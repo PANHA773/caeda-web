@@ -33,7 +33,7 @@ use App\Http\Controllers\Admin\StaffController;
 // ADMIN ROUTES
 // ==============================
 // Faculties (Admin)
-Route::prefix('admin')->name('admin.')->group(function () {
+Route::middleware('auth')->prefix('admin')->name('admin.')->group(function () {
     // Admin Dashboard
     Route::get('/', [AboutAdminController::class, 'index'])->name('dashboard');
 
@@ -58,27 +58,12 @@ Route::prefix('admin')->name('admin.')->group(function () {
 
     // Accreditations
     Route::get('/accreditations', [AccreditationAdminController::class, 'index'])->name('accreditations.index');
-});
 
-// Office Managers
-Route::prefix('admin')->name('admin.')->group(function () {
     Route::resource('office-managers', OfficeManagerController::class);
-});
-
-// Caeda​ Staff
-Route::prefix('admin')->name('admin.')->group(function () {
     Route::resource('staff', StaffController::class);
-});
-
-
-
-Route::prefix('admin')->name('admin.')->group(function () {
     // Note: admin programs are handled by ProgramCaedaController below.
     // Removed duplicate registration of the non-admin ProgramController here
     // to avoid route/name conflicts with the admin resource controller.
-});
-
-Route::prefix('admin')->name('admin.')->group(function () {
     Route::resource('programs', ProgramCaedaController::class);
 });
 
@@ -163,7 +148,15 @@ Route::post('/contact', [ContactController::class, 'store'])->name('contact.subm
 // NEWSLETTER
 // ==============================
 Route::post('/newsletter', [NewsletterController::class, 'subscribe'])->name('newsletter.subscribe');
+Route::middleware('auth')->group(function () {
 
+    Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
+    Route::get('/profile', [ProfileController::class, 'index'])->name('profile');
+    Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
+    Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
+});
 
 // load admin.php
 require __DIR__ . '/admin.php';
+
+require __DIR__.'/auth.php';
