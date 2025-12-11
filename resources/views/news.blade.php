@@ -1,921 +1,886 @@
 @extends('layouts.app')
 
-@section('title', 'News & Updates - CAEDA')
+@section('title', 'CAEDA News Feed')
 
 @section('extra-css')
     <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     
     <style>
-        @keyframes fade-in-up {
-            from { opacity: 0; transform: translateY(30px); }
-            to { opacity: 1; transform: translateY(0); }
+        /* Facebook-like animations */
+        @keyframes fade-in {
+            from { opacity: 0; }
+            to { opacity: 1; }
         }
-        @keyframes gradient-x {
-            0%, 100% { background-position: 0% 50%; }
-            50% { background-position: 100% 50%; }
+        @keyframes slide-up {
+            from { transform: translateY(20px); opacity: 0; }
+            to { transform: translateY(0); opacity: 1; }
         }
-        @keyframes float {
-            0%, 100% { transform: translateY(0px); }
-            50% { transform: translateY(-15px); }
-        }
-        @keyframes pulse-glow {
-            0%, 100% { box-shadow: 0 0 20px rgba(59, 130, 246, 0.5); }
-            50% { box-shadow: 0 0 40px rgba(59, 130, 246, 0.8); }
-        }
-        @keyframes slide-in-left {
-            from { transform: translateX(-50px); opacity: 0; }
-            to { transform: translateX(0); opacity: 1; }
-        }
-        @keyframes slide-in-right {
-            from { transform: translateX(50px); opacity: 0; }
-            to { transform: translateX(0); opacity: 1; }
-        }
-        @keyframes shimmer {
-            0% { background-position: -1000px 0; }
-            100% { background-position: 1000px 0; }
-        }
-        @keyframes typing {
-            from { width: 0 }
-            to { width: 100% }
-        }
-        @keyframes blink-caret {
-            from, to { border-color: transparent }
-            50% { border-color: #3b82f6 }
+        @keyframes like-pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.2); }
+            100% { transform: scale(1); }
         }
         
-        .animate-fade-in-up { animation: fade-in-up 0.8s ease-out forwards; }
-        .animate-gradient-x { animation: gradient-x 3s ease infinite; background-size: 200% 200%; }
-        .animate-float { animation: float 4s ease-in-out infinite; }
-        .animate-pulse-glow { animation: pulse-glow 2s ease-in-out infinite; }
-        .animate-slide-in-left { animation: slide-in-left 0.8s ease-out forwards; }
-        .animate-slide-in-right { animation: slide-in-right 0.8s ease-out forwards; }
-        .animate-shimmer { animation: shimmer 2s infinite linear; }
-        .animate-typing { 
-            animation: typing 3.5s steps(40, end), blink-caret .75s step-end infinite;
-            overflow: hidden;
-            border-right: .15em solid #3b82f6;
-            white-space: nowrap;
+        .animate-fade-in { animation: fade-in 0.3s ease-out forwards; }
+        .animate-slide-up { animation: slide-up 0.4s ease-out forwards; }
+        .animate-like-pulse { animation: like-pulse 0.3s ease-out; }
+        
+        .font-poppins { font-family: 'Poppins', sans-serif; }
+        
+        /* Facebook-like styles */
+        .fb-sidebar-link {
+            transition: all 0.2s ease;
+            border-radius: 8px;
+        }
+        .fb-sidebar-link:hover {
+            background-color: #f0f2f5;
+        }
+        .fb-post {
+            transition: box-shadow 0.3s ease;
+            border-radius: 8px;
+        }
+        .fb-post:hover {
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+        }
+        .fb-interaction-btn {
+            transition: all 0.2s ease;
+            border-radius: 4px;
+        }
+        .fb-interaction-btn:hover {
+            background-color: #f0f2f5;
+        }
+        .fb-active-tab {
+            border-bottom: 3px solid #0866ff;
+            color: #0866ff;
+        }
+        .fb-story-gradient {
+            background: linear-gradient(45deg, #f09433 0%, #e6683c 25%, #dc2743 50%, #cc2366 75%, #bc1888 100%);
+        }
+        .fb-blue-gradient {
+            background: linear-gradient(135deg, #0866ff, #1877f2);
+        }
+        .fb-text-blue {
+            color: #0866ff;
+        }
+        .fb-bg-hover:hover {
+            background-color: #f0f2f5;
+        }
+        .fb-comment-input {
+            background-color: #f0f2f5;
+            border-radius: 20px;
+        }
+        .fb-divider {
+            border-color: #e4e6eb;
+        }
+        .fb-header-shadow {
+            box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
         }
         
-        .font-cinzel { font-family: 'Cinzel', serif; }
-        .news-card-gradient {
-            background: linear-gradient(145deg, #ffffff, #f5f7ff);
-            box-shadow: 20px 20px 60px #d9d9d9, -20px -20px 60px #ffffff;
+        /* Custom scrollbar */
+        .custom-scrollbar::-webkit-scrollbar {
+            width: 8px;
         }
-        .hover-scale {
-            transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        .custom-scrollbar::-webkit-scrollbar-track {
+            background: #f1f1f1;
+            border-radius: 10px;
         }
-        .hover-scale:hover {
-            transform: translateY(-10px) scale(1.03);
+        .custom-scrollbar::-webkit-scrollbar-thumb {
+            background: #bcc0c4;
+            border-radius: 10px;
         }
-        .glass-effect {
-            background: rgba(255, 255, 255, 0.7);
-            backdrop-filter: blur(10px);
-            border: 1px solid rgba(255, 255, 255, 0.2);
+        .custom-scrollbar::-webkit-scrollbar-thumb:hover {
+            background: #8a8d91;
         }
-        .text-gradient {
-            background: linear-gradient(90deg, #3b82f6, #8b5cf6, #ec4899);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
+        
+        /* Story styles */
+        .story-ring {
+            background: linear-gradient(45deg, #f09433 0%, #e6683c 25%, #dc2743 50%, #cc2366 75%, #bc1888 100%);
+            padding: 2px;
+            border-radius: 50%;
         }
-        .category-badge {
-            position: relative;
-            overflow: hidden;
-            transition: all 0.3s ease;
+        .story-ring-inner {
+            background: white;
+            border-radius: 50%;
+            padding: 2px;
         }
-        .category-badge::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: -100%;
-            width: 100%;
-            height: 100%;
-            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.4), transparent);
-            transition: left 0.5s;
-        }
-        .category-badge:hover::before {
-            left: 100%;
-        }
-        .news-image-hover {
-            transition: all 0.5s ease;
-            filter: brightness(0.95);
-        }
-        .news-image-hover:hover {
-            filter: brightness(1.05) contrast(1.1);
-            transform: scale(1.05);
-        }
-        .read-time-indicator {
-            position: relative;
-            overflow: hidden;
-        }
-        .read-time-indicator::after {
-            content: '';
-            position: absolute;
-            bottom: 0;
-            left: 0;
-            width: 100%;
-            height: 3px;
-            background: linear-gradient(90deg, #3b82f6, #8b5cf6);
-            transform: scaleX(0);
-            transform-origin: left;
-            transition: transform 0.3s ease;
-        }
-        .read-time-indicator:hover::after {
-            transform: scaleX(1);
-        }
-        .trending-badge {
-            background: linear-gradient(135deg, #ff6b6b, #ff8e53);
-            position: relative;
-            overflow: hidden;
-        }
-        .trending-badge::after {
-            content: '';
-            position: absolute;
-            top: -50%;
-            left: -50%;
-            width: 200%;
-            height: 200%;
-            background: linear-gradient(45deg, transparent, rgba(255,255,255,0.1), transparent);
-            animation: shimmer 2s infinite;
-        }
-        .featured-news-gradient {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            position: relative;
-            overflow: hidden;
-        }
-        .featured-news-gradient::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" preserveAspectRatio="none"><path d="M0,0 L100,0 L100,100 Z" fill="rgba(255,255,255,0.1)"/></svg>');
-            background-size: 100% 100%;
-        }
-        .news-content {
-            position: relative;
-            overflow: hidden;
-        }
-        .news-content::after {
-            content: '';
-            position: absolute;
-            bottom: 0;
-            left: 0;
-            right: 0;
-            height: 100px;
-            background: linear-gradient(to top, white, transparent);
-            pointer-events: none;
-        }
-        .scrollbar-hide {
-            -ms-overflow-style: none;
-            scrollbar-width: none;
-        }
-        .scrollbar-hide::-webkit-scrollbar {
-            display: none;
-        }
-        .typewriter-text {
-            display: inline-block;
-            overflow: hidden;
-            border-right: 3px solid #3b82f6;
-            white-space: nowrap;
-            animation: typing 3.5s steps(40, end) infinite, blink-caret .75s step-end infinite;
-        }
-        .news-skeleton {
+        
+        /* Loading skeleton */
+        .skeleton {
             background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%);
             background-size: 200% 100%;
-            animation: shimmer 1.5s infinite linear;
+            animation: loading 1.5s infinite;
+        }
+        @keyframes loading {
+            0% { background-position: 200% 0; }
+            100% { background-position: -200% 0; }
+        }
+        
+        /* Emoji picker */
+        .emoji-picker {
+            transform: translateY(100%);
+            transition: transform 0.3s ease;
+        }
+        .emoji-picker.show {
+            transform: translateY(0);
+        }
+        
+        /* Notification badge */
+        .notification-badge {
+            position: absolute;
+            top: -5px;
+            right: -5px;
+            background: #e41e3f;
+            color: white;
+            border-radius: 50%;
+            width: 18px;
+            height: 18px;
+            font-size: 11px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
         }
     </style>
 @endsection
 
 @section('content')
 
-{{-- ================= HERO SECTION ================= --}}
-<section class="relative py-24 px-4 md:px-8 overflow-hidden bg-gradient-to-br from-blue-900 via-purple-900 to-indigo-900">
-    <div class="absolute inset-0">
-        <div class="absolute inset-0 bg-black/40"></div>
-        <div class="absolute top-0 left-0 w-full h-full bg-[url('https://images.unsplash.com/photo-1588681664899-f142ff2dc9b1?ixlib=rb-4.0.3&auto=format&fit=crop&w=2070&q=80')] bg-cover bg-center opacity-20"></div>
-    </div>
-    
-    {{-- Animated floating elements --}}
-    <div class="absolute top-20 left-10 w-24 h-24 bg-blue-500/20 rounded-full animate-float"></div>
-    <div class="absolute bottom-24 right-16 w-32 h-32 bg-purple-500/20 rounded-full animate-float" style="animation-delay: 1s"></div>
-    <div class="absolute top-1/3 right-1/4 w-20 h-20 bg-pink-500/20 rounded-full animate-float" style="animation-delay: 2s"></div>
-    <div class="absolute bottom-1/3 left-1/4 w-16 h-16 bg-cyan-500/20 rounded-full animate-float" style="animation-delay: 1.5s"></div>
-    
-    <div class="max-w-7xl mx-auto relative z-10">
-        <div class="text-center">
-            <div class="inline-flex items-center bg-white/20 backdrop-blur-lg rounded-full px-6 py-3 mb-8 animate-slide-in-left">
-                <div class="w-3 h-3 bg-green-400 rounded-full mr-3 animate-pulse"></div>
-                <span class="text-white font-semibold text-sm md:text-base">Latest Updates • Stay Informed</span>
-            </div>
-            
-            <h1 class="text-4xl md:text-6xl lg:text-7xl font-bold mb-6 text-white font-cinzel">
-                <span class="text-gradient">News</span> & 
-                <span class="block bg-gradient-to-r from-cyan-300 to-blue-300 bg-clip-text text-transparent animate-gradient-x">Updates</span>
-            </h1>
-            
-            <p class="text-xl md:text-2xl text-blue-100 mb-10 max-w-3xl mx-auto leading-relaxed animate-slide-in-right">
-                Stay informed with the latest developments, announcements, and insights from CAEDA.
-                <span class="block mt-2 text-lg text-blue-200">Your source for educational innovation and community achievements.</span>
-            </p>
-            
-            <div class="relative max-w-2xl mx-auto mb-12">
-                <div class="relative">
+{{-- ================= FACEBOOK-STYLE HEADER ================= --}}
+<header class="sticky top-0 z-50 bg-white fb-header-shadow">
+    <div class="max-w-7xl mx-auto px-4">
+        <div class="flex items-center justify-between h-16">
+            {{-- Left: Logo and Search --}}
+            <div class="flex items-center space-x-4">
+                <div class="flex items-center">
+                    <div class="w-8 h-8 fb-blue-gradient rounded-full flex items-center justify-center mr-3">
+                        <i class="fas fa-graduation-cap text-white text-lg"></i>
+                    </div>
+                    <span class="text-2xl font-bold text-gray-900 font-poppins">CAEDA</span>
+                </div>
+                
+                <div class="hidden md:block relative">
                     <input type="text" 
-                           id="news-search" 
-                           placeholder="Search news, articles, or announcements..." 
-                           class="w-full px-8 py-4 pl-14 rounded-2xl bg-white/10 backdrop-blur-lg border-2 border-white/30 text-white placeholder-blue-200 focus:outline-none focus:border-blue-400 focus:ring-4 focus:ring-blue-500/30 transition-all duration-300">
-                    <i class="fas fa-search absolute left-5 top-1/2 transform -translate-y-1/2 text-blue-300 text-lg"></i>
-                    <button class="absolute right-3 top-1/2 transform -translate-y-1/2 bg-gradient-to-r from-blue-500 to-purple-500 text-white px-6 py-2.5 rounded-xl hover:from-blue-600 hover:to-purple-600 transition-all duration-300 shadow-lg">
-                        Search
-                    </button>
-                </div>
-                <div class="flex flex-wrap justify-center gap-2 mt-4">
-                    <span class="text-blue-200 text-sm">Popular searches:</span>
-                    <a href="#" class="text-white hover:text-blue-300 text-sm bg-white/10 px-3 py-1 rounded-lg transition">Research</a>
-                    <a href="#" class="text-white hover:text-blue-300 text-sm bg-white/10 px-3 py-1 rounded-lg transition">Events</a>
-                    <a href="#" class="text-white hover:text-blue-300 text-sm bg-white/10 px-3 py-1 rounded-lg transition">Awards</a>
-                    <a href="#" class="text-white hover:text-blue-300 text-sm bg-white/10 px-3 py-1 rounded-lg transition">Partnerships</a>
+                           placeholder="Search CAEDA News..." 
+                           class="w-64 pl-10 pr-4 py-2 bg-gray-100 rounded-full text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:bg-white">
+                    <i class="fas fa-search absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-500"></i>
                 </div>
             </div>
             
-            <div class="flex flex-wrap justify-center gap-4 animate-fade-in-up" style="animation-delay: 0.3s">
-                <button onclick="scrollToLatest()" class="group bg-gradient-to-r from-blue-500 to-purple-500 hover:from-blue-600 hover:to-purple-600 text-white font-bold py-4 px-8 rounded-2xl transition-all duration-300 transform hover:-translate-y-1 hover:shadow-2xl shadow-lg flex items-center">
-                    <span>Latest News</span>
-                    <svg class="w-5 h-5 ml-2 transform group-hover:translate-x-2 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 14l-7 7m0 0l-7-7m7 7V3" />
-                    </svg>
+            {{-- Center: Navigation Tabs --}}
+            <div class="flex items-center space-x-1">
+                <a href="#" class="fb-active-tab px-6 py-3 text-gray-700 hover:bg-gray-100 rounded-lg transition">
+                    <i class="fas fa-newspaper text-lg"></i>
+                </a>
+                <a href="#" class="px-6 py-3 text-gray-700 hover:bg-gray-100 rounded-lg transition">
+                    <i class="fas fa-video text-lg"></i>
+                </a>
+                <a href="#" class="px-6 py-3 text-gray-700 hover:bg-gray-100 rounded-lg transition">
+                    <i class="fas fa-users text-lg"></i>
+                </a>
+                <a href="#" class="px-6 py-3 text-gray-700 hover:bg-gray-100 rounded-lg transition relative">
+                    <i class="fas fa-bell text-lg"></i>
+                    <span class="notification-badge">3</span>
+                </a>
+            </div>
+            
+            {{-- Right: User Menu --}}
+            <div class="flex items-center space-x-3">
+                <button class="md:hidden p-2 hover:bg-gray-100 rounded-full">
+                    <i class="fas fa-search text-gray-600"></i>
                 </button>
-                <button class="group border-2 border-white/60 hover:border-white text-white hover:bg-white/10 font-medium py-4 px-8 rounded-2xl transition-all duration-300 backdrop-blur-sm flex items-center">
-                    <i class="fas fa-rss mr-2"></i>
-                    <span>Subscribe to Newsletter</span>
+                
+                <div class="relative">
+                    <button class="flex items-center space-x-2 p-1 hover:bg-gray-100 rounded-full">
+                        <div class="w-8 h-8 bg-gradient-to-r from-blue-500 to-purple-500 rounded-full flex items-center justify-center text-white font-bold">
+                            CS
+                        </div>
+                        <span class="hidden md:inline text-sm font-medium text-gray-700">Dr. Sokny</span>
+                    </button>
+                </div>
+                
+                <button class="p-2 hover:bg-gray-100 rounded-full">
+                    <i class="fas fa-plus text-gray-600"></i>
+                </button>
+                
+                <button class="p-2 hover:bg-gray-100 rounded-full">
+                    <i class="fas fa-comment-dots text-gray-600"></i>
                 </button>
             </div>
         </div>
     </div>
-</section>
+</header>
 
-{{-- ================= FEATURED NEWS ================= --}}
-<section class="py-16 bg-gradient-to-r from-gray-50 via-blue-50/30 to-purple-50/30">
-    <div class="max-w-7xl mx-auto px-4 md:px-8">
-        <div class="flex items-center justify-between mb-12 animate-fade-in-up">
-            <div>
-                <div class="inline-flex items-center bg-gradient-to-r from-blue-500 to-purple-500 text-white text-sm font-bold px-4 py-2 rounded-full mb-3 animate-pulse-glow">
-                    <i class="fas fa-star mr-2"></i> FEATURED STORY
-                </div>
-                <h2 class="text-3xl md:text-4xl font-bold text-gray-900">
-                    Today's <span class="text-gradient">Highlight</span>
-                </h2>
-                <p class="text-gray-600 mt-2">Most important news of the week</p>
-            </div>
-            <div class="hidden md:flex items-center gap-2">
-                <button class="p-3 rounded-xl bg-white shadow-md hover:shadow-lg transition">
-                    <i class="fas fa-chevron-left text-gray-600"></i>
-                </button>
-                <button class="p-3 rounded-xl bg-white shadow-md hover:shadow-lg transition">
-                    <i class="fas fa-chevron-right text-gray-600"></i>
-                </button>
-            </div>
-        </div>
-        
-        <div class="featured-news-gradient rounded-3xl overflow-hidden shadow-2xl hover-scale animate-fade-in-up" style="animation-delay: 0.2s">
-            <div class="grid grid-cols-1 lg:grid-cols-2">
-                <div class="p-10 text-white">
-                    <div class="inline-flex items-center bg-white/20 backdrop-blur-sm rounded-full px-4 py-2 mb-6">
-                        <i class="fas fa-trophy mr-2"></i>
-                        <span class="text-sm font-semibold">EXCLUSIVE INTERVIEW</span>
-                    </div>
-                    <h3 class="text-3xl md:text-4xl font-bold mb-6 leading-tight">
-                        CAEDA Wins National Award for Educational Innovation 2024
-                    </h3>
-                    <p class="text-blue-100 mb-8 text-lg leading-relaxed">
-                        Our groundbreaking research in adaptive learning technologies has been recognized as the most innovative educational project of the year.
-                    </p>
-                    <div class="flex items-center justify-between mb-6">
-                        <div class="flex items-center">
-                            <div class="w-12 h-12 rounded-full bg-gradient-to-r from-blue-400 to-cyan-400 flex items-center justify-center text-white font-bold mr-4">
-                                CS
-                            </div>
-                            <div>
-                                <div class="font-semibold">Dr. Chen Sokny</div>
-                                <div class="text-blue-200 text-sm">Research Director</div>
-                            </div>
+{{-- ================= MAIN CONTENT ================= --}}
+<div class="min-h-screen bg-gray-100 font-poppins">
+    <div class="max-w-7xl mx-auto px-4 py-6">
+        <div class="flex flex-col lg:flex-row gap-6">
+            
+            {{-- ================= LEFT SIDEBAR ================= --}}
+            <div class="lg:w-1/4 space-y-4">
+                {{-- User Profile Card --}}
+                <div class="bg-white rounded-lg shadow p-4 animate-slide-up">
+                    <div class="flex items-center space-x-3 mb-4">
+                        <div class="w-12 h-12 bg-gradient-to-r from-blue-500 to-purple-500 rounded-full flex items-center justify-center text-white font-bold text-lg">
+                            CS
                         </div>
-                        <div class="text-blue-200">
-                            <i class="far fa-clock mr-2"></i> 8 min read
+                        <div>
+                            <h3 class="font-bold text-gray-900">Dr. Chen Sokny</h3>
+                            <p class="text-sm text-gray-600">Research Director</p>
                         </div>
                     </div>
-                    <div class="flex gap-4">
-                        <button class="flex-1 bg-white text-blue-600 hover:bg-blue-50 font-semibold py-3.5 rounded-xl transition-all duration-300 transform hover:-translate-y-1 hover:shadow-xl">
-                            Read Full Story
-                        </button>
-                        <button class="p-3.5 bg-white/20 hover:bg-white/30 rounded-xl transition">
-                            <i class="fas fa-share-alt"></i>
-                        </button>
-                        <button class="p-3.5 bg-white/20 hover:bg-white/30 rounded-xl transition">
-                            <i class="far fa-bookmark"></i>
-                        </button>
-                    </div>
-                </div>
-                <div class="relative h-64 lg:h-auto min-h-[400px]">
-                    <img src="https://images.unsplash.com/photo-1523050854058-8df90110c9f1?ixlib=rb-4.0.3&auto=format&fit=crop&w=1000&q=80" 
-                         alt="Award Ceremony"
-                         class="absolute inset-0 w-full h-full object-cover news-image-hover">
-                    <div class="absolute inset-0 bg-gradient-to-r from-blue-900/70 to-transparent lg:hidden"></div>
-                    <div class="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/70 to-transparent p-6">
-                        <div class="text-white">
-                            <div class="text-sm font-semibold mb-2">📸 Photo Gallery</div>
-                            <div class="text-xs text-blue-200">12 photos from the award ceremony</div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-</section>
-
-{{-- ================= NEWS GRID ================= --}}
-<section id="latest-news" class="py-20 px-4 md:px-8">
-    <div class="max-w-7xl mx-auto">
-        <div class="flex flex-col lg:flex-row gap-12">
-            {{-- MAIN CONTENT --}}
-            <div class="lg:w-2/3">
-                <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-12 animate-fade-in-up">
-                    <div>
-                        <h2 class="text-3xl md:text-4xl font-bold text-gray-900 font-cinzel">
-                            Latest <span class="text-gradient">News</span>
-                        </h2>
-                        <p class="text-gray-600 mt-2">Fresh updates from our community and beyond</p>
-                    </div>
-                    <div class="mt-4 sm:mt-0">
-                        <div class="flex items-center gap-3">
-                            <span class="text-gray-600 text-sm">Sort by:</span>
-                            <select class="bg-gray-100 border-none rounded-xl px-4 py-2.5 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none">
-                                <option>Newest First</option>
-                                <option>Most Popular</option>
-                                <option>Trending</option>
-                                <option>Oldest First</option>
-                            </select>
-                        </div>
+                    
+                    <div class="space-y-1">
+                        <a href="#" class="fb-sidebar-link flex items-center space-x-3 p-2">
+                            <i class="fas fa-user-friends text-blue-600 w-6"></i>
+                            <span>Friends</span>
+                        </a>
+                        <a href="#" class="fb-sidebar-link flex items-center space-x-3 p-2">
+                            <i class="fas fa-save text-green-600 w-6"></i>
+                            <span>Saved</span>
+                        </a>
+                        <a href="#" class="fb-sidebar-link flex items-center space-x-3 p-2">
+                            <i class="fas fa-flag text-orange-600 w-6"></i>
+                            <span>Pages</span>
+                        </a>
+                        <a href="#" class="fb-sidebar-link flex items-center space-x-3 p-2">
+                            <i class="fas fa-users text-purple-600 w-6"></i>
+                            <span>Groups</span>
+                        </a>
+                        <a href="#" class="fb-sidebar-link flex items-center space-x-3 p-2">
+                            <i class="fas fa-calendar-alt text-red-600 w-6"></i>
+                            <span>Events</span>
+                        </a>
                     </div>
                 </div>
                 
-                {{-- NEWS FILTERS --}}
-                <div class="flex flex-wrap gap-3 mb-10 animate-fade-in-up" style="animation-delay: 0.1s">
-                    <button class="news-filter active bg-gradient-to-r from-blue-500 to-purple-500 text-white px-5 py-2.5 rounded-xl font-medium transition-all duration-300 hover:shadow-lg" data-filter="all">
-                        All News
-                    </button>
-                    <button class="news-filter bg-gray-100 hover:bg-gray-200 text-gray-800 px-5 py-2.5 rounded-xl font-medium transition-all duration-300 hover:shadow-lg" data-filter="research">
-                        <i class="fas fa-flask mr-2"></i> Research
-                    </button>
-                    <button class="news-filter bg-gray-100 hover:bg-gray-200 text-gray-800 px-5 py-2.5 rounded-xl font-medium transition-all duration-300 hover:shadow-lg" data-filter="announcement">
-                        <i class="fas fa-bullhorn mr-2"></i> Announcements
-                    </button>
-                    <button class="news-filter bg-gray-100 hover:bg-gray-200 text-gray-800 px-5 py-2.5 rounded-xl font-medium transition-all duration-300 hover:shadow-lg" data-filter="event">
-                        <i class="fas fa-calendar-alt mr-2"></i> Events
-                    </button>
-                    <button class="news-filter bg-gray-100 hover:bg-gray-200 text-gray-800 px-5 py-2.5 rounded-xl font-medium transition-all duration-300 hover:shadow-lg" data-filter="achievement">
-                        <i class="fas fa-trophy mr-2"></i> Achievements
-                    </button>
-                    <button class="news-filter bg-gray-100 hover:bg-gray-200 text-gray-800 px-5 py-2.5 rounded-xl font-medium transition-all duration-300 hover:shadow-lg" data-filter="partnership">
-                        <i class="fas fa-handshake mr-2"></i> Partnerships
-                    </button>
+                {{-- Shortcuts --}}
+                <div class="bg-white rounded-lg shadow p-4 animate-slide-up" style="animation-delay: 0.1s">
+                    <h3 class="font-bold text-gray-900 mb-3">Your Shortcuts</h3>
+                    <div class="space-y-1">
+                        <a href="#" class="fb-sidebar-link flex items-center space-x-3 p-2">
+                            <div class="w-6 h-6 bg-blue-100 rounded flex items-center justify-center">
+                                <i class="fas fa-flask text-blue-600 text-sm"></i>
+                            </div>
+                            <span>Research Lab</span>
+                        </a>
+                        <a href="#" class="fb-sidebar-link flex items-center space-x-3 p-2">
+                            <div class="w-6 h-6 bg-green-100 rounded flex items-center justify-center">
+                                <i class="fas fa-graduation-cap text-green-600 text-sm"></i>
+                            </div>
+                            <span>Student Council</span>
+                        </a>
+                        <a href="#" class="fb-sidebar-link flex items-center space-x-3 p-2">
+                            <div class="w-6 h-6 bg-purple-100 rounded flex items-center justify-center">
+                                <i class="fas fa-code text-purple-600 text-sm"></i>
+                            </div>
+                            <span>Tech Club</span>
+                        </a>
+                        <a href="#" class="fb-sidebar-link flex items-center space-x-3 p-2">
+                            <div class="w-6 h-6 bg-yellow-100 rounded flex items-center justify-center">
+                                <i class="fas fa-leaf text-yellow-600 text-sm"></i>
+                            </div>
+                            <span>Green Campus</span>
+                        </a>
+                    </div>
                 </div>
                 
-                {{-- NEWS GRID --}}
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
-                    @php
-                        $news = [
+                {{-- Sponsored --}}
+                <div class="bg-white rounded-lg shadow p-4 animate-slide-up" style="animation-delay: 0.2s">
+                    <h3 class="font-bold text-gray-900 mb-3">Sponsored</h3>
+                    <div class="space-y-3">
+                        <a href="#" class="block">
+                            <div class="rounded-lg overflow-hidden mb-2">
+                                <img src="https://images.unsplash.com/photo-1553877522-43269d4ea984?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=80" 
+                                     alt="Sponsored" class="w-full h-32 object-cover">
+                            </div>
+                            <div class="text-xs text-gray-500">Sponsored • Educational Tools</div>
+                            <div class="font-medium text-sm">Premium Research Software - 50% Off for Students</div>
+                        </a>
+                    </div>
+                </div>
+                
+                {{-- Footer Links --}}
+                <div class="text-xs text-gray-500 px-2">
+                    <div class="flex flex-wrap gap-2 mb-2">
+                        <a href="#" class="hover:underline">Privacy</a>
+                        <a href="#" class="hover:underline">Terms</a>
+                        <a href="#" class="hover:underline">Advertising</a>
+                        <a href="#" class="hover:underline">Ad Choices</a>
+                        <a href="#" class="hover:underline">Cookies</a>
+                    </div>
+                    <div>CAEDA © 2024</div>
+                </div>
+            </div>
+            
+            {{-- ================= MAIN FEED ================= --}}
+            <div class="lg:w-2/4 space-y-6">
+                {{-- Stories --}}
+                <div class="bg-white rounded-lg shadow p-4 animate-slide-up">
+                    <div class="flex items-center justify-between mb-4">
+                        <h3 class="font-bold text-gray-900">Stories</h3>
+                        <button class="text-blue-600 text-sm font-medium hover:underline">See All</button>
+                    </div>
+                    
+                    <div class="flex space-x-4 overflow-x-auto pb-2 scrollbar-hide">
+                        {{-- Create Story --}}
+                        <div class="flex-shrink-0 w-32">
+                            <div class="relative rounded-lg overflow-hidden border border-gray-300">
+                                <img src="https://images.unsplash.com/photo-1568602471122-7832951cc4c5?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=80" 
+                                     alt="Create story" class="w-full h-40 object-cover">
+                                <div class="absolute bottom-0 left-0 right-0 bg-white p-3 text-center">
+                                    <div class="w-10 h-10 bg-blue-600 rounded-full flex items-center justify-center mx-auto -mt-8 mb-2">
+                                        <i class="fas fa-plus text-white"></i>
+                                    </div>
+                                    <div class="font-semibold text-sm">Create Story</div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        {{-- Story List --}}
+                        @php
+                            $stories = [
+                                ['user' => 'Sarah Chen', 'img' => 'https://images.unsplash.com/photo-1494790108755-2616b786d4d3?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=80'],
+                                ['user' => 'James Wilson', 'img' => 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=80'],
+                                ['user' => 'Research Team', 'img' => 'https://images.unsplash.com/photo-1556761175-b413da4baf72?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=80'],
+                                ['user' => 'Tech Club', 'img' => 'https://images.unsplash.com/photo-1559136555-9303baea8ebd?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=80'],
+                            ];
+                        @endphp
+                        
+                        @foreach($stories as $story)
+                            <div class="flex-shrink-0 w-32">
+                                <div class="story-ring">
+                                    <div class="story-ring-inner">
+                                        <div class="relative rounded-lg overflow-hidden">
+                                            <img src="{{ $story['img'] }}" 
+                                                 alt="{{ $story['user'] }}"
+                                                 class="w-full h-40 object-cover">
+                                            <div class="absolute bottom-0 left-0 right-0 p-3 text-white bg-gradient-to-t from-black/60 to-transparent">
+                                                <div class="font-semibold text-sm">{{ $story['user'] }}</div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        @endforeach
+                    </div>
+                </div>
+                
+                {{-- Create Post --}}
+                <div class="bg-white rounded-lg shadow p-4 animate-slide-up" style="animation-delay: 0.1s">
+                    <div class="flex items-center space-x-3 mb-4">
+                        <div class="w-10 h-10 bg-gradient-to-r from-blue-500 to-purple-500 rounded-full flex items-center justify-center text-white font-bold">
+                            CS
+                        </div>
+                        <button class="flex-1 text-left p-3 fb-comment-input text-gray-500 hover:bg-gray-200 transition">
+                            What's on your mind, Dr. Sokny?
+                        </button>
+                    </div>
+                    
+                    <div class="flex items-center justify-between pt-4 border-t fb-divider">
+                        <button class="fb-interaction-btn flex items-center space-x-2 px-4 py-2 flex-1 justify-center">
+                            <i class="fas fa-video text-red-500"></i>
+                            <span class="text-sm font-medium text-gray-700">Live video</span>
+                        </button>
+                        <button class="fb-interaction-btn flex items-center space-x-2 px-4 py-2 flex-1 justify-center">
+                            <i class="fas fa-images text-green-500"></i>
+                            <span class="text-sm font-medium text-gray-700">Photo/video</span>
+                        </button>
+                        <button class="fb-interaction-btn flex items-center space-x-2 px-4 py-2 flex-1 justify-center">
+                            <i class="fas fa-smile text-yellow-500"></i>
+                            <span class="text-sm font-medium text-gray-700">Feeling/activity</span>
+                        </button>
+                    </div>
+                </div>
+                
+                {{-- Posts Feed --}}
+                <div id="posts-feed" class="space-y-6">
+                    {{-- Posts are provided by the controller as $news --}}
+                    
                             [
                                 'id' => 1,
-                                'title' => 'New AI Research Lab Opens at CAEDA Campus',
-                                'description' => 'State-of-the-art facility dedicated to artificial intelligence and machine learning research begins operations.',
-                                'date' => 'Dec 3, 2024',
-                                'category' => 'research',
-                                'category_label' => 'Research',
-                                'image' => 'https://images.unsplash.com/photo-1581094794329-c8112a89af12?ixlib=rb-4.0.3&auto=format&fit=crop&w=1000&q=80',
-                                'author' => 'Dr. James Wilson',
-                                'read_time' => '5 min',
-                                'trending' => true,
-                                'tags' => ['AI', 'Technology', 'Innovation']
+                                'user' => [
+                                    'name' => 'Research Department',
+                                    'avatar' => 'https://images.unsplash.com/photo-1556761175-b413da4baf72?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=80',
+                                    'role' => 'Official Page',
+                                    'time' => '2h',
+                                    'verified' => true
+                                ],
+                                'content' => "🎉 BREAKING: Our quantum computing research team has achieved a major breakthrough! We've successfully demonstrated quantum supremacy with our new 72-qubit processor. This could revolutionize fields from cryptography to drug discovery.",
+                                'image' => 'https://images.unsplash.com/photo-1635070041078-e363dbe005cb?ixlib=rb-4.0.3&auto=format&fit=crop&w=1000&q=80',
+                                'likes' => 245,
+                                'comments' => 42,
+                                'shares' => 18,
+                                'isLiked' => false,
+                                'tags' => ['#QuantumComputing', '#Breakthrough', '#Research']
                             ],
                             [
                                 'id' => 2,
-                                'title' => 'Partnership Announced with MIT for Student Exchange Program',
-                                'description' => 'New collaboration enables CAEDA students to study at MIT and vice versa starting next semester.',
-                                'date' => 'Dec 1, 2024',
-                                'category' => 'partnership',
-                                'category_label' => 'Partnership',
-                                'image' => 'https://images.unsplash.com/photo-1523580494863-6f3031224c94?ixlib=rb-4.0.3&auto=format&fit=crop&w=1000&q=80',
-                                'author' => 'Admin Office',
-                                'read_time' => '3 min',
-                                'trending' => true,
-                                'tags' => ['Partnership', 'International', 'Students']
+                                'user' => [
+                                    'name' => 'Dr. Sarah Chen',
+                                    'avatar' => 'https://images.unsplash.com/photo-1494790108755-2616b786d4d3?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=80',
+                                    'role' => 'Professor of AI',
+                                    'time' => '4h',
+                                    'verified' => false
+                                ],
+                                'content' => "Just wrapped up an incredible panel discussion on 'Ethical AI in Education' with colleagues from Stanford and MIT. So proud to see CAEDA leading these important conversations! 🤖📚",
+                                'image' => 'https://images.unsplash.com/photo-1515187029135-18ee286d815b?ixlib=rb-4.0.3&auto=format&fit=crop&w=1000&q=80',
+                                'likes' => 189,
+                                'comments' => 31,
+                                'shares' => 9,
+                                'isLiked' => true,
+                                'tags' => ['#AI', '#Education', '#Ethics']
                             ],
                             [
                                 'id' => 3,
-                                'title' => 'CAEDA Researchers Discover Breakthrough in Quantum Computing',
-                                'description' => 'Groundbreaking algorithm reduces quantum error rates by 75%, accelerating practical quantum computing.',
-                                'date' => 'Nov 28, 2024',
-                                'category' => 'research',
-                                'category_label' => 'Research',
-                                'image' => 'https://images.unsplash.com/photo-1635070041078-e363dbe005cb?ixlib=rb-4.0.3&auto=format&fit=crop&w=1000&q=80',
-                                'author' => 'Dr. Sarah Chen',
-                                'read_time' => '7 min',
-                                'trending' => false,
-                                'tags' => ['Quantum', 'Research', 'Breakthrough']
+                                'user' => [
+                                    'name' => 'Student Council',
+                                    'avatar' => 'https://images.unsplash.com/photo-1523050854058-8df90110c9f1?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=80',
+                                    'role' => 'Student Organization',
+                                    'time' => '6h',
+                                    'verified' => true
+                                ],
+                                'content' => "Hackathon 2024 is officially OPEN! 🚀 Over 500 students from 30 universities competing this year. The energy here is electric! Follow #CAEDAHack2024 for live updates.",
+                                'image' => 'https://images.unsplash.com/photo-1559136555-9303baea8ebd?ixlib=rb-4.0.3&auto=format&fit=crop&w=1000&q=80',
+                                'video' => true,
+                                'likes' => 523,
+                                'comments' => 89,
+                                'shares' => 45,
+                                'isLiked' => false,
+                                'tags' => ['#Hackathon', '#Students', '#Innovation']
                             ],
                             [
                                 'id' => 4,
-                                'title' => 'Annual Research Symposium Dates Announced',
-                                'description' => 'Mark your calendars for the biggest research event of the year featuring international speakers.',
-                                'date' => 'Nov 25, 2024',
-                                'category' => 'event',
-                                'category_label' => 'Event',
-                                'image' => 'https://images.unsplash.com/photo-1540575467063-178a50c2df87?ixlib=rb-4.0.3&auto=format&fit=crop&w=1000&q=80',
-                                'author' => 'Events Team',
-                                'read_time' => '2 min',
-                                'trending' => false,
-                                'tags' => ['Symposium', 'Conference', 'Research']
-                            ],
-                            [
-                                'id' => 5,
-                                'title' => 'Student Team Wins International Hackathon 2024',
-                                'description' => 'Our students developed an AI-powered solution for sustainable agriculture, beating 200+ teams.',
-                                'date' => 'Nov 22, 2024',
-                                'category' => 'achievement',
-                                'category_label' => 'Achievement',
-                                'image' => 'https://images.unsplash.com/photo-1559136555-9303baea8ebd?ixlib=rb-4.0.3&auto=format&fit=crop&w=1000&q=80',
-                                'author' => 'Student Affairs',
-                                'read_time' => '4 min',
-                                'trending' => true,
-                                'tags' => ['Students', 'Hackathon', 'Winners']
-                            ],
-                            [
-                                'id' => 6,
-                                'title' => 'New Online Learning Platform Launches',
-                                'description' => 'Interactive platform offers courses in emerging technologies with industry certification.',
-                                'date' => 'Nov 20, 2024',
-                                'category' => 'announcement',
-                                'category_label' => 'Announcement',
-                                'image' => 'https://images.unsplash.com/photo-1516321318423-f06f85e504b3?ixlib=rb-4.0.3&auto=format&fit=crop&w=1000&q=80',
-                                'author' => 'Digital Learning',
-                                'read_time' => '6 min',
-                                'trending' => false,
-                                'tags' => ['E-Learning', 'Platform', 'Courses']
+                                'user' => [
+                                    'name' => 'CAEDA Library',
+                                    'avatar' => 'https://images.unsplash.com/photo-1507842217343-583bb7270b66?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=80',
+                                    'role' => 'Official Page',
+                                    'time' => '1d',
+                                    'verified' => true
+                                ],
+                                'content' => "📚 NEW ARRIVALS: Just added 500+ new academic journals and 200+ e-books to our digital library. Access is FREE for all CAEDA students and faculty. Knowledge should be accessible to all!",
+                                'image' => 'https://images.unsplash.com/photo-1589829545856-d10d557cf95f?ixlib=rb-4.0.3&auto=format&fit=crop&w=1000&q=80',
+                                'likes' => 156,
+                                'comments' => 23,
+                                'shares' => 12,
+                                'isLiked' => false,
+                                'tags' => ['#Library', '#Education', '#FreeAccess']
                             ],
                         ];
-                    @endphp
-                    
-                    @foreach($news as $index => $item)
-                        <div class="news-card bg-white rounded-3xl overflow-hidden shadow-xl hover-scale news-card-gradient animate-fade-in-up"
-                             data-category="{{ $item['category'] }}"
-                             style="animation-delay: {{ $index * 150 }}ms">
+                    @foreach($news as $post)
+                        <div class="fb-post bg-white rounded-lg shadow animate-fade-in" 
+                             style="animation-delay: {{ $loop->index * 100 }}ms">
                             
-                            <div class="relative overflow-hidden h-56">
-                                <img src="{{ $item['image'] }}" 
-                                     alt="{{ $item['title'] }}"
-                                     class="w-full h-full object-cover news-image-hover">
-                                
-                                @if($item['trending'])
-                                    <div class="absolute top-4 left-4 trending-badge text-white px-4 py-2 rounded-full text-xs font-bold shadow-lg">
-                                        🔥 TRENDING
+                            {{-- Post Header --}}
+                            <div class="p-4">
+                                <div class="flex items-start justify-between">
+                                    <div class="flex items-center space-x-3">
+                                        <img src="{{ $post['user']['avatar'] }}" 
+                                             alt="{{ $post['user']['name'] }}"
+                                             class="w-10 h-10 rounded-full object-cover">
+                                        <div>
+                                            <div class="flex items-center space-x-1">
+                                                <h4 class="font-bold text-gray-900">{{ $post['user']['name'] }}</h4>
+                                                @if($post['user']['verified'])
+                                                    <i class="fas fa-check-circle text-blue-600 text-sm"></i>
+                                                @endif
+                                            </div>
+                                            <div class="flex items-center space-x-2 text-sm text-gray-500">
+                                                <span>{{ $post['user']['time'] }} ago</span>
+                                                <span>•</span>
+                                                <i class="fas fa-globe-americas"></i>
+                                            </div>
+                                        </div>
                                     </div>
-                                @endif
-                                
-                                <div class="absolute top-4 right-4">
-                                    <span class="category-badge bg-gradient-to-r from-blue-500 to-purple-500 text-white px-4 py-2 rounded-full text-sm font-bold shadow-lg">
-                                        {{ $item['category_label'] }}
-                                    </span>
+                                    <button class="p-2 hover:bg-gray-100 rounded-full">
+                                        <i class="fas fa-ellipsis-h text-gray-500"></i>
+                                    </button>
                                 </div>
                                 
-                                <div class="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/70 to-transparent p-4">
-                                    <div class="text-white text-sm">{{ $item['date'] }}</div>
-                                    <div class="text-blue-200 text-xs">{{ $item['author'] }}</div>
+                                {{-- Post Content --}}
+                                <div class="mt-4">
+                                    <p class="text-gray-900 mb-4">{{ $post['content'] }}</p>
+                                    
+                                    @if(isset($post['tags']))
+                                        <div class="flex flex-wrap gap-2 mb-4">
+                                            @foreach($post['tags'] as $tag)
+                                                <span class="text-blue-600 hover:underline cursor-pointer">{{ $tag }}</span>
+                                            @endforeach
+                                        </div>
+                                    @endif
                                 </div>
                             </div>
                             
-                            <div class="p-6">
-                                <h3 class="text-xl font-bold text-gray-900 mb-3 leading-tight">{{ $item['title'] }}</h3>
-                                
-                                <p class="text-gray-600 mb-4 leading-relaxed">
-                                    {{ $item['description'] }}
-                                </p>
-                                
-                                <div class="flex flex-wrap gap-2 mb-6">
-                                    @foreach($item['tags'] as $tag)
-                                        <span class="text-xs font-medium px-3 py-1.5 bg-gray-100 text-gray-700 rounded-full">
-                                            #{{ $tag }}
-                                        </span>
-                                    @endforeach
+                            {{-- Post Media --}}
+                            @if(isset($post['image']))
+                                <div class="border-t fb-divider">
+                                    @if(isset($post['video']))
+                                        <div class="relative">
+                                            <img src="{{ $post['image'] }}" 
+                                                 alt="Post image"
+                                                 class="w-full h-96 object-cover">
+                                            <div class="absolute inset-0 flex items-center justify-center">
+                                                <button class="w-16 h-16 bg-white/80 rounded-full flex items-center justify-center hover:bg-white transition">
+                                                    <i class="fas fa-play text-2xl text-blue-600"></i>
+                                                </button>
+                                            </div>
+                                        </div>
+                                    @else
+                                        <img src="{{ $post['image'] }}" 
+                                             alt="Post image"
+                                             class="w-full h-96 object-cover">
+                                    @endif
+                                </div>
+                            @endif
+                            
+                            {{-- Post Stats --}}
+                            <div class="p-4 border-t fb-divider">
+                                <div class="flex items-center justify-between text-sm text-gray-500 mb-3">
+                                    <div class="flex items-center space-x-4">
+                                        <div class="flex items-center">
+                                            <div class="w-6 h-6 bg-blue-600 rounded-full flex items-center justify-center text-white text-xs">
+                                                <i class="fas fa-thumbs-up"></i>
+                                            </div>
+                                            <span class="ml-2">{{ $post['likes'] }}</span>
+                                        </div>
+                                        <div class="flex items-center hover:underline cursor-pointer">
+                                            <span>{{ $post['comments'] }} comments</span>
+                                        </div>
+                                        <div class="flex items-center hover:underline cursor-pointer">
+                                            <span>{{ $post['shares'] }} shares</span>
+                                        </div>
+                                    </div>
                                 </div>
                                 
-                                <div class="flex items-center justify-between">
-                                    <div class="read-time-indicator text-sm text-gray-500 font-medium">
-                                        <i class="far fa-clock mr-1"></i>
-                                        {{ $item['read_time'] }} read
-                                    </div>
-                                    <div class="flex gap-2">
-                                        <button onclick="viewNews({{ $item['id'] }})" 
-                                                class="px-4 py-2 bg-gradient-to-r from-blue-500 to-purple-500 hover:from-blue-600 hover:to-purple-600 text-white font-semibold rounded-xl transition-all duration-300 transform hover:-translate-y-1 hover:shadow-lg">
-                                            Read More
-                                        </button>
-                                        <button class="p-2.5 border border-gray-300 rounded-xl text-gray-600 hover:border-blue-500 hover:text-blue-600 transition">
-                                            <i class="far fa-bookmark"></i>
-                                        </button>
+                                {{-- Interaction Buttons --}}
+                                <div class="flex border-t fb-divider pt-2">
+                                    <button onclick="likePost({{ $post['id'] }}, this)" 
+                                            class="fb-interaction-btn flex items-center justify-center space-x-2 flex-1 py-2 rounded-lg {{ $post['isLiked'] ? 'fb-text-blue' : '' }}"
+                                            data-liked="{{ $post['isLiked'] ? 'true' : 'false' }}">
+                                        <i class="fas fa-thumbs-up {{ $post['isLiked'] ? 'fb-text-blue' : '' }}"></i>
+                                        <span class="font-medium">Like</span>
+                                    </button>
+                                    
+                                    <button onclick="focusComment({{ $post['id'] }})"
+                                            class="fb-interaction-btn flex items-center justify-center space-x-2 flex-1 py-2 rounded-lg">
+                                        <i class="far fa-comment"></i>
+                                        <span class="font-medium">Comment</span>
+                                    </button>
+                                    
+                                    <button onclick="sharePost({{ $post['id'] }})"
+                                            class="fb-interaction-btn flex items-center justify-center space-x-2 flex-1 py-2 rounded-lg">
+                                        <i class="fas fa-share"></i>
+                                        <span class="font-medium">Share</span>
+                                    </button>
+                                </div>
+                                
+                                {{-- Comments Section --}}
+                                <div class="mt-4 space-y-4">
+                                    {{-- Sample Comments --}}
+                                    @if($loop->first)
+                                        <div class="space-y-3">
+                                            <div class="flex space-x-3">
+                                                <img src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=80" 
+                                                     alt="User" class="w-8 h-8 rounded-full">
+                                                <div class="flex-1">
+                                                    <div class="bg-gray-100 rounded-2xl p-3">
+                                                        <div class="font-medium text-sm">Michael Chen</div>
+                                                        <p class="text-sm mt-1">This is incredible! Can't wait to read the paper!</p>
+                                                    </div>
+                                                    <div class="flex items-center space-x-4 mt-2 ml-3 text-xs text-gray-500">
+                                                        <button class="hover:underline">Like</button>
+                                                        <span>•</span>
+                                                        <span>2h</span>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    @endif
+                                    
+                                    {{-- Comment Input --}}
+                                    <div class="flex items-center space-x-3">
+                                        <div class="w-8 h-8 bg-gradient-to-r from-blue-500 to-purple-500 rounded-full flex items-center justify-center text-white font-bold text-sm">
+                                            CS
+                                        </div>
+                                        <div class="flex-1 relative">
+                                            <input type="text" 
+                                                   id="comment-input-{{ $post['id'] }}"
+                                                   placeholder="Write a comment..."
+                                                   class="w-full px-4 py-2 fb-comment-input text-sm focus:outline-none focus:ring-2 focus:ring-blue-500">
+                                            <div class="absolute right-2 top-1/2 transform -translate-y-1/2 flex items-center space-x-2">
+                                                <button class="p-1 hover:bg-gray-200 rounded-full">
+                                                    <i class="far fa-smile text-gray-500"></i>
+                                                </button>
+                                                <button class="p-1 hover:bg-gray-200 rounded-full">
+                                                    <i class="fas fa-camera text-gray-500"></i>
+                                                </button>
+                                            </div>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
                         </div>
                     @endforeach
-                </div>
-                
-                {{-- PAGINATION --}}
-                <div class="mt-12 flex justify-center animate-fade-in-up">
-                    <nav class="inline-flex rounded-2xl bg-gray-100 p-2 shadow-inner">
-                        <button class="px-4 py-2.5 rounded-xl bg-white text-gray-700 hover:bg-blue-50 hover:text-blue-600 transition shadow-md">
-                            <i class="fas fa-chevron-left"></i>
+                    
+                    {{-- Pagination (if using Laravel pagination) --}}
+                    @if(isset($news) && method_exists($news, 'links'))
+                        <div class="text-center py-4">
+                            {{ $news->links() }}
+                        </div>
+                    @endif
+
+                    {{-- Load More --}}
+                    <div class="text-center py-8">
+                        <button id="load-more" 
+                                class="px-6 py-3 bg-gray-200 hover:bg-gray-300 text-gray-700 font-medium rounded-lg transition">
+                            <i class="fas fa-spinner animate-spin mr-2 hidden"></i>
+                            Load More Posts
                         </button>
-                        <button class="px-5 py-2.5 mx-1 rounded-xl bg-gradient-to-r from-blue-500 to-purple-500 text-white font-medium shadow-md">
-                            1
-                        </button>
-                        <button class="px-5 py-2.5 mx-1 rounded-xl bg-white text-gray-700 hover:bg-blue-50 hover:text-blue-600 transition shadow-md">
-                            2
-                        </button>
-                        <button class="px-5 py-2.5 mx-1 rounded-xl bg-white text-gray-700 hover:bg-blue-50 hover:text-blue-600 transition shadow-md">
-                            3
-                        </button>
-                        <span class="px-3 py-2.5 text-gray-500">...</span>
-                        <button class="px-5 py-2.5 mx-1 rounded-xl bg-white text-gray-700 hover:bg-blue-50 hover:text-blue-600 transition shadow-md">
-                            8
-                        </button>
-                        <button class="px-4 py-2.5 rounded-xl bg-white text-gray-700 hover:bg-blue-50 hover:text-blue-600 transition shadow-md">
-                            <i class="fas fa-chevron-right"></i>
-                        </button>
-                    </nav>
+                    </div>
                 </div>
             </div>
             
-            {{-- SIDEBAR --}}
-            <div class="lg:w-1/3">
-                {{-- TRENDING NOW --}}
-                <div class="mb-10 animate-fade-in-up" style="animation-delay: 0.3s">
-                    <div class="flex items-center mb-6">
-                        <div class="w-2 h-8 bg-gradient-to-b from-blue-500 to-purple-500 rounded-full mr-3"></div>
-                        <h3 class="text-2xl font-bold text-gray-900">Trending Now</h3>
+            {{-- ================= RIGHT SIDEBAR ================= --}}
+            <div class="lg:w-1/4 space-y-6">
+                {{-- Birthday --}}
+                <div class="bg-white rounded-lg shadow p-4 animate-slide-up" style="animation-delay: 0.1s">
+                    <div class="flex items-center space-x-3 mb-3">
+                        <i class="fas fa-birthday-cake text-pink-500 text-xl"></i>
+                        <h3 class="font-bold text-gray-900">Birthdays</h3>
                     </div>
-                    
-                    <div class="space-y-6">
-                        @foreach(array_slice($news, 0, 3) as $item)
-                            @if($item['trending'])
-                                <div class="group p-4 rounded-2xl bg-gradient-to-r from-blue-50 to-purple-50 hover:from-blue-100 hover:to-purple-100 transition-all duration-300 cursor-pointer">
-                                    <div class="flex items-start gap-4">
-                                        <div class="flex-shrink-0 w-16 h-16 rounded-xl overflow-hidden">
-                                            <img src="{{ $item['image'] }}" 
-                                                 alt="{{ $item['title'] }}"
-                                                 class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500">
-                                        </div>
-                                        <div class="flex-1">
-                                            <div class="flex items-center gap-2 mb-1">
-                                                <span class="text-xs font-semibold px-2 py-1 bg-gradient-to-r from-blue-500 to-purple-500 text-white rounded-full">
-                                                    {{ $item['category_label'] }}
-                                                </span>
-                                                <span class="text-xs text-gray-500">{{ $item['date'] }}</span>
-                                            </div>
-                                            <h4 class="font-bold text-gray-900 group-hover:text-blue-600 transition-colors duration-300 leading-tight">
-                                                {{ Str::limit($item['title'], 50) }}
-                                            </h4>
-                                            <div class="flex items-center text-sm text-gray-600 mt-2">
-                                                <i class="fas fa-fire text-orange-500 mr-1"></i>
-                                                <span>Trending</span>
-                                                <span class="mx-2">•</span>
-                                                <i class="far fa-clock mr-1"></i>
-                                                <span>{{ $item['read_time'] }}</span>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            @endif
-                        @endforeach
-                    </div>
-                </div>
-                
-                {{-- NEWSLETTER --}}
-                <div class="mb-10 glass-effect rounded-3xl p-6 shadow-xl animate-fade-in-up" style="animation-delay: 0.4s">
-                    <div class="text-center mb-6">
-                        <div class="w-16 h-16 mx-auto mb-4 bg-gradient-to-r from-blue-500 to-purple-500 rounded-full flex items-center justify-center">
-                            <i class="fas fa-paper-plane text-2xl text-white"></i>
+                    <div class="text-sm">
+                        <div class="flex items-center justify-between mb-2">
+                            <span class="font-medium">Sarah Johnson</span>
+                            <span class="text-gray-500">Today</span>
                         </div>
-                        <h3 class="text-xl font-bold text-gray-900 mb-2">Stay Updated</h3>
-                        <p class="text-gray-600 text-sm">Get the latest news delivered to your inbox</p>
+                        <div class="flex items-center justify-between">
+                            <span class="font-medium">James Wilson</span>
+                            <span class="text-gray-500">Tomorrow</span>
+                        </div>
                     </div>
-                    
-                    <form class="space-y-4">
-                        <input type="email" 
-                               placeholder="Your email address" 
-                               class="w-full px-4 py-3 rounded-xl border border-gray-300 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition">
-                        <button type="submit" 
-                                class="w-full bg-gradient-to-r from-blue-500 to-purple-500 hover:from-blue-600 hover:to-purple-600 text-white font-semibold py-3.5 rounded-xl transition-all duration-300 transform hover:-translate-y-1 hover:shadow-xl">
-                            Subscribe Now
-                        </button>
-                    </form>
-                    
-                    <p class="text-xs text-gray-500 text-center mt-4">
-                        We respect your privacy. Unsubscribe at any time.
-                    </p>
+                    <button class="w-full mt-3 p-2 bg-gray-100 hover:bg-gray-200 rounded-lg text-sm font-medium">
+                        See All
+                    </button>
                 </div>
                 
-                {{-- CATEGORIES --}}
-                <div class="mb-10 animate-fade-in-up" style="animation-delay: 0.5s">
-                    <h3 class="text-2xl font-bold text-gray-900 mb-6">Categories</h3>
+                {{-- Contacts --}}
+                <div class="bg-white rounded-lg shadow p-4 animate-slide-up" style="animation-delay: 0.2s">
+                    <div class="flex items-center justify-between mb-4">
+                        <h3 class="font-bold text-gray-900">Contacts</h3>
+                        <div class="flex space-x-2">
+                            <button class="p-1 hover:bg-gray-100 rounded-full">
+                                <i class="fas fa-video text-gray-500"></i>
+                            </button>
+                            <button class="p-1 hover:bg-gray-100 rounded-full">
+                                <i class="fas fa-search text-gray-500"></i>
+                            </button>
+                            <button class="p-1 hover:bg-gray-100 rounded-full">
+                                <i class="fas fa-ellipsis-h text-gray-500"></i>
+                            </button>
+                        </div>
+                    </div>
                     
-                    <div class="space-y-3">
+                    <div class="space-y-3 custom-scrollbar" style="max-height: 400px; overflow-y: auto;">
                         @php
-                            $categories = [
-                                ['name' => 'Research', 'count' => 24, 'icon' => 'fas fa-flask', 'color' => 'bg-blue-500'],
-                                ['name' => 'Announcements', 'count' => 18, 'icon' => 'fas fa-bullhorn', 'color' => 'bg-purple-500'],
-                                ['name' => 'Events', 'count' => 32, 'icon' => 'fas fa-calendar-alt', 'color' => 'bg-green-500'],
-                                ['name' => 'Achievements', 'count' => 15, 'icon' => 'fas fa-trophy', 'color' => 'bg-yellow-500'],
-                                ['name' => 'Partnerships', 'count' => 9, 'icon' => 'fas fa-handshake', 'color' => 'bg-pink-500'],
-                                ['name' => 'Student News', 'count' => 28, 'icon' => 'fas fa-user-graduate', 'color' => 'bg-indigo-500'],
+                            $contacts = [
+                                ['name' => 'Dr. Robert Kim', 'status' => 'online', 'avatar' => 'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=80'],
+                                ['name' => 'Prof. Maria Garcia', 'status' => 'online', 'avatar' => 'https://images.unsplash.com/photo-1494790108755-2616b786d4d3?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=80'],
+                                ['name' => 'Alex Thompson', 'status' => 'away', 'avatar' => 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=80'],
+                                ['name' => 'Research Lab Team', 'status' => 'group', 'avatar' => 'https://images.unsplash.com/photo-1556761175-b413da4baf72?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=80'],
+                                ['name' => 'Student Union', 'status' => 'offline', 'avatar' => 'https://images.unsplash.com/photo-1540575467063-178a50c2df87?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=80'],
+                                ['name' => 'Tech Club', 'status' => 'online', 'avatar' => 'https://images.unsplash.com/photo-1559136555-9303baea8ebd?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=80'],
                             ];
                         @endphp
                         
-                        @foreach($categories as $category)
-                            <a href="#" class="flex items-center justify-between p-4 rounded-2xl bg-gray-50 hover:bg-blue-50 hover:text-blue-600 transition-all duration-300 group">
-                                <div class="flex items-center">
-                                    <div class="w-10 h-10 {{ $category['color'] }} rounded-xl flex items-center justify-center mr-4 group-hover:scale-110 transition-transform duration-300">
-                                        <i class="{{ $category['icon'] }} text-white"></i>
-                                    </div>
-                                    <span class="font-medium">{{ $category['name'] }}</span>
+                        @foreach($contacts as $contact)
+                            <div class="flex items-center space-x-3 p-2 rounded-lg hover:bg-gray-100 cursor-pointer">
+                                <div class="relative">
+                                    <img src="{{ $contact['avatar'] }}" 
+                                         alt="{{ $contact['name'] }}"
+                                         class="w-10 h-10 rounded-full object-cover">
+                                    @if($contact['status'] === 'online')
+                                        <div class="absolute bottom-0 right-0 w-3 h-3 bg-green-500 rounded-full border-2 border-white"></div>
+                                    @elseif($contact['status'] === 'away')
+                                        <div class="absolute bottom-0 right-0 w-3 h-3 bg-yellow-500 rounded-full border-2 border-white"></div>
+                                    @elseif($contact['status'] === 'group')
+                                        <div class="absolute bottom-0 right-0 w-3 h-3 bg-blue-500 rounded-full border-2 border-white"></div>
+                                    @endif
                                 </div>
-                                <span class="px-3 py-1 bg-white rounded-full text-sm font-semibold text-gray-700 group-hover:bg-blue-100 group-hover:text-blue-700">
-                                    {{ $category['count'] }}
-                                </span>
-                            </a>
+                                <span class="font-medium text-sm">{{ $contact['name'] }}</span>
+                            </div>
                         @endforeach
                     </div>
                 </div>
                 
-                {{-- TAGS CLOUD --}}
-                <div class="animate-fade-in-up" style="animation-delay: 0.6s">
-                    <h3 class="text-2xl font-bold text-gray-900 mb-6">Popular Tags</h3>
+                {{-- Trending Now --}}
+                <div class="bg-white rounded-lg shadow p-4 animate-slide-up" style="animation-delay: 0.3s">
+                    <h3 class="font-bold text-gray-900 mb-4">Trending Now</h3>
                     
-                    <div class="flex flex-wrap gap-3">
+                    <div class="space-y-4">
                         @php
-                            $tags = ['AI', 'Research', 'Technology', 'Innovation', 'Education', 'Students', 'Quantum', 'Machine Learning', 'Data Science', 'Startup', 'International', 'Conference', 'Hackathon', 'Awards', 'Sustainability'];
+                            $trending = [
+                                ['tag' => '#CAEDAHack2024', 'posts' => '2.3K posts'],
+                                ['tag' => '#QuantumBreakthrough', 'posts' => '1.8K posts'],
+                                ['tag' => '#CampusRenewal', 'posts' => '956 posts'],
+                                ['tag' => '#ResearchGrant', 'posts' => '742 posts'],
+                            ];
                         @endphp
                         
-                        @foreach($tags as $tag)
-                            <a href="#" class="px-4 py-2.5 bg-gradient-to-r from-gray-100 to-gray-200 hover:from-blue-100 hover:to-purple-100 text-gray-700 hover:text-blue-600 font-medium rounded-xl transition-all duration-300 hover:scale-105 hover:shadow-lg">
-                                #{{ $tag }}
-                            </a>
+                        @foreach($trending as $item)
+                            <div class="p-3 rounded-lg hover:bg-gray-50 cursor-pointer">
+                                <div class="text-xs text-gray-500 mb-1">Trending in CAEDA</div>
+                                <div class="font-bold text-gray-900 mb-1">{{ $item['tag'] }}</div>
+                                <div class="text-sm text-gray-500">{{ $item['posts'] }}</div>
+                            </div>
                         @endforeach
                     </div>
                 </div>
-            </div>
-        </div>
-    </div>
-</section>
-
-{{-- ================= MULTIMEDIA SECTION ================= --}}
-<section class="py-20 bg-gradient-to-br from-gray-50 via-blue-50/30 to-purple-50/30 px-4 md:px-8">
-    <div class="max-w-7xl mx-auto">
-        <div class="text-center mb-16 animate-fade-in-up">
-            <h2 class="text-3xl md:text-4xl font-bold text-gray-900 mb-4 font-cinzel">
-                Multimedia <span class="text-gradient">Gallery</span>
-            </h2>
-            <p class="text-lg text-gray-600 max-w-3xl mx-auto">
-                Visual stories, interviews, and highlights from our events and research
-            </p>
-        </div>
-        
-        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-12">
-            @php
-                $multimedia = [
-                    [
-                        'type' => 'video',
-                        'title' => 'Behind the Scenes: Award Ceremony',
-                        'thumbnail' => 'https://images.unsplash.com/photo-1571019613454-1cb2f99b2d8b?ixlib=rb-4.0.3&auto=format&fit=crop&w=1000&q=80',
-                        'duration' => '5:42',
-                        'views' => '2.4K'
-                    ],
-                    [
-                        'type' => 'gallery',
-                        'title' => 'Research Symposium 2024 Photos',
-                        'thumbnail' => 'https://images.unsplash.com/photo-1497366754035-f200968a6e72?ixlib=rb-4.0.3&auto=format&fit=crop&w=1000&q=80',
-                        'count' => 48,
-                        'icon' => 'fas fa-images'
-                    ],
-                    [
-                        'type' => 'podcast',
-                        'title' => 'AI in Education: Expert Roundtable',
-                        'thumbnail' => 'https://images.unsplash.com/photo-1590602847869-f468a594f5c7?ixlib=rb-4.0.3&auto=format&fit=crop&w=1000&q=80',
-                        'duration' => '42:15',
-                        'icon' => 'fas fa-podcast'
-                    ],
-                    [
-                        'type' => 'document',
-                        'title' => 'Annual Research Report 2024',
-                        'thumbnail' => 'https://images.unsplash.com/photo-1586232702178-f044c5f4d4b7?ixlib=rb-4.0.3&auto=format&fit=crop&w=1000&q=80',
-                        'pages' => 124,
-                        'icon' => 'fas fa-file-pdf'
-                    ],
-                ];
-            @endphp
-            
-            @foreach($multimedia as $index => $media)
-                <div class="group bg-white rounded-3xl overflow-hidden shadow-xl hover-scale animate-fade-in-up" 
-                     style="animation-delay: {{ $index * 150 }}ms">
-                    <div class="relative h-48 overflow-hidden">
-                        <img src="{{ $media['thumbnail'] }}" 
-                             alt="{{ $media['title'] }}"
-                             class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700">
-                        
-                        <div class="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center">
-                            <button class="w-14 h-14 bg-gradient-to-r from-blue-500 to-purple-500 rounded-full flex items-center justify-center text-white shadow-lg transform group-hover:scale-110 transition-transform duration-300">
-                                @if($media['type'] == 'video')
-                                    <i class="fas fa-play text-xl"></i>
-                                @elseif($media['type'] == 'gallery')
-                                    <i class="fas fa-images text-xl"></i>
-                                @elseif($media['type'] == 'podcast')
-                                    <i class="fas fa-play-circle text-xl"></i>
-                                @else
-                                    <i class="fas fa-download text-xl"></i>
-                                @endif
-                            </button>
-                        </div>
-                        
-                        @if($media['type'] == 'video')
-                            <div class="absolute bottom-4 right-4 bg-black/70 text-white px-3 py-1 rounded-lg text-sm font-semibold">
-                                {{ $media['duration'] }}
-                            </div>
-                        @endif
+                
+                {{-- Groups --}}
+                <div class="bg-white rounded-lg shadow p-4 animate-slide-up" style="animation-delay: 0.4s">
+                    <div class="flex items-center justify-between mb-4">
+                        <h3 class="font-bold text-gray-900">Groups</h3>
+                        <button class="text-blue-600 text-sm font-medium hover:underline">See All</button>
                     </div>
                     
-                    <div class="p-5">
-                        <div class="flex items-center mb-3">
-                            <div class="w-8 h-8 rounded-lg {{ 
-                                $media['type'] == 'video' ? 'bg-red-500' : 
-                                ($media['type'] == 'gallery' ? 'bg-green-500' : 
-                                ($media['type'] == 'podcast' ? 'bg-purple-500' : 'bg-blue-500')) 
-                            }} flex items-center justify-center mr-3">
-                                <i class="text-white text-sm {{ 
-                                    $media['type'] == 'video' ? 'fas fa-video' : 
-                                    ($media['type'] == 'gallery' ? 'fas fa-images' : 
-                                    ($media['type'] == 'podcast' ? 'fas fa-podcast' : 'fas fa-file-alt')) 
-                                }}"></i>
+                    <div class="space-y-3">
+                        <div class="flex items-center space-x-3 p-2 rounded-lg hover:bg-gray-100 cursor-pointer">
+                            <div class="w-10 h-10 bg-blue-100 rounded-lg flex items-center justify-center">
+                                <i class="fas fa-flask text-blue-600"></i>
                             </div>
-                            <span class="text-sm font-semibold text-gray-700">{{ ucfirst($media['type']) }}</span>
+                            <div>
+                                <div class="font-medium text-sm">Research Scholars</div>
+                                <div class="text-xs text-gray-500">3 new posts</div>
+                            </div>
                         </div>
                         
-                        <h4 class="font-bold text-gray-900 mb-3 leading-tight">{{ $media['title'] }}</h4>
+                        <div class="flex items-center space-x-3 p-2 rounded-lg hover:bg-gray-100 cursor-pointer">
+                            <div class="w-10 h-10 bg-green-100 rounded-lg flex items-center justify-center">
+                                <i class="fas fa-leaf text-green-600"></i>
+                            </div>
+                            <div>
+                                <div class="font-medium text-sm">Green Campus</div>
+                                <div class="text-xs text-gray-500">Event tomorrow</div>
+                            </div>
+                        </div>
                         
-                        <div class="flex items-center text-sm text-gray-600">
-                            @if($media['type'] == 'video')
-                                <i class="fas fa-eye mr-1"></i>
-                                <span>{{ $media['views'] }} views</span>
-                            @elseif($media['type'] == 'gallery')
-                                <i class="{{ $media['icon'] }} mr-1"></i>
-                                <span>{{ $media['count'] }} photos</span>
-                            @elseif($media['type'] == 'podcast')
-                                <i class="{{ $media['icon'] }} mr-1"></i>
-                                <span>{{ $media['duration'] }}</span>
-                            @else
-                                <i class="{{ $media['icon'] }} mr-1"></i>
-                                <span>{{ $media['pages'] }} pages</span>
-                            @endif
+                        <div class="flex items-center space-x-3 p-2 rounded-lg hover:bg-gray-100 cursor-pointer">
+                            <div class="w-10 h-10 bg-purple-100 rounded-lg flex items-center justify-center">
+                                <i class="fas fa-code text-purple-600"></i>
+                            </div>
+                            <div>
+                                <div class="font-medium text-sm">AI & ML Club</div>
+                                <div class="text-xs text-gray-500">Workshop today</div>
+                            </div>
                         </div>
                     </div>
                 </div>
-            @endforeach
+                
+                {{-- Quick Links --}}
+                <div class="text-xs text-gray-500">
+                    <div class="flex flex-wrap gap-2 mb-2">
+                        <a href="#" class="hover:underline">Privacy</a> •
+                        <a href="#" class="hover:underline">Terms</a> •
+                        <a href="#" class="hover:underline">Advertising</a> •
+                        <a href="#" class="hover:underline">Ad Choices</a> •
+                        <a href="#" class="hover:underline">Cookies</a> •
+                        <a href="#" class="hover:underline">More</a>
+                    </div>
+                    <div>Meta © 2024</div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+{{-- Create Post Modal --}}
+<div id="create-post-modal" class="hidden fixed inset-0 bg-black/50 z-50 flex items-center justify-center p-4">
+    <div class="bg-white rounded-lg w-full max-w-lg animate-slide-up">
+        <div class="p-4 border-b flex items-center justify-between">
+            <h3 class="text-xl font-bold text-gray-900">Create Post</h3>
+            <button onclick="closeModal('create-post-modal')" class="p-2 hover:bg-gray-100 rounded-full">
+                <i class="fas fa-times text-gray-500"></i>
+            </button>
         </div>
         
-        <div class="text-center">
-            <button class="bg-gradient-to-r from-gray-100 to-gray-200 hover:from-gray-200 hover:to-gray-300 text-gray-800 font-bold py-4 px-8 rounded-2xl transition-all duration-300 transform hover:-translate-y-1 hover:shadow-xl">
-                Explore More Media
+        <div class="p-4">
+            <div class="flex items-center space-x-3 mb-4">
+                <div class="w-10 h-10 bg-gradient-to-r from-blue-500 to-purple-500 rounded-full flex items-center justify-center text-white font-bold">
+                    CS
+                </div>
+                <div>
+                    <div class="font-bold">Dr. Chen Sokny</div>
+                    <select class="text-sm border-none bg-gray-100 rounded-lg px-2 py-1">
+                        <option>Public</option>
+                        <option>Friends</option>
+                        <option>Only me</option>
+                    </select>
+                </div>
+            </div>
+            
+            <textarea id="post-content" 
+                      placeholder="What's on your mind, Dr. Sokny?"
+                      class="w-full h-40 p-3 resize-none focus:outline-none text-lg"></textarea>
+            
+            <div class="border rounded-lg p-3 mt-4">
+                <div class="flex items-center justify-between mb-3">
+                    <span class="font-medium">Add to your post</span>
+                </div>
+                <div class="flex space-x-2">
+                    <button class="p-2 hover:bg-gray-100 rounded-lg">
+                        <i class="fas fa-images text-green-500"></i>
+                    </button>
+                    <button class="p-2 hover:bg-gray-100 rounded-lg">
+                        <i class="fas fa-user-tag text-blue-500"></i>
+                    </button>
+                    <button class="p-2 hover:bg-gray-100 rounded-lg">
+                        <i class="fas fa-smile text-yellow-500"></i>
+                    </button>
+                    <button class="p-2 hover:bg-gray-100 rounded-lg">
+                        <i class="fas fa-map-marker-alt text-red-500"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+        
+        <div class="p-4 border-t">
+            <button onclick="submitPost()" 
+                    class="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 rounded-lg transition">
+                Post
             </button>
         </div>
     </div>
-</section>
+</div>
 
-{{-- ================= ARCHIVES ================= --}}
-<section class="py-20 px-4 md:px-8 bg-white">
+{{-- Emoji Picker --}}
+<div id="emoji-picker" class="emoji-picker fixed bottom-0 left-0 right-0 bg-white border-t shadow-lg z-40 p-4">
     <div class="max-w-7xl mx-auto">
-        <div class="flex flex-col lg:flex-row items-start lg:items-center justify-between mb-12 animate-fade-in-up">
-            <div>
-                <h2 class="text-3xl md:text-4xl font-bold text-gray-900 mb-2 font-cinzel">
-                    News <span class="text-gradient">Archives</span>
-                </h2>
-                <p class="text-gray-600">Browse past news and updates by year and month</p>
-            </div>
-            <div class="mt-4 lg:mt-0">
-                <select class="bg-gray-100 border-none rounded-xl px-4 py-3 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none">
-                    <option>Browse by Year</option>
-                    <option>2024</option>
-                    <option>2023</option>
-                    <option>2022</option>
-                    <option>2021</option>
-                    <option>2020</option>
-                </select>
-            </div>
+        <div class="flex justify-between items-center mb-4">
+            <h4 class="font-bold text-gray-900">Emoji</h4>
+            <button onclick="toggleEmojiPicker()" class="p-2 hover:bg-gray-100 rounded-full">
+                <i class="fas fa-times text-gray-500"></i>
+            </button>
         </div>
-        
-        <div class="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-4 animate-fade-in-up" style="animation-delay: 0.2s">
+        <div class="grid grid-cols-8 gap-2">
             @php
-                $months = [
-                    ['name' => 'January', 'count' => 12],
-                    ['name' => 'February', 'count' => 8],
-                    ['name' => 'March', 'count' => 15],
-                    ['name' => 'April', 'count' => 9],
-                    ['name' => 'May', 'count' => 11],
-                    ['name' => 'June', 'count' => 18],
-                    ['name' => 'July', 'count' => 7],
-                    ['name' => 'August', 'count' => 14],
-                    ['name' => 'September', 'count' => 16],
-                    ['name' => 'October', 'count' => 13],
-                    ['name' => 'November', 'count' => 10],
-                    ['name' => 'December', 'count' => 5],
-                ];
+                $emojis = ['😀', '😂', '🥰', '😎', '🤔', '👏', '🎉', '🔥', '✨', '💪', '🤝', '📚', '🎓', '💡', '🔬', '💻'];
             @endphp
-            
-            @foreach($months as $month)
-                <div class="group p-5 text-center rounded-2xl bg-gradient-to-br from-gray-50 to-gray-100 hover:from-blue-50 hover:to-purple-50 transition-all duration-300 cursor-pointer hover-scale">
-                    <div class="text-3xl font-bold text-gray-900 mb-2 group-hover:text-blue-600 transition-colors duration-300">
-                        {{ substr($month['name'], 0, 3) }}
-                    </div>
-                    <div class="text-sm text-gray-600 mb-2">{{ $month['name'] }}</div>
-                    <div class="text-xs font-semibold px-3 py-1.5 bg-white rounded-full text-gray-700 group-hover:bg-blue-100 group-hover:text-blue-700 transition-colors duration-300">
-                        {{ $month['count'] }} articles
-                    </div>
-                </div>
+            @foreach($emojis as $emoji)
+                <button class="text-2xl p-2 hover:bg-gray-100 rounded-lg" onclick="insertEmoji('{{ $emoji }}')">
+                    {{ $emoji }}
+                </button>
             @endforeach
         </div>
     </div>
-</section>
+</div>
 
-{{-- ================= CTA SECTION ================= --}}
-<section class="py-20 bg-gradient-to-br from-blue-600 via-purple-600 to-indigo-700 text-white relative overflow-hidden">
-    <div class="absolute inset-0">
-        <div class="absolute top-0 left-0 w-96 h-96 bg-white/10 rounded-full -translate-x-1/2 -translate-y-1/2"></div>
-        <div class="absolute bottom-0 right-0 w-96 h-96 bg-purple-400/20 rounded-full translate-x-1/3 translate-y-1/3"></div>
-    </div>
-    
-    <div class="max-w-4xl mx-auto text-center relative z-10 px-4 md:px-8">
-        <div class="inline-flex items-center bg-white/20 backdrop-blur-lg rounded-full px-6 py-3 mb-8">
-            <i class="fas fa-newspaper mr-2"></i>
-            <span class="font-semibold">STAY CONNECTED</span>
+{{-- Loading Overlay --}}
+<div id="loading" class="hidden fixed inset-0 bg-black/50 z-50 flex items-center justify-center">
+    <div class="bg-white p-8 rounded-lg shadow-lg">
+        <div class="flex items-center space-x-3">
+            <div class="w-10 h-10 border-4 border-blue-600 border-t-transparent rounded-full animate-spin"></div>
+            <div class="text-lg font-medium">Loading...</div>
         </div>
-        
-        <h2 class="text-3xl md:text-4xl lg:text-5xl font-bold mb-6">
-            Never Miss an <span class="bg-gradient-to-r from-cyan-300 to-blue-300 bg-clip-text text-transparent">Update</span>
-        </h2>
-        <p class="text-xl mb-10 opacity-90 max-w-2xl mx-auto">
-            Subscribe to our newsletter and be the first to know about our latest news, events, and research breakthroughs
-        </p>
-        
-        <div class="max-w-md mx-auto mb-12">
-            <div class="flex gap-2">
-                <input type="email" 
-                       placeholder="Enter your email address" 
-                       class="flex-1 px-6 py-4 rounded-2xl bg-white/10 backdrop-blur-sm border border-white/30 text-white placeholder-blue-200 focus:outline-none focus:ring-4 focus:ring-blue-500/30 focus:border-blue-400 transition">
-                <button class="bg-gradient-to-r from-cyan-400 to-blue-400 hover:from-cyan-500 hover:to-blue-500 text-white font-bold py-4 px-8 rounded-2xl transition-all duration-300 transform hover:-translate-y-1 hover:shadow-xl">
-                    Subscribe
-                </button>
-            </div>
-        </div>
-        
-        <div class="flex flex-col sm:flex-row gap-6 justify-center text-sm">
-            <div class="flex items-center">
-                <i class="fas fa-check-circle text-green-300 mr-2"></i>
-                <span>No spam, ever</span>
-            </div>
-            <div class="flex items-center">
-                <i class="fas fa-check-circle text-green-300 mr-2"></i>
-                <span>Unsubscribe anytime</span>
-            </div>
-            <div class="flex items-center">
-                <i class="fas fa-check-circle text-green-300 mr-2"></i>
-                <span>Weekly digest</span>
-            </div>
-        </div>
-    </div>
-</section>
-
-{{-- Loading Modal --}}
-<div id="loading-modal" class="hidden fixed inset-0 bg-black/70 backdrop-blur-sm z-50 flex items-center justify-center">
-    <div class="bg-white p-8 rounded-3xl shadow-2xl max-w-md mx-4 text-center animate-scale-in">
-        <svg class="animate-spin mx-auto h-12 w-12 text-blue-600 mb-4" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
-            <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
-            <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
-        </svg>
-        <h3 class="text-xl font-bold text-gray-800 mb-2">Loading News</h3>
-        <p class="text-gray-600">Please wait while we fetch the latest articles...</p>
     </div>
 </div>
 
@@ -924,188 +889,177 @@
 @section('extra-js')
 <script>
 document.addEventListener('DOMContentLoaded', function() {
-    // News filtering
-    const newsFilters = document.querySelectorAll('.news-filter');
-    const newsCards = document.querySelectorAll('.news-card');
+    // Facebook-like interactions
     
-    newsFilters.forEach(filter => {
-        filter.addEventListener('click', function() {
-            // Update active filter
-            newsFilters.forEach(f => f.classList.remove('active', 'bg-gradient-to-r', 'from-blue-500', 'to-purple-500', 'text-white'));
-            newsFilters.forEach(f => f.classList.add('bg-gray-100', 'hover:bg-gray-200', 'text-gray-800'));
-            this.classList.remove('bg-gray-100', 'hover:bg-gray-200', 'text-gray-800');
-            this.classList.add('active', 'bg-gradient-to-r', 'from-blue-500', 'to-purple-500', 'text-white');
-            
-            const filterValue = this.dataset.filter;
-            
-            // Filter news cards
-            newsCards.forEach(card => {
-                if (filterValue === 'all' || card.dataset.category === filterValue) {
-                    card.style.display = 'block';
-                    card.classList.add('animate-fade-in-up');
-                } else {
-                    card.style.display = 'none';
-                    card.classList.remove('animate-fade-in-up');
-                }
-            });
+    // Open create post modal when clicking "What's on your mind"
+    document.querySelectorAll('[class*="fb-comment-input"]').forEach(input => {
+        input.addEventListener('click', function() {
+            document.getElementById('create-post-modal').classList.remove('hidden');
         });
     });
     
-    // Search functionality
-    const searchInput = document.getElementById('news-search');
-    if (searchInput) {
-        searchInput.addEventListener('input', debounce(function() {
-            const searchTerm = this.value.toLowerCase().trim();
+    // Like post functionality
+    window.likePost = function(postId, button) {
+        const isLiked = button.getAttribute('data-liked') === 'true';
+        const likeIcon = button.querySelector('i');
+        const likeText = button.querySelector('span');
+        
+        if (isLiked) {
+            // Unlike
+            button.setAttribute('data-liked', 'false');
+            button.classList.remove('fb-text-blue');
+            likeIcon.classList.remove('fb-text-blue');
+            likeIcon.classList.remove('fas');
+            likeIcon.classList.add('far');
+            likeText.textContent = 'Like';
             
-            if (searchTerm.length > 2) {
-                // Show loading
-                const modal = document.getElementById('loading-modal');
-                modal.classList.remove('hidden');
+            // Update like count (in a real app, you'd make an API call)
+            const postElement = button.closest('.fb-post');
+            const likeCountElement = postElement.querySelector('[class*="text-blue-600"] + span');
+            if (likeCountElement) {
+                const currentLikes = parseInt(likeCountElement.textContent);
+                likeCountElement.textContent = currentLikes - 1;
+            }
+        } else {
+            // Like
+            button.setAttribute('data-liked', 'true');
+            button.classList.add('fb-text-blue');
+            likeIcon.classList.add('fb-text-blue');
+            likeIcon.classList.remove('far');
+            likeIcon.classList.add('fas');
+            likeText.textContent = 'Liked';
+            
+            // Add animation
+            button.classList.add('animate-like-pulse');
+            setTimeout(() => button.classList.remove('animate-like-pulse'), 300);
+            
+            // Update like count
+            const postElement = button.closest('.fb-post');
+            const likeCountElement = postElement.querySelector('[class*="text-blue-600"] + span');
+            if (likeCountElement) {
+                const currentLikes = parseInt(likeCountElement.textContent);
+                likeCountElement.textContent = currentLikes + 1;
+            }
+        }
+    };
+    
+    // Focus comment input
+    window.focusComment = function(postId) {
+        const commentInput = document.getElementById(`comment-input-${postId}`);
+        if (commentInput) {
+            commentInput.focus();
+        }
+    };
+    
+    // Share post
+    window.sharePost = function(postId) {
+        // Show share options
+        showNotification('Share options would appear here', 'info');
+    };
+    
+    // Submit new post
+    window.submitPost = function() {
+        const content = document.getElementById('post-content').value.trim();
+        if (!content) {
+            showNotification('Please write something to post', 'warning');
+            return;
+        }
+        
+        showLoading();
+        
+        // Simulate API call
+        setTimeout(() => {
+            hideLoading();
+            closeModal('create-post-modal');
+            showNotification('Post published successfully!', 'success');
+            document.getElementById('post-content').value = '';
+            
+            // In a real app, you would add the new post to the feed
+            // addNewPostToFeed(content);
+        }, 1500);
+    };
+    
+    // Close modal
+    window.closeModal = function(modalId) {
+        document.getElementById(modalId).classList.add('hidden');
+    };
+    
+    // Toggle emoji picker
+    window.toggleEmojiPicker = function() {
+        const picker = document.getElementById('emoji-picker');
+        picker.classList.toggle('show');
+    };
+    
+    // Insert emoji
+    window.insertEmoji = function(emoji) {
+        const activeElement = document.activeElement;
+        if (activeElement.tagName === 'TEXTAREA' || activeElement.tagName === 'INPUT') {
+            const start = activeElement.selectionStart;
+            const end = activeElement.selectionEnd;
+            const text = activeElement.value;
+            activeElement.value = text.substring(0, start) + emoji + text.substring(end);
+            activeElement.selectionStart = activeElement.selectionEnd = start + emoji.length;
+            activeElement.focus();
+        }
+    };
+    
+    // Load more posts
+    const loadMoreBtn = document.getElementById('load-more');
+    if (loadMoreBtn) {
+        loadMoreBtn.addEventListener('click', function() {
+            const spinner = this.querySelector('.fa-spinner');
+            spinner.classList.remove('hidden');
+            this.disabled = true;
+            
+            // Simulate loading more posts
+            setTimeout(() => {
+                spinner.classList.add('hidden');
+                this.disabled = false;
                 
-                // Simulate search
+                // In a real app, you would fetch and append new posts
+                // fetchMorePosts();
+                
+                showNotification('More posts loaded!', 'success');
+            }, 2000);
+        });
+    }
+    
+    // Search functionality
+    const searchInput = document.querySelector('input[placeholder*="Search"]');
+    if (searchInput) {
+        searchInput.addEventListener('keyup', debounce(function(e) {
+            if (e.key === 'Enter' || this.value.length > 2) {
+                showLoading();
                 setTimeout(() => {
-                    modal.classList.add('hidden');
-                    searchNews(searchTerm);
+                    hideLoading();
+                    showNotification(`Search results for: ${this.value}`, 'info');
                 }, 1000);
             }
         }, 500));
     }
     
-    // Intersection Observer for animations
-    const observer = new IntersectionObserver(
-        (entries) => {
-            entries.forEach((entry) => {
-                if (entry.isIntersecting) {
-                    entry.target.classList.add('animate-fade-in-up');
-                }
-            });
-        },
-        { threshold: 0.1 }
-    );
-    
-    // Observe all animated elements
-    document.querySelectorAll('.animate-fade-in-up').forEach((el) => {
-        observer.observe(el);
-    });
-    
-    // Trending badges animation
-    const trendingBadges = document.querySelectorAll('.trending-badge');
-    trendingBadges.forEach(badge => {
-        badge.addEventListener('mouseenter', function() {
-            this.style.transform = 'scale(1.05)';
-        });
-        
-        badge.addEventListener('mouseleave', function() {
-            this.style.transform = 'scale(1)';
-        });
-    });
-    
-    // Bookmark functionality
-    document.querySelectorAll('.fa-bookmark').forEach(bookmark => {
-        bookmark.addEventListener('click', function(e) {
-            e.stopPropagation();
-            this.classList.toggle('far');
-            this.classList.toggle('fas');
-            this.classList.toggle('text-blue-500');
-            
-            const newsTitle = this.closest('.news-card')?.querySelector('h3')?.textContent || 'News article';
-            const action = this.classList.contains('fas') ? 'Bookmarked' : 'Removed bookmark';
-            
-            showNotification(`${action}: ${newsTitle}`, this.classList.contains('fas') ? 'success' : 'info');
-        });
-    });
-    
-    // Share functionality
-    document.querySelectorAll('.fa-share-alt').forEach(shareBtn => {
-        shareBtn.addEventListener('click', function(e) {
-            e.stopPropagation();
-            const newsTitle = this.closest('.featured-news-gradient')?.querySelector('h3')?.textContent || 'CAEDA News';
-            const newsUrl = window.location.href;
-            
-            if (navigator.share) {
-                navigator.share({
-                    title: newsTitle,
-                    text: 'Check out this news from CAEDA',
-                    url: newsUrl
-                });
-            } else {
-                // Fallback: copy to clipboard
-                navigator.clipboard.writeText(`${newsTitle} - ${newsUrl}`);
-                showNotification('Link copied to clipboard!', 'success');
-            }
-        });
-    });
+    // Real-time notifications
+    simulateNotifications();
 });
 
-// Global functions
-function scrollToLatest() {
-    document.getElementById('latest-news').scrollIntoView({ 
-        behavior: 'smooth',
-        block: 'start'
-    });
-}
-
-function viewNews(newsId) {
-    // Show loading modal
-    const modal = document.getElementById('loading-modal');
-    modal.classList.remove('hidden');
-    
-    // Simulate loading
-    setTimeout(() => {
-        modal.classList.add('hidden');
-        
-        // In a real application, you would redirect to the news article page
-        // window.location.href = `/news/${newsId}`;
-        
-        // For demo purposes, show an alert
-        showNotification(`Loading news article #${newsId}...`, 'info');
-    }, 1500);
-}
-
-function searchNews(term) {
-    // In a real application, you would make an API call
-    // fetch(`/api/news/search?q=${term}`)
-    //     .then(response => response.json())
-    //     .then(data => updateSearchResults(data));
-    
-    // For demo purposes, filter existing cards
-    const newsCards = document.querySelectorAll('.news-card');
-    let foundCount = 0;
-    
-    newsCards.forEach(card => {
-        const title = card.querySelector('h3').textContent.toLowerCase();
-        const description = card.querySelector('p').textContent.toLowerCase();
-        const tags = Array.from(card.querySelectorAll('.text-xs')).map(tag => tag.textContent.toLowerCase());
-        
-        if (title.includes(term) || description.includes(term) || tags.some(tag => tag.includes(term))) {
-            card.style.display = 'block';
-            card.classList.add('animate-fade-in-up');
-            foundCount++;
-        } else {
-            card.style.display = 'none';
-            card.classList.remove('animate-fade-in-up');
-        }
-    });
-    
-    showNotification(`Found ${foundCount} news articles for "${term}"`, foundCount > 0 ? 'success' : 'warning');
-}
-
+// Show notification
 function showNotification(message, type = 'info') {
-    // Create notification element
     const notification = document.createElement('div');
     const colors = {
-        success: { bg: 'bg-gradient-to-r from-green-500 to-emerald-600', icon: 'fa-check-circle' },
-        error: { bg: 'bg-gradient-to-r from-red-500 to-rose-600', icon: 'fa-times-circle' },
-        warning: { bg: 'bg-gradient-to-r from-yellow-500 to-orange-600', icon: 'fa-exclamation-triangle' },
-        info: { bg: 'bg-gradient-to-r from-blue-500 to-indigo-600', icon: 'fa-info-circle' }
+        success: 'bg-green-500',
+        error: 'bg-red-500',
+        warning: 'bg-yellow-500',
+        info: 'bg-blue-500'
     };
     
-    notification.className = `fixed top-24 right-4 ${colors[type].bg} text-white px-5 py-4 rounded-xl shadow-2xl animate-slide-in-right z-50 max-w-sm`;
+    notification.className = `fixed top-20 right-4 ${colors[type]} text-white px-4 py-3 rounded-lg shadow-lg animate-slide-up z-50`;
     notification.innerHTML = `
-        <div class="flex items-center gap-3">
-            <i class="fas ${colors[type].icon} text-xl"></i>
-            <div class="flex-1">${message}</div>
-            <button onclick="this.parentElement.parentElement.remove()" class="text-white/80 hover:text-white ml-2">
+        <div class="flex items-center justify-between">
+            <div class="flex items-center space-x-3">
+                <i class="fas fa-${type === 'success' ? 'check-circle' : type === 'error' ? 'exclamation-circle' : 'info-circle'}"></i>
+                <span>${message}</span>
+            </div>
+            <button onclick="this.parentElement.parentElement.remove()" class="ml-4">
                 <i class="fas fa-times"></i>
             </button>
         </div>
@@ -1113,17 +1067,26 @@ function showNotification(message, type = 'info') {
     
     document.body.appendChild(notification);
     
-    // Auto-remove after 5 seconds
     setTimeout(() => {
         if (notification.parentElement) {
             notification.style.opacity = '0';
-            notification.style.transform = 'translateX(20px)';
+            notification.style.transform = 'translateY(-20px)';
             setTimeout(() => notification.remove(), 300);
         }
-    }, 5000);
+    }, 3000);
 }
 
-// Utility function: Debounce
+// Show loading
+function showLoading() {
+    document.getElementById('loading').classList.remove('hidden');
+}
+
+// Hide loading
+function hideLoading() {
+    document.getElementById('loading').classList.add('hidden');
+}
+
+// Debounce function
 function debounce(func, wait) {
     let timeout;
     return function executedFunction(...args) {
@@ -1136,24 +1099,57 @@ function debounce(func, wait) {
     };
 }
 
+// Simulate real-time notifications
+function simulateNotifications() {
+    setTimeout(() => {
+        // Show a notification after 10 seconds
+        showNotification('James Wilson liked your post', 'info');
+    }, 10000);
+    
+    setTimeout(() => {
+        // Show another notification after 20 seconds
+        showNotification('Sarah Chen commented on your photo', 'info');
+    }, 20000);
+}
+
 // Keyboard shortcuts
 document.addEventListener('keydown', function(e) {
-    // Ctrl/Cmd + F to focus search
-    if ((e.ctrlKey || e.metaKey) && e.key === 'f') {
-        e.preventDefault();
-        const searchInput = document.getElementById('news-search');
-        if (searchInput) {
-            searchInput.focus();
-            searchInput.select();
+    // Ctrl/Cmd + Enter to submit post
+    if ((e.ctrlKey || e.metaKey) && e.key === 'Enter') {
+        const modal = document.getElementById('create-post-modal');
+        if (!modal.classList.contains('hidden')) {
+            submitPost();
         }
     }
     
-    // Escape to clear search
+    // Escape to close modals
     if (e.key === 'Escape') {
-        const searchInput = document.getElementById('news-search');
-        if (searchInput && document.activeElement === searchInput) {
-            searchInput.value = '';
-            searchNews('');
+        const modals = ['create-post-modal', 'emoji-picker'];
+        modals.forEach(modalId => {
+            const modal = document.getElementById(modalId);
+            if (modal && !modal.classList.contains('hidden')) {
+                closeModal(modalId);
+            }
+        });
+    }
+});
+
+// Infinite scroll
+let loading = false;
+window.addEventListener('scroll', function() {
+    if (loading) return;
+    
+    const scrollPosition = window.innerHeight + window.scrollY;
+    const pageHeight = document.documentElement.scrollHeight - 500;
+    
+    if (scrollPosition >= pageHeight) {
+        loading = true;
+        const loadMoreBtn = document.getElementById('load-more');
+        if (loadMoreBtn) {
+            loadMoreBtn.click();
+            setTimeout(() => {
+                loading = false;
+            }, 2000);
         }
     }
 });

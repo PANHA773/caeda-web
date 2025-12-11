@@ -13,6 +13,7 @@ use App\Http\Controllers\ProjectController;
 use App\Http\Controllers\ProgramController;
 use App\Http\Controllers\EventController;
 use App\Http\Controllers\DonationController;
+use App\Http\Controllers\NewsController;
 
 
 use App\Http\Controllers\Admin\AboutAdminController;
@@ -47,13 +48,13 @@ Route::prefix('admin')->name('admin.')->group(function () {
     Route::put('/faculties/{faculty}', [FacultyAdminController::class, 'update'])->name('faculties.update');
     Route::delete('/faculties/{faculty}', [FacultyAdminController::class, 'destroy'])->name('faculties.destroy');
     Route::get('/faculties/{faculty}', [FacultyAdminController::class, 'show'])->name('faculties.show');
-    
+
 
     // Team Members
     Route::resource('/team-members', TeamMemberAdminController::class);
 
     // Core Values
-       Route::resource('core-values', CoreValueAdminController::class);
+    Route::resource('core-values', CoreValueAdminController::class);
 
     // Accreditations
     Route::get('/accreditations', [AccreditationAdminController::class, 'index'])->name('accreditations.index');
@@ -123,7 +124,7 @@ Route::view('/psbu-weekly-news', 'psbu-weekly-news')->name('psbu-weekly-news');
 Route::view('/psbu-youth', 'psbu-youth')->name('psbu-youth');
 Route::view('/our-team', 'our-team')->name('our-team');
 Route::view('/events', 'events')->name('events');
-Route::view('/news', 'news')->name('news');
+Route::get('/news', [NewsController::class, 'index'])->name('news');
 
 // donation page
 Route::view('/donation', 'donation')->name('donation');
@@ -162,3 +163,7 @@ Route::post('/contact', [ContactController::class, 'store'])->name('contact.subm
 // NEWSLETTER
 // ==============================
 Route::post('/newsletter', [NewsletterController::class, 'subscribe'])->name('newsletter.subscribe');
+
+
+// load admin.php
+require __DIR__ . '/admin.php';

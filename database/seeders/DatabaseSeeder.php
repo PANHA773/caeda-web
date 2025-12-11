@@ -19,6 +19,7 @@ class DatabaseSeeder extends Seeder
             StaffSeeder::class,
             TeamMembersSeeder::class,
             CoreValuesSeeder::class,
+            
 
             ProgramSeeder::class,
             // EventSeeder::class,
@@ -29,6 +30,7 @@ class DatabaseSeeder extends Seeder
             OfficeManagerSeeder::class,
             FacultiesSeeder::class,
             AboutContentSeeder::class,
+            NewsSeeder::class,
         ]);
     }
 }
