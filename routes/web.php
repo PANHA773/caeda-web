@@ -27,8 +27,45 @@ use App\Http\Controllers\Admin\AccreditationAdminController;
 use App\Http\Controllers\Admin\OfficeManagerController;
 use App\Http\Controllers\Admin\ProgramCaedaController;
 use App\Http\Controllers\Admin\StaffController;
-use App\Http\Controllers\Admin\PartnerController;
-use App\Http\Controllers\Admin\EventCeadaController;
+
+// ==============================
+// ADMIN ROUTES
+// ==============================
+// Faculties (Admin)
+Route::middleware('auth')->prefix('admin')->name('admin.')->group(function () {
+    // Admin Dashboard
+    Route::get('/', [AboutAdminController::class, 'index'])->name('dashboard');
+
+    // About Page
+    Route::get('/about', [AboutAdminController::class, 'index'])->name('about.index');
+
+    // Faculties
+    Route::get('/faculties', [FacultyAdminController::class, 'index'])->name('faculties.index');
+    Route::get('/faculties/create', [FacultyAdminController::class, 'create'])->name('faculties.create');
+    Route::post('/faculties', [FacultyAdminController::class, 'store'])->name('faculties.store');
+    Route::get('/faculties/{faculty}/edit', [FacultyAdminController::class, 'edit'])->name('faculties.edit');
+    Route::put('/faculties/{faculty}', [FacultyAdminController::class, 'update'])->name('faculties.update');
+    Route::delete('/faculties/{faculty}', [FacultyAdminController::class, 'destroy'])->name('faculties.destroy');
+    Route::get('/faculties/{faculty}', [FacultyAdminController::class, 'show'])->name('faculties.show');
+
+
+    // Team Members
+    Route::resource('/team-members', TeamMemberAdminController::class);
+
+    // Core Values
+    Route::resource('core-values', CoreValueAdminController::class);
+
+    // Accreditations
+    Route::get('/accreditations', [AccreditationAdminController::class, 'index'])->name('accreditations.index');
+
+    Route::resource('office-managers', OfficeManagerController::class);
+    Route::resource('staff', StaffController::class);
+    // Note: admin programs are handled by ProgramCaedaController below.
+    // Removed duplicate registration of the non-admin ProgramController here
+    // to avoid route/name conflicts with the admin resource controller.
+    Route::resource('programs', ProgramCaedaController::class);
+});
+
 
 
 
@@ -128,55 +165,15 @@ Route::post('/contact', [ContactController::class, 'store'])->name('contact.subm
 // NEWSLETTER
 // ==============================
 Route::post('/newsletter', [NewsletterController::class, 'subscribe'])->name('newsletter.subscribe');
+Route::middleware('auth')->group(function () {
 
-// ==============================
-// PROTECTED ADMIN ROUTES
-// ==============================
-// All admin routes require authentication
-Route::middleware(['auth'])->prefix('admin')->name('admin.')->group(function () {
-
-    // Admin Dashboard
-    Route::get('/', [AboutAdminController::class, 'index'])->name('dashboard');
-
-    // About Page
-    Route::get('/about', [AboutAdminController::class, 'index'])->name('about.index');
-
-    // Faculties
-    Route::get('/faculties', [FacultyAdminController::class, 'index'])->name('faculties.index');
-    Route::get('/faculties/create', [FacultyAdminController::class, 'create'])->name('faculties.create');
-    Route::post('/faculties', [FacultyAdminController::class, 'store'])->name('faculties.store');
-    Route::get('/faculties/{faculty}/edit', [FacultyAdminController::class, 'edit'])->name('faculties.edit');
-    Route::put('/faculties/{faculty}', [FacultyAdminController::class, 'update'])->name('faculties.update');
-    Route::delete('/faculties/{faculty}', [FacultyAdminController::class, 'destroy'])->name('faculties.destroy');
-    Route::get('/faculties/{faculty}', [FacultyAdminController::class, 'show'])->name('faculties.show');
-
-    // Team Members
-    Route::resource('/team-members', TeamMemberAdminController::class);
-
-    // Core Values
-    Route::resource('core-values', CoreValueAdminController::class);
-
-    // Accreditations
-    Route::get('/accreditations', [AccreditationAdminController::class, 'index'])->name('accreditations.index');
-
-    // Office Managers
-    Route::resource('office-managers', OfficeManagerController::class);
-
-    // Staff
-    Route::resource('staff', StaffController::class);
-
-    // Programs
-    Route::resource('programs', ProgramCaedaController::class);
-
-    // Events
-    Route::resource('events', EventCeadaController::class);
-
-    // Partners
-    Route::resource('partners', PartnerController::class);
-//
-
-
-
-
-
+    Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
+    Route::get('/profile', [ProfileController::class, 'index'])->name('profile');
+    Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
+    Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 });
+
+// load admin.php
+require __DIR__ . '/admin.php';
+
+require __DIR__.'/auth.php';
