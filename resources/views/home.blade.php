@@ -69,15 +69,6 @@
                 <div class="space-y-4 mb-8" data-animate>
                     <h3 class="text-2xl md:text-3xl font-bold mb-6 text-white font-cinzel">University Faculties</h3>
 
-                    @php
-                        $faculties = [
-                            "Faculty of Information Technology & Computer Science",
-                            "Faculty of Philosophy, Religion and Law",
-                            "Faculty of Educational Sciences and Literature",
-                            "Faculty of Pud Sangakut and Foreign Language"
-                        ];
-                    @endphp
-
                     @foreach($faculties as $index => $faculty)
                         <div class="flex items-center gap-3 text-lg md:text-xl group cursor-pointer hover:translate-x-2 transition-all"
                              style="animation-delay: {{ $index * 200 }}ms">
@@ -141,15 +132,6 @@
 <section data-animate class="py-20 bg-gradient-to-r from-gray-50 to-blue-50 border-y border-gray-200/50 backdrop-blur-sm">
     <div class="max-w-7xl mx-auto px-4 md:px-8">
         <div class="grid grid-cols-2 md:grid-cols-4 gap-8">
-            @php
-                $stats = [
-                    ['number' => '10K+', 'label' => 'Students Enrolled', 'color' => 'from-blue-500 to-cyan-500'],
-                    ['number' => '200+', 'label' => 'Expert Instructors', 'color' => 'from-purple-500 to-pink-500'],
-                    ['number' => '500+', 'label' => 'Courses Available', 'color' => 'from-green-500 to-teal-500'],
-                    ['number' => '95%', 'label' => 'Satisfaction Rate', 'color' => 'from-orange-500 to-red-500']
-                ];
-            @endphp
-            
             @foreach($stats as $index => $stat)
                 <div class="text-center group transform transition-all duration-500 hover:scale-105"
                      style="animation-delay: {{ $index * 150 }}ms">
@@ -253,114 +235,40 @@
         </div>
 
         <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
-            @php
-                $courses = [
-                    [
-                        'id' => 1,
-                        'title' => 'Web Development',
-                        'description' => 'Learn modern web development with React, Node.js and more',
-                        'duration' => '12 weeks',
-                        'level' => 'Intermediate',
-                        'students' => 1245,
-                        'rating' => 4.8,
-                        'image' => 'https://images.unsplash.com/photo-1581276879432-15e50529f34b?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80',
-                        'category' => 'Programming',
-                        'price' => 79.99,
-                        'instructor' => 'John Smith'
-                    ],
-                    [
-                        'id' => 2,
-                        'title' => 'Data Science',
-                        'description' => 'Master data analysis, visualization and machine learning',
-                        'duration' => '16 weeks',
-                        'level' => 'Advanced',
-                        'students' => 895,
-                        'rating' => 4.7,
-                        'image' => 'https://images.unsplash.com/photo-1551288049-bebda4e38f71?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80',
-                        'category' => 'Data Science',
-                        'price' => 89.99,
-                        'instructor' => 'Maria Garcia'
-                    ],
-                    [
-                        'id' => 3,
-                        'title' => 'UI/UX Design',
-                        'description' => 'Create beautiful and functional user interfaces',
-                        'duration' => '10 weeks',
-                        'level' => 'Beginner',
-                        'students' => 1567,
-                        'rating' => 4.9,
-                        'image' => 'https://images.unsplash.com/photo-1561070791-2526d30994b5?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80',
-                        'category' => 'Design',
-                        'price' => 69.99,
-                        'instructor' => 'David Wilson'
-                    ],
-                    [
-                        'id' => 4,
-                        'title' => 'Mobile Development',
-                        'description' => 'Build iOS and Android apps with React Native',
-                        'duration' => '14 weeks',
-                        'level' => 'Intermediate',
-                        'students' => 1023,
-                        'rating' => 4.6,
-                        'image' => 'https://images.unsplash.com/photo-1512941937669-90a1b58e7e9c?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80',
-                        'category' => 'Programming',
-                        'price' => 84.99,
-                        'instructor' => 'Sarah Johnson'
-                    ]
-                ];
-            @endphp
-            
-            @foreach($courses as $course)
+            @foreach($programs as $program)
                 <div class="bg-white rounded-2xl overflow-hidden shadow-lg hover:shadow-2xl transition-all duration-500 hover:-translate-y-2 group">
                     <div class="relative overflow-hidden">
-                        <img src="{{ $course['image'] }}" 
-                             alt="{{ $course['title'] }}"
+                        <img src="{{ $program->image ?: 'https://via.placeholder.com/800x480' }}" 
+                             alt="{{ $program->title }}"
                              class="w-full h-48 object-cover group-hover:scale-110 transition-transform duration-500">
-                        <div class="absolute top-4 right-4 bg-red-500 text-white px-3 py-1 rounded-full text-sm font-semibold">
-                            Popular
-                        </div>
+                        @if($program->is_featured)
+                            <div class="absolute top-4 right-4 bg-red-500 text-white px-3 py-1 rounded-full text-sm font-semibold">Featured</div>
+                        @endif
                     </div>
                     
                     <div class="p-6">
                         <div class="flex justify-between items-start mb-4">
                             <div>
-                                <span class="text-sm font-semibold text-blue-600 bg-blue-50 px-3 py-1 rounded-full">
-                                    {{ $course['category'] }}
-                                </span>
-                                <h3 class="text-xl font-bold text-gray-900 mt-2 group-hover:text-blue-600 transition-colors duration-300">
-                                    {{ $course['title'] }}
-                                </h3>
+                                <span class="text-sm font-semibold text-blue-600 bg-blue-50 px-3 py-1 rounded-full">{{ $program->category }}</span>
+                                <h3 class="text-xl font-bold text-gray-900 mt-2 group-hover:text-blue-600 transition-colors duration-300">{{ $program->title }}</h3>
                             </div>
-                            <div class="text-2xl font-bold text-green-600">
-                                ${{ number_format($course['price'], 2) }}
-                            </div>
+                            <div class="text-2xl font-bold text-green-600">${{ number_format($program->tuition ?? 0, 2) }}</div>
                         </div>
                         
-                        <p class="text-gray-600 mb-4 line-clamp-2">
-                            {{ $course['description'] }}
-                        </p>
+                        <p class="text-gray-600 mb-4 line-clamp-2">{{ $program->short_description ?? Str::limit($program->description, 120) }}</p>
                         
                         <div class="flex items-center justify-between text-sm text-gray-500 mb-4">
-                            <span class="flex items-center">
-                                <svg class="w-4 h-4 mr-1 text-yellow-400" fill="currentColor" viewBox="0 0 20 20">
-                                    <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/>
-                                </svg>
-                                {{ $course['rating'] }}
-                            </span>
-                            <span>{{ number_format($course['students']) }} students</span>
+                            <span class="flex items-center"><svg class="w-4 h-4 mr-1 text-yellow-400" fill="currentColor" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg>{{ $program->rating }}</span>
+                            <span>{{ number_format($program->students ?? 0) }} students</span>
                         </div>
                         
                         <div class="flex items-center justify-between">
-                            <span class="text-gray-700 font-medium">{{ $course['duration'] }}</span>
-                            <span class="px-3 py-1 bg-gray-100 text-gray-700 rounded-full text-sm">
-                                {{ $course['level'] }}
-                            </span>
+                            <span class="text-gray-700 font-medium">{{ $program->duration ?? '' }}</span>
+                            <span class="px-3 py-1 bg-gray-100 text-gray-700 rounded-full text-sm">{{ $program->level ?? '' }}</span>
                         </div>
                         
                         <div class="mt-6">
-                            <button class="w-full bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white font-semibold py-3 rounded-xl transition-all duration-300 transform group-hover:-translate-y-1">
-                                Enroll Now
-                            </button>
+                            <a href="{{ route('programs') }}" class="w-full inline-block text-center bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white font-semibold py-3 rounded-xl transition-all duration-300 transform group-hover:-translate-y-1">View Program</a>
                         </div>
                     </div>
                 </div>
@@ -508,7 +416,7 @@
 
 {{-- ================= CONTACT FORM SECTION ================= --}}
 
-<!-- <section data-animate class="py-20 bg-white/80 backdrop-blur-sm px-4 md:px-8">
+{{-- <section data-animate class="py-20 bg-white/80 backdrop-blur-sm px-4 md:px-8">--}}
     <div class="max-w-4xl mx-auto">
         <div class="text-center mb-16">
             <h2 class="text-4xl md:text-5xl font-bold text-gray-900 mb-4 font-cinzel">
@@ -526,58 +434,7 @@
             <p class="text-lg">We'll get back to you within 24 hours.</p>
         </div>
 
-        {{-- CONTACT FORM --}}
-        <form id="contact-form"
-              class="bg-gradient-to-br from-blue-50/50 to-purple-50/50 p-8 rounded-3xl shadow-lg border border-blue-100/50 backdrop-blur-sm transform transition-all duration-500 hover:shadow-xl">
-            @csrf
-            
-            {{-- ERROR MESSAGE --}}
-            <div id="form-error" class="hidden bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded-xl mb-6 animate-shake"></div>
-
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
-                <div class="transform transition-all duration-300 hover:-translate-y-1">
-                    <label for="name" class="block text-sm font-semibold text-gray-700 mb-2">
-                        Full Name
-                    </label>
-                    <input type="text"
-                           id="name"
-                           name="name"
-                           class="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all duration-300 bg-white/80 backdrop-blur-sm hover:shadow-lg"
-                           placeholder="Your name"
-                           required>
-                </div>
-                <div class="transform transition-all duration-300 hover:-translate-y-1">
-                    <label for="email" class="block text-sm font-semibold text-gray-700 mb-2">
-                        Email Address
-                    </label>
-                    <input type="email"
-                           id="email"
-                           name="email"
-                           class="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all duration-300 bg-white/80 backdrop-blur-sm hover:shadow-lg"
-                           placeholder="Your email address"
-                           required>
-                </div>
-            </div>
-
-            <div class="mb-6 transform transition-all duration-300 hover:-translate-y-1">
-                <label for="message" class="block text-sm font-semibold text-gray-700 mb-2">
-                    Message
-                </label>
-                <textarea id="message"
-                          name="message"
-                          rows="5"
-                          class="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all duration-300 bg-white/80 backdrop-blur-sm hover:shadow-lg"
-                          placeholder="Your message"
-                          required></textarea>
-            </div>
-
-            <button type="submit"
-                    class="w-full bg-gradient-to-r from-blue-900 to-purple-900 hover:from-blue-800 hover:to-purple-800 text-white font-bold py-4 px-6 rounded-xl transition-all duration-300 hover:shadow-xl transform hover:-translate-y-1">
-                Send Message
-            </button>
-        </form>
-    </div>
-</section> -->
+        {{-- Contact form removed (commented out). --}}
 
 {{-- ================= CTA SECTION ================= --}}
 <section class="py-20 bg-gradient-to-r from-blue-900 via-purple-900 to-indigo-900 text-white relative overflow-hidden">

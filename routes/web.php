@@ -14,74 +14,14 @@ use App\Http\Controllers\ProgramController;
 use App\Http\Controllers\EventController;
 use App\Http\Controllers\DonationController;
 use App\Http\Controllers\NewsController;
-
-
 use App\Http\Controllers\Admin\AboutAdminController;
 use App\Http\Controllers\Admin\FacultyAdminController;
 use App\Http\Controllers\Admin\TeamMemberAdminController;
 use App\Http\Controllers\Admin\CoreValueAdminController;
 use App\Http\Controllers\Admin\AccreditationAdminController;
 use App\Http\Controllers\Admin\OfficeManagerController;
-
 use App\Http\Controllers\Admin\ProgramCaedaController;
-
 use App\Http\Controllers\Admin\StaffController;
-
-
-
-// ==============================
-// ADMIN ROUTES
-// ==============================
-// Faculties (Admin)
-Route::prefix('admin')->name('admin.')->group(function () {
-    // Admin Dashboard
-    Route::get('/', [AboutAdminController::class, 'index'])->name('dashboard');
-
-    // About Page
-    Route::get('/about', [AboutAdminController::class, 'index'])->name('about.index');
-
-    // Faculties
-    Route::get('/faculties', [FacultyAdminController::class, 'index'])->name('faculties.index');
-    Route::get('/faculties/create', [FacultyAdminController::class, 'create'])->name('faculties.create');
-    Route::post('/faculties', [FacultyAdminController::class, 'store'])->name('faculties.store');
-    Route::get('/faculties/{faculty}/edit', [FacultyAdminController::class, 'edit'])->name('faculties.edit');
-    Route::put('/faculties/{faculty}', [FacultyAdminController::class, 'update'])->name('faculties.update');
-    Route::delete('/faculties/{faculty}', [FacultyAdminController::class, 'destroy'])->name('faculties.destroy');
-    Route::get('/faculties/{faculty}', [FacultyAdminController::class, 'show'])->name('faculties.show');
-
-
-    // Team Members
-    Route::resource('/team-members', TeamMemberAdminController::class);
-
-    // Core Values
-    Route::resource('core-values', CoreValueAdminController::class);
-
-    // Accreditations
-    Route::get('/accreditations', [AccreditationAdminController::class, 'index'])->name('accreditations.index');
-});
-
-// Office Managers
-Route::prefix('admin')->name('admin.')->group(function () {
-    Route::resource('office-managers', OfficeManagerController::class);
-});
-
-// Caeda​ Staff
-Route::prefix('admin')->name('admin.')->group(function () {
-    Route::resource('staff', StaffController::class);
-});
-
-
-
-Route::prefix('admin')->name('admin.')->group(function () {
-    // Note: admin programs are handled by ProgramCaedaController below.
-    // Removed duplicate registration of the non-admin ProgramController here
-    // to avoid route/name conflicts with the admin resource controller.
-});
-
-Route::prefix('admin')->name('admin.')->group(function () {
-    Route::resource('programs', ProgramCaedaController::class);
-});
-
 
 
 
@@ -141,8 +81,14 @@ Route::view('/contact', 'contact')->name('contact');
 // AUTH
 // ==============================
 Route::get('/login', [LoginController::class, 'index'])->name('login');
+Route::post('/login', [LoginController::class, 'submit'])->name('login.submit');
 Route::get('/register', [RegisterController::class, 'index'])->name('register');
+Route::post('/register', [RegisterController::class, 'store'])->name('register.store');
 Route::post('/logout', [LoginController::class, 'logout'])->name('logout');
+
+// Admin Auth
+Route::get('/admin/login', [LoginController::class, 'adminLogin'])->name('admin.login');
+Route::post('/admin/login', [LoginController::class, 'adminSubmit'])->name('admin.login.submit');
 
 // ==============================
 // COURSES
@@ -164,6 +110,44 @@ Route::post('/contact', [ContactController::class, 'store'])->name('contact.subm
 // ==============================
 Route::post('/newsletter', [NewsletterController::class, 'subscribe'])->name('newsletter.subscribe');
 
+// ==============================
+// PROTECTED ADMIN ROUTES
+// ==============================
+// All admin routes require authentication
+Route::middleware(['auth'])->prefix('admin')->name('admin.')->group(function () {
+    
+    // Admin Dashboard
+    Route::get('/', [AboutAdminController::class, 'index'])->name('dashboard');
 
-// load admin.php
-require __DIR__ . '/admin.php';
+    // About Page
+    Route::get('/about', [AboutAdminController::class, 'index'])->name('about.index');
+
+    // Faculties
+    Route::get('/faculties', [FacultyAdminController::class, 'index'])->name('faculties.index');
+    Route::get('/faculties/create', [FacultyAdminController::class, 'create'])->name('faculties.create');
+    Route::post('/faculties', [FacultyAdminController::class, 'store'])->name('faculties.store');
+    Route::get('/faculties/{faculty}/edit', [FacultyAdminController::class, 'edit'])->name('faculties.edit');
+    Route::put('/faculties/{faculty}', [FacultyAdminController::class, 'update'])->name('faculties.update');
+    Route::delete('/faculties/{faculty}', [FacultyAdminController::class, 'destroy'])->name('faculties.destroy');
+    Route::get('/faculties/{faculty}', [FacultyAdminController::class, 'show'])->name('faculties.show');
+
+    // Team Members
+    Route::resource('/team-members', TeamMemberAdminController::class);
+
+    // Core Values
+    Route::resource('core-values', CoreValueAdminController::class);
+
+    // Accreditations
+    Route::get('/accreditations', [AccreditationAdminController::class, 'index'])->name('accreditations.index');
+
+    // Office Managers
+    Route::resource('office-managers', OfficeManagerController::class);
+
+    // Staff
+    Route::resource('staff', StaffController::class);
+
+    // Programs
+    Route::resource('programs', ProgramCaedaController::class);
+});
+
+
