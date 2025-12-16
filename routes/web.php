@@ -4,6 +4,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\LanguageController;
 use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\Auth\RegisterController;
+use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\ContactController;
 use App\Http\Controllers\NewsletterController;
 use App\Http\Controllers\HomeController;
@@ -14,6 +15,10 @@ use App\Http\Controllers\ProgramController;
 use App\Http\Controllers\EventController;
 use App\Http\Controllers\DonationController;
 use App\Http\Controllers\NewsController;
+use App\Http\Controllers\TeamController;
+use App\Http\Controllers\PartnersController;
+
+// admin controllers
 use App\Http\Controllers\Admin\AboutAdminController;
 use App\Http\Controllers\Admin\FacultyAdminController;
 use App\Http\Controllers\Admin\TeamMemberAdminController;
@@ -22,6 +27,8 @@ use App\Http\Controllers\Admin\AccreditationAdminController;
 use App\Http\Controllers\Admin\OfficeManagerController;
 use App\Http\Controllers\Admin\ProgramCaedaController;
 use App\Http\Controllers\Admin\StaffController;
+use App\Http\Controllers\Admin\PartnerController;
+use App\Http\Controllers\Admin\EventCeadaController;
 
 
 
@@ -62,9 +69,14 @@ Route::view('/workshop', 'workshop')->name('workshop');
 Route::view('/psbu-vison', 'psbu-vison')->name('psbu-vison');
 Route::view('/psbu-weekly-news', 'psbu-weekly-news')->name('psbu-weekly-news');
 Route::view('/psbu-youth', 'psbu-youth')->name('psbu-youth');
-Route::view('/our-team', 'our-team')->name('our-team');
-Route::view('/events', 'events')->name('events');
+Route::get('/our-team', [TeamController::class, 'index'])->name('our-team');
+Route::get('/partners', [PartnersController::class, 'index'])->name('partners');
+Route::get('/events', [EventController::class, 'index'])->name('events');
+Route::get('/events/{event}', [EventController::class, 'show'])->name('events.show');
 Route::get('/news', [NewsController::class, 'index'])->name('news');
+// Comments and interactions for news
+Route::post('/news/{news}/comments', [\App\Http\Controllers\CommentController::class, 'store'])->name('news.comments.store');
+Route::post('/news/{news}/like', [\App\Http\Controllers\NewsController::class, 'toggleLike'])->name('news.like');
 
 // donation page
 Route::view('/donation', 'donation')->name('donation');
@@ -89,6 +101,13 @@ Route::post('/logout', [LoginController::class, 'logout'])->name('logout');
 // Admin Auth
 Route::get('/admin/login', [LoginController::class, 'adminLogin'])->name('admin.login');
 Route::post('/admin/login', [LoginController::class, 'adminSubmit'])->name('admin.login.submit');
+
+// Protected User Routes (require authentication)
+Route::middleware(['auth'])->group(function () {
+    Route::get('/profile', [ProfileController::class, 'show'])->name('profile');
+    Route::get('/profile/edit', [ProfileController::class, 'edit'])->name('profile.edit');
+    Route::put('/profile', [ProfileController::class, 'update'])->name('profile.update');
+});
 
 // ==============================
 // COURSES
@@ -115,7 +134,7 @@ Route::post('/newsletter', [NewsletterController::class, 'subscribe'])->name('ne
 // ==============================
 // All admin routes require authentication
 Route::middleware(['auth'])->prefix('admin')->name('admin.')->group(function () {
-    
+
     // Admin Dashboard
     Route::get('/', [AboutAdminController::class, 'index'])->name('dashboard');
 
@@ -148,6 +167,16 @@ Route::middleware(['auth'])->prefix('admin')->name('admin.')->group(function () 
 
     // Programs
     Route::resource('programs', ProgramCaedaController::class);
+
+    // Events
+    Route::resource('events', EventCeadaController::class);
+
+    // Partners
+    Route::resource('partners', PartnerController::class);
+//
+
+
+
+
+
 });
-
-

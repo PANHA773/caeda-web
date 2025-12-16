@@ -120,82 +120,35 @@
             <div class="absolute inset-0 bg-gradient-to-r from-transparent via-blue-50/30 to-transparent animate-pulse-slow"></div>
             
             <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-6 items-center justify-items-center relative z-10">
-                @php
-                    $trustedCompanies = [
-                        [
-                            'name' => 'PSBU Leadership Academy',
-                            'logo' => '/assets/logos/PSBU Leadership Academy.png',
-                            'width' => 120,
-                            'height' => 120,
-                            'url' => 'https://psbu-leadership.com',
-                            'animation' => 'float'
-                        ],
-                        [
-                            'name' => 'EBS',
-                            'logo' => '/assets/logos/EBS.png',
-                            'width' => 120,
-                            'height' => 120,
-                            'url' => 'https://ebs.com',
-                            'animation' => 'pulse'
-                        ],
-                        [
-                            'name' => 'PSB University Cambodia',
-                            'logo' => '/assets/logos/PSB University Cambodia.png',
-                            'width' => 120,
-                            'height' => 120,
-                            'url' => 'https://psbu.edu.kh',
-                            'animation' => 'bounce'
-                        ],
-                        [
-                            'name' => 'Post Health Logo',
-                            'logo' => '/assets/logos/LOGO ប៉ុស្ដិ៍សុខភាព221.png',
-                            'width' => 120,
-                            'height' => 120,
-                            'url' => 'https://posthealth.com',
-                            'animation' => 'spin-slow'
-                        ],
-                        [
-                            'name' => 'PSBU',
-                            'logo' => '/assets/logos/PSBU.png',
-                            'width' => 120,
-                            'height' => 120,
-                            'url' => 'https://psbu.edu.kh',
-                            'animation' => 'tilt'
-                        ],
-                        [
-                            'name' => 'SDG',
-                            'logo' => '/assets/logos/SDG.png',
-                            'width' => 120,
-                            'height' => 120,
-                            'url' => 'https://sdg.org',
-                            'animation' => 'float'
-                        ],
-                    ];
-                @endphp
-                
-                @foreach($trustedCompanies as $index => $company)
+                @forelse($partners as $index => $partner)
                     <div class="group relative" style="animation-delay: {{ $index * 100 }}ms">
                         <div class="relative transform transition-all duration-500 group-hover:scale-110 group-hover:z-20">
                             <div class="absolute inset-0 bg-gradient-to-r from-blue-500 to-purple-500 rounded-2xl blur-md opacity-0 group-hover:opacity-30 transition-opacity duration-500"></div>
                             
-                            <div class="relative bg-white rounded-xl p-4 shadow-lg border border-gray-100 backdrop-blur-sm transition-all duration-500 ease-out group-hover:shadow-2xl group-hover:border-blue-200 hover:animate-{{ $company['animation'] }}">
-                                <img 
-                                    src="{{ asset($company['logo']) }}" 
-                                    alt="{{ $company['name'] }}"
-                                    class="object-contain transition-all duration-300 group-hover:brightness-110 group-hover:contrast-110"
-                                    style="width: {{ $company['width'] }}px; height: {{ $company['height'] }}px"
-                                    onerror="this.src='{{ asset('assets/default-logo.png') }}'">
+                            <div class="relative bg-white rounded-xl p-4 shadow-lg border border-gray-100 backdrop-blur-sm transition-all duration-500 ease-out group-hover:shadow-2xl group-hover:border-blue-200">
+                                <a href="{{ $partner->website_url ?: '#' }}" target="_blank" rel="noopener noreferrer" class="inline-block">
+                                    <img 
+                                        src="{{ $partner->logo }}" 
+                                        alt="{{ $partner->name }}"
+                                        class="object-contain transition-all duration-300 group-hover:brightness-110 group-hover:contrast-110"
+                                        style="width: 120px; height: 120px"
+                                        onerror="this.src='{{ asset('assets/default-logo.png') }}'">
+                                </a>
                             </div>
                             
                             <div class="absolute -bottom-2 left-1/2 transform -translate-x-1/2 translate-y-full opacity-0 group-hover:opacity-100 transition-all duration-300 pointer-events-none z-30">
                                 <div class="bg-gray-900 text-white text-xs font-medium px-3 py-2 rounded-lg whitespace-nowrap shadow-xl">
-                                    {{ $company['name'] }}
+                                    {{ $partner->name }}
                                     <div class="absolute -top-1 left-1/2 transform -translate-x-1/2 w-2 h-2 bg-gray-900 rotate-45"></div>
                                 </div>
                             </div>
                         </div>
                     </div>
-                @endforeach
+                @empty
+                    <div class="col-span-full text-center py-12">
+                        <p class="text-gray-500 text-lg">No partners found.</p>
+                    </div>
+                @endforelse
             </div>
 
             <div class="mt-12 relative">
@@ -314,69 +267,61 @@
             @endforeach
         </div>
 
-        {{-- PREMIUM MEMBERS --}}
+        {{-- PREMIUM MEMBERS FROM DATABASE --}}
         <div class="bg-gradient-to-br from-white to-blue-50/30 rounded-3xl shadow-2xl p-8 border border-gray-200/50 backdrop-blur-sm animate-fade-in-up">
             <div class="text-center mb-8">
                 <h3 class="text-3xl font-bold text-gray-900 mb-2">
-                    Success <span class="bg-gradient-to-r from-green-500 to-teal-500 bg-clip-text text-transparent">Stories</span>
+                    Our <span class="bg-gradient-to-r from-green-500 to-teal-500 bg-clip-text text-transparent">Team</span>
                 </h3>
-                <p class="text-gray-600">Real people, real results</p>
+                <p class="text-gray-600">Meet our talented team members</p>
             </div>
             
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
-                @php
-                    $premiumMembers = [
-                        [
-                            'name' => 'Sarah Johnson',
-                            'role' => 'Senior Developer',
-                            'company' => 'Google',
-                            'avatar' => 'https://images.unsplash.com/photo-1494790108377-be9c29b29330?ixlib=rb-4.0.3&auto=format&fit=crop&w=200&q=80',
-                            'achievement' => 'Promoted to Senior Role',
-                            'joined' => '2 years ago',
-                            'gradient' => 'from-blue-500 to-purple-600'
-                        ],
-                        [
-                            'name' => 'Mike Chen',
-                            'role' => 'Data Scientist',
-                            'company' => 'Netflix',
-                            'avatar' => 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?ixlib=rb-4.0.3&auto=format&fit=crop&w=200&q=80',
-                            'achievement' => '50% Salary Increase',
-                            'joined' => '1 year ago',
-                            'gradient' => 'from-green-500 to-teal-600'
-                        ],
-                        [
-                            'name' => 'Emma Wilson',
-                            'role' => 'Product Manager',
-                            'company' => 'Spotify',
-                            'avatar' => 'https://images.unsplash.com/photo-1438761681033-6461ffad8d80?ixlib=rb-4.0.3&auto=format&fit=crop&w=200&q=80',
-                            'achievement' => 'Led 3 Successful Launches',
-                            'joined' => '18 months ago',
-                            'gradient' => 'from-pink-500 to-rose-600'
-                        ]
-                    ];
-                @endphp
-                
-                @foreach($premiumMembers as $index => $member)
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                @forelse($teamMembers as $index => $member)
                     <div class="group text-center p-6 rounded-2xl bg-white/50 backdrop-blur-sm border border-gray-200/50 hover:border-transparent transition-all duration-500 transform hover:-translate-y-2 hover:shadow-xl animate-fade-in-up" style="animation-delay: {{ $index * 200 }}ms">
                         <div class="relative inline-block mb-4">
-                            <div class="absolute inset-0 bg-gradient-to-br {{ $member['gradient'] }} rounded-full blur-md opacity-0 group-hover:opacity-70 transition-opacity duration-500"></div>
+                            <div class="absolute inset-0 bg-gradient-to-br from-blue-500 to-purple-600 rounded-full blur-md opacity-0 group-hover:opacity-70 transition-opacity duration-500"></div>
                             <img
-                                src="{{ $member['avatar'] }}"
-                                alt="{{ $member['name'] }}"
-                                class="relative w-20 h-20 rounded-full mx-auto border-4 border-white shadow-lg group-hover:scale-110 transition-transform duration-500 z-10"
+                                src="{{ $member->photo ?: 'https://via.placeholder.com/80?text=No+Photo' }}"
+                                alt="{{ $member->name }}"
+                                class="relative w-20 h-20 rounded-full mx-auto border-4 border-white shadow-lg group-hover:scale-110 transition-transform duration-500 z-10 object-cover"
                             />
                         </div>
                         
-                        <h4 class="font-bold text-gray-900 text-lg mb-1">{{ $member['name'] }}</h4>
-                        <p class="text-sm text-gray-600 mb-3">{{ $member['role'] }} at {{ $member['company'] }}</p>
+                        <h4 class="font-bold text-gray-900 text-lg mb-1">{{ $member->name }}</h4>
+                        <p class="text-sm text-gray-600 mb-2">{{ $member->position }}</p>
+                        <p class="text-xs text-blue-600 font-semibold mb-3">{{ $member->department }}</p>
                         
-                        <div class="bg-gradient-to-r from-green-50 to-teal-50 border border-green-200 rounded-xl p-3 mb-3 group-hover:shadow-md transition-shadow duration-300">
-                            <span class="text-green-700 text-sm font-semibold">{{ $member['achievement'] }}</span>
-                        </div>
+                        @if($member->bio)
+                            <p class="text-sm text-gray-500 mb-3 line-clamp-2">{{ $member->bio }}</p>
+                        @endif
                         
-                        <p class="text-xs text-gray-500">Member since {{ $member['joined'] }}</p>
+                        @if($member->social_links && count($member->social_links) > 0)
+                            <div class="flex justify-center gap-2 mt-3">
+                                @foreach($member->social_links as $platform => $link)
+                                    @if($link)
+                                        <a href="{{ $link }}" target="_blank" rel="noopener noreferrer" 
+                                           class="inline-flex items-center justify-center w-8 h-8 rounded-full bg-gray-100 text-gray-600 hover:bg-blue-500 hover:text-white transition-all duration-300">
+                                            @if($platform === 'linkedin')
+                                                <i class="fab fa-linkedin text-xs"></i>
+                                            @elseif($platform === 'twitter')
+                                                <i class="fab fa-twitter text-xs"></i>
+                                            @elseif($platform === 'github')
+                                                <i class="fab fa-github text-xs"></i>
+                                            @elseif($platform === 'email')
+                                                <i class="fas fa-envelope text-xs"></i>
+                                            @endif
+                                        </a>
+                                    @endif
+                                @endforeach
+                            </div>
+                        @endif
                     </div>
-                @endforeach
+                @empty
+                    <div class="col-span-full text-center py-12">
+                        <p class="text-gray-500 text-lg">No team members found.</p>
+                    </div>
+                @endforelse
             </div>
         </div>
     </div>

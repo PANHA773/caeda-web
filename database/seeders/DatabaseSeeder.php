@@ -25,7 +25,7 @@ class DatabaseSeeder extends Seeder
             
 
             ProgramSeeder::class,
-            // EventSeeder::class,
+            EventSeeder::class,
           
           
 
@@ -34,6 +34,8 @@ class DatabaseSeeder extends Seeder
             FacultiesSeeder::class,
             AboutContentSeeder::class,
             NewsSeeder::class,
+            CommentSeeder::class,
+            PartnerSeeder::class,
         ]);
     }
 }

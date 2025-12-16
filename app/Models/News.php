@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use App\Models\Comment;
 
 class News extends Model
 {
@@ -31,5 +32,22 @@ class News extends Model
         'tags' => 'array',
         'is_liked' => 'boolean',
         'published_at' => 'datetime',
+        'likes' => 'integer',
+        'comments' => 'integer',
+        'shares' => 'integer',
     ];
+
+    public function comments()
+    {
+        return $this->hasMany(Comment::class)->latest();
+    }
+
+    /**
+     * Avoid collision with the `comments` integer column (comments count).
+     * Provide relationship under `commentsList` to fetch Comment models.
+     */
+    public function commentsList()
+    {
+        return $this->hasMany(Comment::class)->latest();
+    }
 }
