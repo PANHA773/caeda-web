@@ -287,95 +287,6 @@
         
         {{-- EVENTS GRID --}}
         <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-            @php
-                $events = [
-                    [
-                        'id' => 1,
-                        'title' => 'AI & Machine Learning Summit',
-                        'description' => 'Explore the latest advancements in artificial intelligence and machine learning with industry experts.',
-                        'date' => 'Nov 25, 2024',
-                        'time' => '9:00 AM - 5:00 PM',
-                        'location' => 'Digital Innovation Hub',
-                        'type' => 'conference',
-                        'price' => '$199',
-                        'seats' => 45,
-                        'speakers' => 12,
-                        'image' => 'https://images.unsplash.com/photo-1555949963-aa79dcee981c?ixlib=rb-4.0.3&auto=format&fit=crop&w=1000&q=80',
-                        'tag' => 'Popular'
-                    ],
-                    [
-                        'id' => 2,
-                        'title' => 'Blockchain Development Workshop',
-                        'description' => 'Hands-on workshop on building decentralized applications with Ethereum and Solidity.',
-                        'date' => 'Dec 5, 2024',
-                        'time' => '10:00 AM - 4:00 PM',
-                        'location' => 'Tech Campus Lab 3',
-                        'type' => 'workshop',
-                        'price' => '$149',
-                        'seats' => 30,
-                        'speakers' => 3,
-                        'image' => 'https://images.unsplash.com/photo-1635070041078-e363dbe005cb?ixlib=rb-4.0.3&auto=format&fit=crop&w=1000&q=80',
-                        'tag' => 'Sold Out'
-                    ],
-                    [
-                        'id' => 3,
-                        'title' => 'Startup Founder Networking',
-                        'description' => 'Connect with investors, mentors, and fellow entrepreneurs in the startup ecosystem.',
-                        'date' => 'Nov 30, 2024',
-                        'time' => '6:00 PM - 9:00 PM',
-                        'location' => 'Innovation Lounge',
-                        'type' => 'networking',
-                        'price' => 'Free',
-                        'seats' => 100,
-                        'speakers' => 8,
-                        'image' => 'https://images.unsplash.com/photo-1559136555-9303baea8ebd?ixlib=rb-4.0.3&auto=format&fit=crop&w=1000&q=80',
-                        'tag' => 'Free'
-                    ],
-                    [
-                        'id' => 4,
-                        'title' => 'Cybersecurity Threats Webinar',
-                        'description' => 'Live webinar on emerging cybersecurity threats and defense strategies for modern enterprises.',
-                        'date' => 'Dec 12, 2024',
-                        'time' => '2:00 PM - 4:00 PM',
-                        'location' => 'Online',
-                        'type' => 'webinar',
-                        'price' => '$49',
-                        'seats' => 500,
-                        'speakers' => 5,
-                        'image' => 'https://images.unsplash.com/photo-1550751827-4bd374c3f58b?ixlib=rb-4.0.3&auto=format&fit=crop&w=1000&q=80',
-                        'tag' => 'Early Bird'
-                    ],
-                    [
-                        'id' => 5,
-                        'title' => 'Data Science Career Fair',
-                        'description' => 'Meet top employers hiring for data science roles and attend career development sessions.',
-                        'date' => 'Dec 8, 2024',
-                        'time' => '11:00 AM - 4:00 PM',
-                        'location' => 'Career Center Hall',
-                        'type' => 'conference',
-                        'price' => '$29',
-                        'seats' => 200,
-                        'speakers' => 15,
-                        'image' => 'https://images.unsplash.com/photo-1531482615713-2afd69097998?ixlib=rb-4.0.3&auto=format&fit=crop&w=1000&q=80',
-                        'tag' => 'Career'
-                    ],
-                    [
-                        'id' => 6,
-                        'title' => 'UI/UX Design Masterclass',
-                        'description' => 'Advanced design techniques and tools for creating exceptional user experiences.',
-                        'date' => 'Jan 15, 2025',
-                        'time' => '9:30 AM - 5:30 PM',
-                        'location' => 'Design Studio 2',
-                        'type' => 'workshop',
-                        'price' => '$179',
-                        'seats' => 25,
-                        'speakers' => 4,
-                        'image' => 'https://images.unsplash.com/photo-1561070791-2526d30994b5?ixlib=rb-4.0.3&auto=format&fit=crop&w=1000&q=80',
-                        'tag' => 'New'
-                    ]
-                ];
-            @endphp
-            
             @foreach($events as $index => $event)
                 <div 
                     class="event-card bg-white rounded-3xl overflow-hidden shadow-xl hover-scale event-card-gradient animate-fade-in-up"
@@ -390,34 +301,31 @@
                         >
                         <div class="absolute top-4 right-4">
                             <span class="bg-gradient-to-r from-blue-500 to-purple-500 text-white px-4 py-2 rounded-full text-sm font-bold shadow-lg">
-                                {{ $event['tag'] }}
+                                {{ $event->tag }}
                             </span>
                         </div>
                         <div class="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/70 to-transparent p-4">
-                            <div class="text-white font-semibold">{{ $event['date'] }} • {{ $event['time'] }}</div>
-                            <div class="text-blue-200 text-sm">{{ $event['location'] }}</div>
+                            <div class="text-white font-semibold">{{ $event->date->format('M d, Y') }} • {{ $event->time }}</div>
+                            <div class="text-blue-200 text-sm">{{ $event->location }}</div>
                         </div>
                     </div>
                     
                     <div class="p-6">
                         <div class="flex justify-between items-start mb-4">
-                            <div>
+                            <div class="flex-1">
                                 <span class="text-xs font-semibold px-3 py-1 rounded-full {{ 
-                                    $event['type'] == 'conference' ? 'bg-blue-100 text-blue-600' : 
-                                    ($event['type'] == 'workshop' ? 'bg-green-100 text-green-600' : 
-                                    ($event['type'] == 'networking' ? 'bg-purple-100 text-purple-600' : 'bg-orange-100 text-orange-600')) 
+                                    $event->type == 'conference' ? 'bg-blue-100 text-blue-600' : 
+                                    ($event->type == 'workshop' ? 'bg-green-100 text-green-600' : 
+                                    ($event->type == 'networking' ? 'bg-purple-100 text-purple-600' : 'bg-orange-100 text-orange-600')) 
                                 }}">
-                                    {{ ucfirst($event['type']) }}
+                                    {{ ucfirst($event->type) }}
                                 </span>
-                                <h3 class="text-xl font-bold text-gray-900 mt-3">{{ $event['title'] }}</h3>
-                            </div>
-                            <div class="text-2xl font-bold text-blue-600">
-                                {{ $event['price'] }}
+                                <h3 class="text-xl font-bold text-gray-900 mt-3">{{ $event->title }}</h3>
                             </div>
                         </div>
                         
                         <p class="text-gray-600 mb-6 leading-relaxed">
-                            {{ $event['description'] }}
+                            {{ $event->description }}
                         </p>
                         
                         <div class="flex items-center justify-between text-sm text-gray-500 mb-6">
@@ -425,30 +333,30 @@
                                 <svg class="w-4 h-4 text-blue-500 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197m13.5-8.5a6 6 0 00-9.5 3.5" />
                                 </svg>
-                                <span>{{ $event['speakers'] }} Speakers</span>
+                                <span>{{ $event->speakers }} Speakers</span>
                             </div>
                             <div class="flex items-center">
                                 <svg class="w-4 h-4 text-green-500 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z" />
                                 </svg>
-                                <span>{{ $event['seats'] }} Seats</span>
+                                <span>{{ $event->seats }} Seats</span>
                             </div>
                         </div>
                         
                         <div class="flex gap-3">
                             <button 
-                                onclick="registerForEvent({{ $event['id'] }})" 
+                                onclick="registerForEvent({{ $event->id }})" 
                                 class="flex-1 bg-gradient-to-r from-blue-500 to-purple-500 hover:from-blue-600 hover:to-purple-600 text-white font-semibold py-3 rounded-xl transition-all duration-300 transform hover:-translate-y-1 hover:shadow-lg"
-                                {{ $event['tag'] == 'Sold Out' ? 'disabled' : '' }}
+                                {{ $event->tag == 'Sold Out' ? 'disabled' : '' }}
                             >
-                                {{ $event['tag'] == 'Sold Out' ? 'Sold Out' : 'Register Now' }}
+                                {{ $event->tag == 'Sold Out' ? 'Sold Out' : 'Register Now' }}
                             </button>
-                            <button 
-                                onclick="viewEventDetails({{ $event['id'] }})" 
-                                class="border-2 border-gray-300 hover:border-blue-500 text-gray-700 hover:text-blue-600 font-medium py-3 px-4 rounded-xl transition-all duration-300"
+                            <a 
+                                href="{{ route('events.show', $event) }}" 
+                                class="border-2 border-gray-300 hover:border-blue-500 text-gray-700 hover:text-blue-600 font-medium py-3 px-4 rounded-xl transition-all duration-300 text-center"
                             >
                                 Details
-                            </button>
+                            </a>
                         </div>
                     </div>
                 </div>
@@ -518,10 +426,10 @@
                                 $calendarDays[] = ['day' => '', 'current' => false, 'event' => false];
                             }
                             
-                            // Current month days
-                            $eventDays = [5, 8, 12, 15, 17, 20, 25, 30];
+                            // Current month days - use $calendarDays from controller
+                            $eventDaysList = $calendarDays; // from controller
                             for ($day = 1; $day <= $totalDays; $day++) {
-                                $hasEvent = in_array($day, $eventDays);
+                                $hasEvent = in_array($day, $eventDaysList);
                                 $calendarDays[] = [
                                     'day' => $day,
                                     'current' => true,
@@ -568,29 +476,19 @@
                     <h3 class="text-2xl font-bold text-gray-900 mb-8">Upcoming This Month</h3>
                     
                     <div class="space-y-6">
-                        @php
-                            $upcomingEvents = [
-                                ['date' => 'Dec 5', 'title' => 'Blockchain Workshop', 'time' => '10:00 AM'],
-                                ['date' => 'Dec 8', 'title' => 'Data Science Career Fair', 'time' => '11:00 AM'],
-                                ['date' => 'Dec 12', 'title' => 'Cybersecurity Webinar', 'time' => '2:00 PM'],
-                                ['date' => 'Dec 15', 'title' => 'Tech Innovation Summit', 'time' => '9:00 AM'],
-                                ['date' => 'Dec 17', 'title' => 'Tech Innovation Summit Day 2', 'time' => '9:00 AM'],
-                            ];
-                        @endphp
-                        
                         @foreach($upcomingEvents as $event)
                             <div class="flex items-start p-4 rounded-2xl bg-gradient-to-r from-blue-50 to-purple-50 hover:from-blue-100 hover:to-purple-100 transition-all duration-300 cursor-pointer group">
                                 <div class="text-center mr-4">
-                                    <div class="text-2xl font-bold text-blue-600">{{ explode(' ', $event['date'])[1] }}</div>
-                                    <div class="text-sm text-gray-500">{{ explode(' ', $event['date'])[0] }}</div>
+                                    <div class="text-2xl font-bold text-blue-600">{{ $event->date->format('d') }}</div>
+                                    <div class="text-sm text-gray-500">{{ $event->date->format('M') }}</div>
                                 </div>
                                 <div class="flex-1">
-                                    <h4 class="font-bold text-gray-900 group-hover:text-blue-600 transition-colors duration-300">{{ $event['title'] }}</h4>
+                                    <h4 class="font-bold text-gray-900 group-hover:text-blue-600 transition-colors duration-300">{{ $event->title }}</h4>
                                     <div class="flex items-center text-sm text-gray-600 mt-1">
                                         <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
                                         </svg>
-                                        {{ $event['time'] }}
+                                        {{ $event->time }}
                                     </div>
                                 </div>
                                 <div class="ml-2 opacity-0 group-hover:opacity-100 transition-opacity duration-300">

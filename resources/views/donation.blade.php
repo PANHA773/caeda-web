@@ -23,26 +23,71 @@
                 {{ __('Your support will help us to make life better for children in need. Every donation provides food, education, healthcare, and hope for a brighter future.') }}
             </p>
         
+        <!-- Small illustrative images below intro -->
+        <div class="mt-6 max-w-4xl mx-auto grid grid-cols-1 sm:grid-cols-3 gap-4">
+            @php
+                $supportImages = [
+                    [
+                        'src' => 'https://images.unsplash.com/photo-1529068755536-a5ade3f3a0e2?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80',
+                        'alt' => 'Children eating',
+                        'caption' => 'Nutrition Programs'
+                    ],
+                    [
+                        'src' => 'https://images.unsplash.com/photo-1509062522246-3755977927d7?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80',
+                        'alt' => 'Children learning',
+                        'caption' => 'Education Support'
+                    ],
+                    [
+                        'src' => 'https://images.unsplash.com/photo-1580281657521-3d8a7f8631b1?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80',
+                        'alt' => 'Child receiving care',
+                        'caption' => 'Health & Care'
+                    ],
+                ];
+            @endphp
+
+            @foreach($supportImages as $img)
+                <div class="rounded-lg overflow-hidden shadow-sm bg-white">
+                    <img src="{{ $img['src'] }}" alt="{{ $img['alt'] }}" class="w-full h-36 object-cover" loading="lazy" onerror="this.src='{{ asset('assets/defaultcourse.jpg') }}'">
+                    <div class="p-3 text-center">
+                        <div class="font-semibold text-gray-800 text-sm">{{ $img['caption'] }}</div>
+                    </div>
+                </div>
+            @endforeach
+        </div>
+
         <!-- Hero images trio -->
         <div
             id="hero-images"
             class="mt-8 mb-12 grid grid-cols-1 md:grid-cols-3 gap-6 items-stretch opacity-0"
         >
             @php
+                // Use remote images so they display reliably without needing local assets
                 $heroImages = [
-                    ['title' => 'Community Outreach', 'caption' => 'Feeding and education programs in rural areas'],
-                    ['title' => 'Education Initiatives', 'caption' => 'Scholarships and learning resources'],
-                    ['title' => 'Health & Care', 'caption' => 'Medical camps and vaccinations']
+                    [
+                        'title' => 'Community Outreach',
+                        'caption' => 'Feeding and education programs in rural areas',
+                        'src' => 'https://images.unsplash.com/photo-1556761175-b413da4baf72?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80'
+                    ],
+                    [
+                        'title' => 'Education Initiatives',
+                        'caption' => 'Scholarships and learning resources',
+                        'src' => 'https://images.unsplash.com/photo-1515187029135-18ee286d815b?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80'
+                    ],
+                    [
+                        'title' => 'Health & Care',
+                        'caption' => 'Medical camps and vaccinations',
+                        'src' => 'https://images.unsplash.com/photo-1503454537195-1dcabb73ffb9?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80'
+                    ],
                 ];
             @endphp
-            
+
             @foreach($heroImages as $index => $image)
                 <div 
                     data-hero-index="{{ $index }}"
                     class="relative rounded-2xl overflow-hidden shadow-lg group bg-white/60 opacity-0 translate-y-6"
                 >
                     <img
-                        src="{{ asset('assets/image' . ($index + 1) . '.jpg') }}"
+                        src="{{ $image['src'] }}"
                         alt="{{ $image['title'] }}"
                         loading="lazy"
                         class="w-full h-56 md:h-48 lg:h-56 object-cover transition-transform duration-500 group-hover:scale-105"

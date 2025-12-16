@@ -7,6 +7,7 @@
 @section('content')
 <div class="space-y-6">
     <!-- Statistics Cards -->
+
     <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
         <div class="stat-card bg-gradient-to-br from-indigo-500 to-purple-600 text-white rounded-2xl p-6 shadow-lg">
             <div class="flex items-center justify-between">
@@ -65,8 +66,8 @@
     <div>
         <h2 class="text-xl font-bold text-gray-900 mb-4">Quick Actions</h2>
         <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-            <a href="{{ route('admin.about.index') }}" 
-               class="group bg-white border border-gray-200 rounded-xl p-4 hover:border-indigo-300 hover:shadow-md transition-all duration-300">
+            <a href="{{ route('admin.about.index') }}"
+                class="group bg-white border border-gray-200 rounded-xl p-4 hover:border-indigo-300 hover:shadow-md transition-all duration-300">
                 <div class="flex items-center space-x-4">
                     <div class="w-12 h-12 bg-indigo-50 rounded-lg flex items-center justify-center group-hover:bg-indigo-100 transition-colors">
                         <i class="fas fa-info-circle text-indigo-600 text-xl"></i>
@@ -78,8 +79,8 @@
                 </div>
             </a>
 
-            <a href="{{ route('admin.team-members.index') }}" 
-               class="group bg-white border border-gray-200 rounded-xl p-4 hover:border-emerald-300 hover:shadow-md transition-all duration-300">
+            <a href="{{ route('admin.team-members.index') }}"
+                class="group bg-white border border-gray-200 rounded-xl p-4 hover:border-emerald-300 hover:shadow-md transition-all duration-300">
                 <div class="flex items-center space-x-4">
                     <div class="w-12 h-12 bg-emerald-50 rounded-lg flex items-center justify-center group-hover:bg-emerald-100 transition-colors">
                         <i class="fas fa-users text-emerald-600 text-xl"></i>
@@ -91,8 +92,8 @@
                 </div>
             </a>
 
-            <a href="{{ route('admin.faculties.index') }}" 
-               class="group bg-white border border-gray-200 rounded-xl p-4 hover:border-blue-300 hover:shadow-md transition-all duration-300">
+            <a href="{{ route('admin.faculties.index') }}"
+                class="group bg-white border border-gray-200 rounded-xl p-4 hover:border-blue-300 hover:shadow-md transition-all duration-300">
                 <div class="flex items-center space-x-4">
                     <div class="w-12 h-12 bg-blue-50 rounded-lg flex items-center justify-center group-hover:bg-blue-100 transition-colors">
                         <i class="fas fa-building text-blue-600 text-xl"></i>
@@ -107,6 +108,7 @@
     </div>
 
     <!-- Recent Activity -->
+
     <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
         <div class="bg-white border border-gray-200 rounded-xl p-6">
             <div class="flex items-center justify-between mb-6">
@@ -114,12 +116,14 @@
                 <a href="#" class="text-sm text-indigo-600 hover:text-indigo-800 font-medium">View All</a>
             </div>
             <div class="space-y-4">
+
                 @foreach([
-                    ['user' => 'Admin', 'action' => 'updated', 'item' => 'About page content', 'time' => '2 min ago', 'color' => 'indigo'],
-                    ['user' => 'John Doe', 'action' => 'added', 'item' => 'new team member', 'time' => '1 hour ago', 'color' => 'green'],
-                    ['user' => 'Jane Smith', 'action' => 'edited', 'item' => 'faculty information', 'time' => '3 hours ago', 'color' => 'blue'],
-                    ['user' => 'Admin', 'action' => 'published', 'item' => 'new accreditation', 'time' => 'Yesterday', 'color' => 'amber'],
+                ['user' => 'Admin', 'action' => 'updated', 'item' => 'About page content', 'time' => '2 min ago', 'color' => 'indigo'],
+                ['user' => 'John Doe', 'action' => 'added', 'item' => 'new team member', 'time' => '1 hour ago', 'color' => 'green'],
+                ['user' => 'Jane Smith', 'action' => 'edited', 'item' => 'faculty information', 'time' => '3 hours ago', 'color' => 'blue'],
+                ['user' => 'Admin', 'action' => 'published', 'item' => 'new accreditation', 'time' => 'Yesterday', 'color' => 'amber'],
                 ] as $activity)
+
                 <div class="flex items-center space-x-4 p-3 hover:bg-gray-50 rounded-lg transition-colors">
                     <div class="w-10 h-10 rounded-full bg-{{ $activity['color'] }}-100 flex items-center justify-center flex-shrink-0">
                         <i class="fas fa-user text-{{ $activity['color'] }}-600"></i>
@@ -182,4 +186,5 @@
         </div>
     </div>
 </div>
+
 @endsection
