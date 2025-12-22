@@ -214,42 +214,56 @@
 <footer class="bg-gray-900 text-white py-12 px-6 mt-16">
     <div class="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-3 gap-10">
 
+        {{-- Logo & Description --}}
         <div>
-            <h2 class="text-3xl font-bold">CAEDA<span class="text-blue-500">.</span></h2>
-            <p class="text-gray-400 mt-3 italic">{{ __('Education Of Best') }}</p>
-            <p class="text-gray-500 mt-4">{{ __('Grow your skills with modern technology courses.') }}</p>
+            <h2 class="text-3xl font-bold">{{ $footer->logo ?? 'CAEDA' }}<span class="text-blue-500">.</span></h2>
+            <p class="text-gray-400 mt-3 italic">{{ $footer->tagline ?? __('Education Of Best') }}</p>
+            <p class="text-gray-500 mt-4">{{ $footer->description ?? __('Grow your skills with modern technology courses.') }}</p>
 
+            {{-- Social Links --}}
             <div class="flex space-x-4 mt-6">
-                <a href="#" class="text-gray-400 hover:text-blue-500"><i class="fab fa-facebook text-xl"></i></a>
-                <a href="#" class="text-gray-400 hover:text-sky-400"><i class="fab fa-twitter text-xl"></i></a>
-                <a href="#" class="text-gray-400 hover:text-pink-500"><i class="fab fa-instagram text-xl"></i></a>
-                <a href="#" class="text-gray-400 hover:text-red-600"><i class="fab fa-youtube text-xl"></i></a>
+                @foreach($footer->social_links ?? [] as $key => $link)
+                    @php
+                        $icon = match($key){
+                            'facebook'=>'fab fa-facebook',
+                            'twitter'=>'fab fa-twitter',
+                            'instagram'=>'fab fa-instagram',
+                            'youtube'=>'fab fa-youtube',
+                            default=>'fab fa-globe'
+                        };
+                    @endphp
+                    <a href="{{ $link }}" class="text-gray-400 hover:text-blue-500">
+                        <i class="{{ $icon }} text-xl"></i>
+                    </a>
+                @endforeach
             </div>
         </div>
 
+        {{-- Quick Links --}}
         <div>
             <h3 class="text-xl font-semibold mb-4">{{ __('Quick Links') }}</h3>
             <ul class="space-y-3 text-gray-400">
-                <li><a href="{{ route('home') }}" class="hover:text-white">{{ __('Home') }}</a></li>
-                <li><a href="{{ route('courses') }}" class="hover:text-white">{{ __('Courses') }}</a></li>
-                <li><a href="{{ route('about') }}" class="hover:text-white">{{ __('About') }}</a></li>
-                <li><a href="{{ route('contact') }}" class="hover:text-white">{{ __('Contact') }}</a></li>
+                @foreach($footer->quick_links ?? [] as $link)
+                    <li><a href="{{ route($link['route']) }}" class="hover:text-white">{{ __($link['name']) }}</a></li>
+                @endforeach
             </ul>
         </div>
 
+        {{-- Contact Info --}}
         <div>
             <h3 class="text-xl font-semibold mb-4">{{ __('Contact Info') }}</h3>
-            <p class="text-gray-400"><i class="fa-solid fa-location-dot mr-2"></i> 44 New Design Street, Melbourne</p>
-            <p class="text-gray-400 mt-2"><i class="fa-solid fa-phone mr-2"></i> (01) 800 433 633</p>
-            <p class="text-gray-400 mt-2"><i class="fa-solid fa-envelope mr-2"></i> info@example.com</p>
+            <p class="text-gray-400"><i class="fa-solid fa-location-dot mr-2"></i> {{ $footer->contact_info['address'] ?? '' }}</p>
+            <p class="text-gray-400 mt-2"><i class="fa-solid fa-phone mr-2"></i> {{ $footer->contact_info['phone'] ?? '' }}</p>
+            <p class="text-gray-400 mt-2"><i class="fa-solid fa-envelope mr-2"></i> {{ $footer->contact_info['email'] ?? '' }}</p>
         </div>
 
     </div>
 
     <div class="text-center text-gray-500 mt-10">
-        © {{ date('Y') }} CAEDA. All Rights Reserved.
+        © {{ date('Y') }} {{ $footer->logo ?? 'CAEDA' }}. All Rights Reserved.
     </div>
 </footer>
+
 
 
 <script>

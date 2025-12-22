@@ -4,25 +4,44 @@ namespace App\Http\Controllers;
 
 use App\Models\TeamMember;
 use App\Models\Partner;
+use App\Models\Faq;
+use App\Models\PricingPlan;
 use Illuminate\Http\Request;
 
 class TeamController extends Controller
 {
     /**
-     * Show the team page with all active team members and partners from database.
+     * Show the team page with all active data
      */
     public function index()
     {
-        // Fetch active team members ordered by their sort_order field
+        // Team Members (has sort_order)
         $teamMembers = TeamMember::where('is_active', true)
             ->orderBy('sort_order')
             ->get();
 
-        // Fetch active partners ordered by their sort_order field
+        // Partners (has sort_order)
         $partners = Partner::where('is_active', true)
             ->orderBy('sort_order')
             ->get();
 
-        return view('our-team', compact('teamMembers', 'partners'));
+        // FAQs (NO sort_order column → use id)
+        $faqs = Faq::where('is_active', true)
+            ->orderBy('id')
+            ->get();
+
+        // Pricing Plans
+        $plans = PricingPlan::with('features')
+            ->where('is_active', true)
+            ->orderByDesc('is_popular')
+            ->orderBy('id')
+            ->get();
+
+        return view('our-team', compact(
+            'teamMembers',
+            'partners',
+            'faqs',
+            'plans'
+        ));
     }
 }

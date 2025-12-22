@@ -128,6 +128,10 @@
     </div>
 </section>
 
+
+
+
+
 {{-- ================= STATS SECTION ================= --}}
 <section data-animate class="py-20 bg-gradient-to-r from-gray-50 to-blue-50 border-y border-gray-200/50 backdrop-blur-sm">
     <div class="max-w-7xl mx-auto px-4 md:px-8">
@@ -183,7 +187,7 @@
                         <p class="text-xl font-semibold text-blue-900">
                             Cambodia-ASEAN Educational Development Association,
                         </p>
-                        <p class="text-lg text-gray-700">H.T.Samdolfe (Presh Abilitar Sujazhala</p>
+                        <p class="text-lg text-gray-700">H.T.Samdolfe (Presh Abilitar Sujazhala)</p>
                         <p class="text-lg text-gray-700">Mahasarajahasajah (Presh BOUR RXY)</p>
                         <p class="text-lg text-gray-700">Samdolfe (Presh Mahasarajahasajah) of</p>
                         <p class="text-lg text-gray-700">Dharmayatibiantilaya of</p>
@@ -222,6 +226,7 @@
     </div>
 </section>
 
+
 {{-- ================= COURSES SECTION ================= --}}
 <section data-animate class="py-20 px-4 md:px-8 bg-gradient-to-b from-gray-50 to-white/80 backdrop-blur-sm">
     <div class="max-w-7xl mx-auto">
@@ -236,39 +241,75 @@
 
         <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
             @foreach($programs as $program)
-                <div class="bg-white rounded-2xl overflow-hidden shadow-lg hover:shadow-2xl transition-all duration-500 hover:-translate-y-2 group">
+                {{-- CARD --}}
+                <div class="bg-white rounded-2xl overflow-hidden shadow-lg hover:shadow-2xl
+                            transition-all duration-500 hover:-translate-y-2 group
+                            flex flex-col h-full">
+
+                    {{-- IMAGE --}}
                     <div class="relative overflow-hidden">
-                        <img src="{{ $program->image ?: 'https://via.placeholder.com/800x480' }}" 
+                        <img src="{{ $program->image ?: 'https://via.placeholder.com/800x480' }}"
                              alt="{{ $program->title }}"
                              class="w-full h-48 object-cover group-hover:scale-110 transition-transform duration-500">
+
                         @if($program->is_featured)
-                            <div class="absolute top-4 right-4 bg-red-500 text-white px-3 py-1 rounded-full text-sm font-semibold">Featured</div>
+                            <div class="absolute top-4 right-4 bg-red-500 text-white px-3 py-1 rounded-full text-sm font-semibold">
+                                Featured
+                            </div>
                         @endif
                     </div>
-                    
-                    <div class="p-6">
+
+                    {{-- CONTENT --}}
+                    <div class="p-6 flex flex-col h-full">
                         <div class="flex justify-between items-start mb-4">
                             <div>
-                                <span class="text-sm font-semibold text-blue-600 bg-blue-50 px-3 py-1 rounded-full">{{ $program->category }}</span>
-                                <h3 class="text-xl font-bold text-gray-900 mt-2 group-hover:text-blue-600 transition-colors duration-300">{{ $program->title }}</h3>
+                                <span class="text-sm font-semibold text-blue-600 bg-blue-50 px-3 py-1 rounded-full">
+                                    {{ $program->category }}
+                                </span>
+                                <h3 class="text-xl font-bold text-gray-900 mt-2 group-hover:text-blue-600 transition-colors duration-300">
+                                    {{ $program->title }}
+                                </h3>
                             </div>
-                            <div class="text-2xl font-bold text-green-600">${{ number_format($program->tuition ?? 0, 2) }}</div>
+                            <div class="text-2xl font-bold text-green-600">
+                                ${{ number_format($program->tuition ?? 0, 2) }}
+                            </div>
                         </div>
-                        
-                        <p class="text-gray-600 mb-4 line-clamp-2">{{ $program->short_description ?? Str::limit($program->description, 120) }}</p>
-                        
+
+                        {{-- DESCRIPTION (height fixed) --}}
+                        <p class="text-gray-600 mb-4 line-clamp-2 min-h-[3rem]">
+                            {{ $program->short_description ?? Str::limit($program->description, 120) }}
+                        </p>
+
+                        {{-- RATING --}}
                         <div class="flex items-center justify-between text-sm text-gray-500 mb-4">
-                            <span class="flex items-center"><svg class="w-4 h-4 mr-1 text-yellow-400" fill="currentColor" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg>{{ $program->rating }}</span>
+                            <span class="flex items-center">
+                                <svg class="w-4 h-4 mr-1 text-yellow-400" fill="currentColor" viewBox="0 0 20 20">
+                                    <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/>
+                                </svg>
+                                {{ $program->rating }}
+                            </span>
                             <span>{{ number_format($program->students ?? 0) }} students</span>
                         </div>
-                        
-                        <div class="flex items-center justify-between">
+
+                        {{-- META --}}
+                        <div class="flex items-center justify-between mb-6">
                             <span class="text-gray-700 font-medium">{{ $program->duration ?? '' }}</span>
-                            <span class="px-3 py-1 bg-gray-100 text-gray-700 rounded-full text-sm">{{ $program->level ?? '' }}</span>
+                            <span class="px-3 py-1 bg-gray-100 text-gray-700 rounded-full text-sm">
+                                {{ $program->level ?? '' }}
+                            </span>
                         </div>
-                        
-                        <div class="mt-6">
-                            <a href="{{ route('programs') }}" class="w-full inline-block text-center bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white font-semibold py-3 rounded-xl transition-all duration-300 transform group-hover:-translate-y-1">View Program</a>
+
+                        {{-- BUTTON (always bottom) --}}
+                        <div class="mt-auto">
+                            <a href="{{ route('programs') }}"
+                               class="w-full inline-block text-center
+                                      bg-gradient-to-r from-blue-600 to-purple-600
+                                      hover:from-blue-700 hover:to-purple-700
+                                      text-white font-semibold py-3 rounded-xl
+                                      transition-all duration-300
+                                      transform group-hover:-translate-y-1">
+                                View Program
+                            </a>
                         </div>
                     </div>
                 </div>
@@ -290,48 +331,29 @@
         </div>
 
         <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
-            @php
-                $features = [
-                    [
-                        'icon' => 'M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253',
-                        'title' => 'Expert Instructors',
-                        'description' => 'Learn from industry professionals with years of experience in their fields',
-                        'color' => 'from-blue-500 to-cyan-500'
-                    ],
-                    [
-                        'icon' => 'M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z',
-                        'title' => 'Interactive Learning',
-                        'description' => 'Engage with interactive content, quizzes, and hands-on projects',
-                        'color' => 'from-purple-500 to-pink-500'
-                    ],
-                    [
-                        'icon' => 'M21 12a9 9 0 01-9 9m9-9a9 9 0 00-9-9m9 9H3m9 9a9 9 0 01-9-9m9 9c1.657 0 3-4.03 3-9s-1.343-9-3-9m0 18c-1.657 0-3-4.03-3-9s1.343-9 3-9m-9 9a9 9 0 019-9',
-                        'title' => 'Lifetime Access',
-                        'description' => 'Get lifetime access to course materials and future updates',
-                        'color' => 'from-green-500 to-teal-500'
-                    ]
-                ];
-            @endphp
-            
             @foreach($features as $index => $feature)
                 <div class="group bg-white/80 backdrop-blur-sm p-8 rounded-3xl shadow-lg text-center hover:shadow-2xl transition-all duration-500 hover:-translate-y-3 border border-gray-100/50"
                      style="animation-delay: {{ $index * 200 }}ms">
-                    <div class="w-20 h-20 bg-gradient-to-br {{ $feature['color'] }} rounded-3xl flex items-center justify-center mx-auto mb-6 transform transition-all duration-500 group-hover:scale-110 group-hover:rotate-12">
+                    <div class="w-20 h-20 bg-gradient-to-br {{ $feature->color }} rounded-3xl flex items-center justify-center mx-auto mb-6 transform transition-all duration-500 group-hover:scale-110 group-hover:rotate-12">
                         <svg class="w-10 h-10 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="{{ $feature['icon'] }}"></path>
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="{{ $feature->icon }}"></path>
                         </svg>
                     </div>
                     <h3 class="text-2xl font-bold text-gray-900 mb-4 group-hover:text-gray-800 transition-colors duration-300">
-                        {{ $feature['title'] }}
+                        {{ $feature->title }}
                     </h3>
                     <p class="text-gray-600 leading-relaxed group-hover:text-gray-700 transition-colors duration-300">
-                        {{ $feature['description'] }}
+                        {{ $feature->description }}
                     </p>
                 </div>
             @endforeach
         </div>
     </div>
 </section>
+
+
+
+
 
 {{-- ================= TESTIMONIALS SECTION ================= --}}
 <section data-animate class="py-20 px-4 md:px-8 bg-gradient-to-br from-blue-50/50 to-purple-50/50 backdrop-blur-sm">
@@ -355,6 +377,7 @@
                         'bio' => 'The courses completely transformed my career. I went from beginner to landing my dream job in just 6 months!',
                         'image_url' => 'https://images.unsplash.com/photo-1494790108377-be9c29b29330?ixlib=rb-4.0.3&auto=format&fit=crop&w=200&q=80',
                         'course' => 'Web Development',
+                        'contact' => 'sarah.johnson@example.com',
                         'rating' => 5
                     ],
                     [

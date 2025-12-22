@@ -16,26 +16,33 @@ class DatabaseSeeder extends Seeder
     public function run(): void
     {
         $this->call([
-            AdminSeeder::class,
-            UserSeeder::class,
-            StaffSeeder::class,
-            TeamMembersSeeder::class,
-            CoreValuesSeeder::class,
+            // AdminSeeder::class,
+            // UserSeeder::class,
+            // StaffSeeder::class,
+            // TeamMembersSeeder::class,
+            // CoreValuesSeeder::class,
          
             
 
-            ProgramSeeder::class,
-            EventSeeder::class,
+            // ProgramSeeder::class,
+            // EventSeeder::class,
           
           
 
-            CommitteeMemberSeeder::class,
-            OfficeManagerSeeder::class,
-            FacultiesSeeder::class,
-            AboutContentSeeder::class,
-            NewsSeeder::class,
-            CommentSeeder::class,
-            PartnerSeeder::class,
+            // CommitteeMemberSeeder::class,
+            // OfficeManagerSeeder::class,
+            // FacultiesSeeder::class,
+            // AboutContentSeeder::class,
+            // NewsSeeder::class,
+            // CommentSeeder::class,
+            // PartnerSeeder::class,
+            // SocialLinkSeeder::class,
+            // ContactMethodSeeder::class,
+            // FaqSeeder::class,
+            // PricingPlanSeeder::class,
+            // FeatureSeeder::class,
+            FooterSeeder::class,
+
         ]);
     }
 }

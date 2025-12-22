@@ -125,6 +125,7 @@
             from {
                 transform: translateX(-100%);
             }
+
             to {
                 transform: translateX(0);
             }
@@ -135,6 +136,7 @@
                 opacity: 0;
                 transform: translateY(-10px);
             }
+
             to {
                 opacity: 1;
                 transform: translateY(0);
@@ -145,6 +147,7 @@
             from {
                 opacity: 0;
             }
+
             to {
                 opacity: 1;
             }
@@ -203,16 +206,21 @@
         }
 
         @keyframes pulse {
-            0%, 100% {
+
+            0%,
+            100% {
                 opacity: 1;
             }
+
             50% {
                 opacity: 0.5;
             }
         }
 
         /* Form elements */
-        input:focus, textarea:focus, select:focus {
+        input:focus,
+        textarea:focus,
+        select:focus {
             border-color: #4F46E5 !important;
             box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.1) !important;
             outline: none;
@@ -290,6 +298,30 @@
 
                 <div class="mt-6 mb-2 px-4">
                     <p class="text-xs font-semibold text-gray-400 uppercase tracking-wider">Content Management</p>
+                </div>
+
+
+                                <!-- home Dropdown -->
+                <div class="relative">
+                    <button class="dropdown-btn w-full flex items-center justify-between px-4 py-3 rounded-xl text-gray-300 hover:text-white transition-all duration-200 focus:outline-none {{ request()->routeIs('admin.our-team*') ? 'active' : '' }}">
+                        <span class="flex items-center space-x-3">
+                            <i class="fas fa-home w-5 text-center text-lg"></i>
+                            <span class="font-medium">Home Page</span>
+                        </span>
+                        <i class="fas fa-chevron-down transition-transform duration-200 text-sm"></i>
+                    </button>
+
+                    <div class="dropdown-menu hidden pl-12 mt-1 space-y-1">
+                        <a href="{{ route('admin.features.index') }}" class="dropdown-link flex items-center space-x-3 px-4 py-2 rounded-lg text-gray-400 hover:text-white hover:bg-gray-800 {{ request()->routeIs('admin.office-managers*') ? 'active' : '' }}">
+                            <i class="fas fa-user-tie w-5 text-center"></i>
+                            <span>Features</span>
+                        </a>
+
+                         <a href="{{ route('admin.footer.index') }}" class="dropdown-link flex items-center space-x-3 px-4 py-2 rounded-lg text-gray-400 hover:text-white hover:bg-gray-800 {{ request()->routeIs('admin.office-managers*') ? 'active' : '' }}">
+                            <i class="fas fa-user-tie w-5 text-center"></i>
+                            <span>Footer</span>
+                        </a>
+                    </div>
                 </div>
 
                 <!-- About Page Dropdown -->
@@ -377,6 +409,10 @@
                             <i class="fas fa-building w-5 text-center"></i>
                             <span>Partners</span>
                         </a>
+                         <a href="{{ route('admin.pricing.index') }}" class="dropdown-link flex items-center space-x-3 px-4 py-2 rounded-lg text-gray-400 hover:text-white hover:bg-gray-800 {{ request()->routeIs('admin.pricing*') ? 'active' : '' }}">
+                            <i class="fas fa-building w-5 text-center"></i>
+                            <span>Pricing</span>
+                        </a>
                     </div>
                 </div>
 
@@ -394,6 +430,56 @@
                         <a href="{{ route('admin.events.index') }}" class="dropdown-link flex items-center space-x-3 px-4 py-2 rounded-lg text-gray-400 hover:text-white hover:bg-gray-800 {{ request()->routeIs('admin.events*') ? 'active' : '' }}">
                             <i class="fas fa-calendar-check w-5 text-center"></i>
                             <span>Events</span>
+                        </a>
+                    </div>
+                </div>
+
+
+                <!-- Contact Page Dropdown -->
+                <div class="relative">
+                    <button class="dropdown-btn w-full flex items-center justify-between px-4 py-3 rounded-xl text-gray-300 hover:text-white transition-all duration-200 focus:outline-none {{ request()->routeIs('admin.events*') ? 'active' : '' }}">
+                        <span class="flex items-center space-x-3">
+                            <i class="fas fa-calendar-alt w-5 text-center text-lg"></i>
+                            <span class="font-medium">Contact Page</span>
+                        </span>
+                        <i class="fas fa-chevron-down transition-transform duration-200 text-sm"></i>
+                    </button>
+
+                    <div class="dropdown-menu hidden pl-12 mt-1 space-y-1">
+                        <a href="{{ route('admin.social.index') }}" class="dropdown-link flex items-center space-x-3 px-4 py-2 rounded-lg text-gray-400 hover:text-white hover:bg-gray-800 {{ request()->routeIs('admin.social*') ? 'active' : '' }}">
+                            <i class="fas fa-calendar-check w-5 text-center"></i>
+                            <span>Social</span>
+                        </a>
+                        <a href="{{ route('admin.contact-information.index') }}" class="dropdown-link flex items-center space-x-3 px-4 py-2 rounded-lg text-gray-400 hover:text-white hover:bg-gray-800 {{ request()->routeIs('admin.social*') ? 'active' : '' }}">
+                            <i class="fas fa-calendar-check w-5 text-center"></i>
+                            <span>Contact-Info</span>
+                        </a>
+
+                             <a href="{{ route('admin.faqs.index') }}" class="dropdown-link flex items-center space-x-3 px-4 py-2 rounded-lg text-gray-400 hover:text-white hover:bg-gray-800 {{ request()->routeIs('admin.social*') ? 'active' : '' }}">
+                            <i class="fas fa-calendar-check w-5 text-center"></i>
+                            <span>Faqs</span>
+                        </a>
+                    </div>
+
+                    
+                </div>
+
+
+                <!-- Workshop Page Dropdown -->
+                <div class="relative">
+                    <button class="dropdown-btn w-full flex items-center justify-between px-4 py-3 rounded-xl text-gray-300 hover:text-white transition-all duration-200 focus:outline-none {{ request()->routeIs('admin.events*') ? 'active' : '' }}">
+                        <span class="flex items-center space-x-3">
+                            <i class="fas fa-chalkboard w-5 text-center text-lg"></i>
+
+                            <span class="font-medium">Workshop Page</span>
+                        </span>
+                        <i class="fas fa-chevron-down transition-transform duration-200 text-sm "></i>
+                    </button>
+
+                    <div class="dropdown-menu hidden pl-12 mt-1 space-y-1">
+                        <a href="{{ route('admin.workshops.index') }}" class="dropdown-link flex items-center space-x-3 px-4 py-2 rounded-lg text-gray-400 hover:text-white hover:bg-gray-800 {{ request()->routeIs('admin.events*') ? 'active' : '' }}">
+                            <i class="fas fa-video w-5 text-center"></i>
+                            <span>Videos</span>
                         </a>
                     </div>
                 </div>
@@ -448,21 +534,21 @@
                         <span class="text-gray-900 font-semibold gradient-text">@yield('title', 'Dashboard')</span>
                     </div>
                 </div>
-                
+
                 <div class="flex items-center space-x-4">
                     <!-- Notifications -->
                     <button class="relative p-2 text-gray-600 hover:text-indigo-600 transition-colors duration-200">
                         <i class="fas fa-bell text-lg"></i>
                         <span class="absolute top-1 right-1 w-2 h-2 bg-red-500 rounded-full"></span>
                     </button>
-                    
+
                     <!-- Search -->
                     <div class="relative hidden md:block">
-                        <input type="text" placeholder="Search..." 
-                               class="pl-10 pr-4 py-2 border border-gray-300 rounded-xl focus:ring-2 focus:ring-indigo-100 focus:border-indigo-500 outline-none transition text-sm w-64">
+                        <input type="text" placeholder="Search..."
+                            class="pl-10 pr-4 py-2 border border-gray-300 rounded-xl focus:ring-2 focus:ring-indigo-100 focus:border-indigo-500 outline-none transition text-sm w-64">
                         <i class="fas fa-search absolute left-3 top-3 text-gray-400"></i>
                     </div>
-                    
+
                     <!-- User Menu -->
                     <div class="relative">
                         <button id="user-menu" class="flex items-center space-x-2 focus:outline-none">
@@ -484,11 +570,11 @@
                         <h1 class="text-2xl md:text-3xl font-bold text-gray-900">@yield('page-title', 'Dashboard')</h1>
                         <p class="text-gray-600 mt-2">@yield('page-description', 'Welcome to your admin dashboard')</p>
                     </div>
-                    
+
                     <!-- Action Buttons -->
                     <div class="flex items-center space-x-3">
                         @hasSection('action-buttons')
-                            @yield('action-buttons')
+                        @yield('action-buttons')
                         @endif
                     </div>
                 </div>
@@ -538,17 +624,17 @@
             dropdowns.forEach(btn => {
                 const menu = btn.nextElementSibling;
                 const icon = btn.querySelector('.fa-chevron-down');
-                
+
                 // Open if active child exists
                 if (menu.querySelector('.active')) {
                     menu.classList.remove('hidden');
                     btn.classList.add('active');
                     icon.classList.add('rotate-180');
                 }
-                
+
                 btn.addEventListener('click', (e) => {
                     e.stopPropagation();
-                    
+
                     // Close other dropdowns
                     dropdowns.forEach(otherBtn => {
                         if (otherBtn !== btn) {
@@ -559,7 +645,7 @@
                             otherIcon.classList.remove('rotate-180');
                         }
                     });
-                    
+
                     // Toggle current dropdown
                     menu.classList.toggle('hidden');
                     btn.classList.toggle('active');
@@ -582,21 +668,21 @@
             window.showToast = function(message, type = 'info') {
                 const container = document.getElementById('toast-container');
                 const toast = document.createElement('div');
-                
+
                 const colors = {
                     success: 'bg-green-500',
                     error: 'bg-red-500',
                     warning: 'bg-yellow-500',
                     info: 'bg-blue-500'
                 };
-                
+
                 const icons = {
                     success: 'fa-check-circle',
                     error: 'fa-exclamation-circle',
                     warning: 'fa-exclamation-triangle',
                     info: 'fa-info-circle'
                 };
-                
+
                 toast.className = `flex items-center p-4 rounded-xl text-white shadow-lg transform transition-all duration-300 translate-x-full ${colors[type]}`;
                 toast.innerHTML = `
                     <i class="fas ${icons[type]} mr-3 text-lg"></i>
@@ -605,14 +691,14 @@
                         <i class="fas fa-times"></i>
                     </button>
                 `;
-                
+
                 container.appendChild(toast);
-                
+
                 // Animate in
                 setTimeout(() => {
                     toast.classList.remove('translate-x-full');
                 }, 10);
-                
+
                 // Remove after 5 seconds
                 setTimeout(() => {
                     toast.classList.add('translate-x-full');
@@ -620,7 +706,7 @@
                         container.removeChild(toast);
                     }, 300);
                 }, 5000);
-                
+
                 // Close button
                 toast.querySelector('button').addEventListener('click', () => {
                     toast.classList.add('translate-x-full');

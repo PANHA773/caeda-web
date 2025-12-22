@@ -17,8 +17,9 @@ use App\Http\Controllers\DonationController;
 use App\Http\Controllers\NewsController;
 use App\Http\Controllers\TeamController;
 use App\Http\Controllers\PartnersController;
+use App\Http\Controllers\WorkshopController;
 
-// admin controllers
+// Admin Controllers
 use App\Http\Controllers\Admin\AboutAdminController;
 use App\Http\Controllers\Admin\FacultyAdminController;
 use App\Http\Controllers\Admin\TeamMemberAdminController;
@@ -29,69 +30,69 @@ use App\Http\Controllers\Admin\ProgramCaedaController;
 use App\Http\Controllers\Admin\StaffController;
 use App\Http\Controllers\Admin\PartnerController;
 use App\Http\Controllers\Admin\EventCeadaController;
-
+use App\Http\Controllers\Admin\WorkshopCeadaController;
+use App\Http\Controllers\Admin\SocialLinkController;
+use App\Http\Controllers\Admin\ContactMethodController;
+use App\Http\Controllers\Admin\FaqController;
+use App\Http\Controllers\Admin\PricingPlanController;
+use App\Http\Controllers\Admin\FeatureController;
+use App\Http\Controllers\Admin\FooterController;
 
 
 // ==============================
-// HOME
+// PUBLIC ROUTES
 // ==============================
+
+// Home
 Route::get('/', [HomeController::class, 'index'])->name('home');
 
-// ==============================
-// STATIC PAGES (Blade only)
-// ==============================
-
-
-
-
-Route::get('/programs', [ProgramController::class, 'view'])->name('programs');
-
-// Route::get('/programs', [ProgramController::class, 'index'])->name('programs.index');
-
-
-// about page
-Route::get('/about', [AboutController::class, 'index'])->name('about');
-
-// project page
-Route::get('/project', [ProjectController::class, 'index'])->name('project');
-
-
-// Events routes
-
-
-
-
-
-
-// Route::view('/project', 'project')->name('project');
-
-Route::view('/workshop', 'workshop')->name('workshop');
+// Static Pages
 Route::view('/psbu-vison', 'psbu-vison')->name('psbu-vison');
 Route::view('/psbu-weekly-news', 'psbu-weekly-news')->name('psbu-weekly-news');
 Route::view('/psbu-youth', 'psbu-youth')->name('psbu-youth');
+Route::view('/donation', 'donation')->name('donation');
+Route::view('/volunteer', 'volunteer')->name('volunteer.signup');
+Route::view('/resources', 'resources')->name('resources.download');
+Route::view('/achieve', 'achieve')->name('achieve');
+Route::view('/contact', 'contact')->name('contact');
+
+// Dynamic Pages
+Route::get('/workshop', [WorkshopController::class, 'index'])->name('workshop');
+Route::get('/programs', [ProgramController::class, 'view'])->name('programs');
+Route::get('/about', [AboutController::class, 'index'])->name('about');
+Route::get('/project', [ProjectController::class, 'index'])->name('project');
 Route::get('/our-team', [TeamController::class, 'index'])->name('our-team');
 Route::get('/partners', [PartnersController::class, 'index'])->name('partners');
 Route::get('/events', [EventController::class, 'index'])->name('events');
 Route::get('/events/{event}', [EventController::class, 'show'])->name('events.show');
 Route::get('/news', [NewsController::class, 'index'])->name('news');
-// Comments and interactions for news
+
+
+// News interactions
 Route::post('/news/{news}/comments', [\App\Http\Controllers\CommentController::class, 'store'])->name('news.comments.store');
 Route::post('/news/{news}/like', [\App\Http\Controllers\NewsController::class, 'toggleLike'])->name('news.like');
 
-// donation page
-Route::view('/donation', 'donation')->name('donation');
+// Donations
 Route::post('/donation', [DonationController::class, 'submit'])->name('donation.submit');
-Route::view('/volunteer', 'volunteer')->name('volunteer.signup');
-Route::view('/resources', 'resources')->name('resources.download');
-// other static pages
 
-Route::view('/achieve', 'achieve')->name('achieve');
-Route::view('/contact', 'contact')->name('contact');
+// Courses
+Route::get('/courses', [CourseController::class, 'index'])->name('courses');
 
+// Contact & Newsletter
+Route::post('/contact', [ContactController::class, 'store'])->name('contact.submit');
+
+Route::get('/contact', [ContactController::class, 'index'])->name('contact');
+
+Route::post('/newsletter', [NewsletterController::class, 'subscribe'])->name('newsletter.subscribe');
+
+// Language Switcher
+Route::post('/switch-language', [LanguageController::class, 'switch'])->name('language.switch');
 
 // ==============================
-// AUTH
+// AUTH ROUTES
 // ==============================
+
+// User Auth
 Route::get('/login', [LoginController::class, 'index'])->name('login');
 Route::post('/login', [LoginController::class, 'submit'])->name('login.submit');
 Route::get('/register', [RegisterController::class, 'index'])->name('register');
@@ -102,7 +103,9 @@ Route::post('/logout', [LoginController::class, 'logout'])->name('logout');
 Route::get('/admin/login', [LoginController::class, 'adminLogin'])->name('admin.login');
 Route::post('/admin/login', [LoginController::class, 'adminSubmit'])->name('admin.login.submit');
 
-// Protected User Routes (require authentication)
+// ==============================
+// PROTECTED USER ROUTES
+// ==============================
 Route::middleware(['auth'])->group(function () {
     Route::get('/profile', [ProfileController::class, 'show'])->name('profile');
     Route::get('/profile/edit', [ProfileController::class, 'edit'])->name('profile.edit');
@@ -110,48 +113,21 @@ Route::middleware(['auth'])->group(function () {
 });
 
 // ==============================
-// COURSES
-// ==============================
-Route::get('/courses', [CourseController::class, 'index'])->name('courses');
-
-// ==============================
-// LANGUAGE SWITCHER
-// ==============================
-Route::post('/switch-language', [LanguageController::class, 'switch'])->name('language.switch');
-
-// ==============================
-// CONTACT FORM
-// ==============================
-Route::post('/contact', [ContactController::class, 'store'])->name('contact.submit');
-
-// ==============================
-// NEWSLETTER
-// ==============================
-Route::post('/newsletter', [NewsletterController::class, 'subscribe'])->name('newsletter.subscribe');
-
-// ==============================
 // PROTECTED ADMIN ROUTES
 // ==============================
-// All admin routes require authentication
 Route::middleware(['auth'])->prefix('admin')->name('admin.')->group(function () {
 
-    // Admin Dashboard
+    // Dashboard
     Route::get('/', [AboutAdminController::class, 'index'])->name('dashboard');
 
-    // About Page
+    // About
     Route::get('/about', [AboutAdminController::class, 'index'])->name('about.index');
 
     // Faculties
-    Route::get('/faculties', [FacultyAdminController::class, 'index'])->name('faculties.index');
-    Route::get('/faculties/create', [FacultyAdminController::class, 'create'])->name('faculties.create');
-    Route::post('/faculties', [FacultyAdminController::class, 'store'])->name('faculties.store');
-    Route::get('/faculties/{faculty}/edit', [FacultyAdminController::class, 'edit'])->name('faculties.edit');
-    Route::put('/faculties/{faculty}', [FacultyAdminController::class, 'update'])->name('faculties.update');
-    Route::delete('/faculties/{faculty}', [FacultyAdminController::class, 'destroy'])->name('faculties.destroy');
-    Route::get('/faculties/{faculty}', [FacultyAdminController::class, 'show'])->name('faculties.show');
+    Route::resource('faculties', FacultyAdminController::class);
 
     // Team Members
-    Route::resource('/team-members', TeamMemberAdminController::class);
+    Route::resource('team-members', TeamMemberAdminController::class);
 
     // Core Values
     Route::resource('core-values', CoreValueAdminController::class);
@@ -173,10 +149,27 @@ Route::middleware(['auth'])->prefix('admin')->name('admin.')->group(function () 
 
     // Partners
     Route::resource('partners', PartnerController::class);
-//
 
+    // Workshops
+    Route::resource('workshops', WorkshopCeadaController::class);
 
+    // Social Links
+    Route::resource('social', SocialLinkController::class);
 
+    // Contact Methods
+     Route::resource('contact-information', ContactMethodController::class);
 
+    // FAQs
+    Route::resource('faqs', FaqController::class);
 
+    // Pricing Plans
+    Route::resource('pricing', PricingPlanController::class);
+
+    //FeatureController 
+    Route::resource('features', FeatureController::class);
+
+    //FooterController
+    Route::resource('footer', FooterController::class);
+    
 });
+

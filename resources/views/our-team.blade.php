@@ -354,153 +354,129 @@
     </div>
 </section>
 
+
+
 {{-- ================= PRICING CARDS ================= --}}
 <section class="py-20 px-4 md:px-8">
     <div class="max-w-7xl mx-auto">
         <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
-            @php
-                $membershipPlans = [
-                    [
-                        'id' => 'basic',
-                        'name' => 'Basic',
-                        'price' => ['monthly' => 9.99, 'annual' => 99.99],
-                        'description' => 'Perfect for beginners starting their journey',
-                        'features' => [
-                            'Access to basic courses',
-                            'Community support',
-                            'Weekly Q&A sessions',
-                            'Basic progress tracking',
-                            'Email support'
-                        ],
-                        'popular' => false,
-                        'color' => 'gray',
-                        'gradient' => 'from-gray-500 to-gray-700',
-                        'membersCount' => '10K+',
-                        'badge' => 'Starter'
-                    ],
-                    [
-                        'id' => 'pro',
-                        'name' => 'Professional',
-                        'price' => ['monthly' => 29.99, 'annual' => 299.99],
-                        'description' => 'Ideal for serious learners and professionals',
-                        'features' => [
-                            'All Basic features',
-                            'Unlimited course access',
-                            'Priority support',
-                            'Certification programs',
-                            'Project reviews',
-                            'Career guidance',
-                            '1-on-1 mentoring sessions'
-                        ],
-                        'popular' => true,
-                        'color' => 'blue',
-                        'gradient' => 'from-blue-500 to-purple-600',
-                        'membersCount' => '5K+',
-                        'badge' => 'Most Popular'
-                    ],
-                    [
-                        'id' => 'enterprise',
-                        'name' => 'Enterprise',
-                        'price' => ['monthly' => 79.99, 'annual' => 799.99],
-                        'description' => 'For teams and organizations',
-                        'features' => [
-                            'All Professional features',
-                            'Team management dashboard',
-                            'Custom learning paths',
-                            'API access',
-                            'Dedicated account manager',
-                            'White-label options',
-                            'Advanced analytics',
-                            'SSO integration'
-                        ],
-                        'popular' => false,
-                        'color' => 'purple',
-                        'gradient' => 'from-purple-500 to-pink-600',
-                        'membersCount' => '500+',
-                        'badge' => 'Teams'
-                    ]
-                ];
-            @endphp
-            
-            @foreach($membershipPlans as $index => $plan)
+
+            @foreach($plans as $index => $plan)
                 @php
-                    $monthlyTotal = $plan['price']['monthly'] * 12;
-                    $savings = $monthlyTotal - $plan['price']['annual'];
-                    $percentage = round(($savings / $monthlyTotal) * 100);
+                    $monthlyTotal = $plan->monthly_price * 12;
+                    $savings = $monthlyTotal - $plan->annual_price;
+                    $percentage = $monthlyTotal > 0 ? round(($savings / $monthlyTotal) * 100) : 0;
                 @endphp
-                
+
                 <div
-                    data-plan="{{ $plan['id'] }}"
-                    class="pricing-card relative group bg-white rounded-3xl shadow-xl hover:shadow-2xl transition-all duration-500 transform hover:-translate-y-4 animate-fade-in-up {{ $plan['popular'] ? 'ring-4 ring-blue-500/20 scale-105' : '' }}"
+                    data-plan="{{ $plan->slug }}"
+                    class="pricing-card relative group bg-white rounded-3xl shadow-xl hover:shadow-2xl transition-all duration-500 transform hover:-translate-y-4 animate-fade-in-up
+                        {{ $plan->is_popular ? 'ring-4 ring-blue-500/20 scale-105' : '' }}"
                     style="animation-delay: {{ $index * 200 }}ms"
                 >
-                    @if($plan['popular'])
+
+                    {{-- BADGE --}}
+                    @if($plan->is_popular && $plan->badge)
                         <div class="absolute -top-4 left-1/2 transform -translate-x-1/2 z-20">
                             <span class="bg-gradient-to-r from-blue-500 to-purple-500 text-white px-6 py-3 rounded-full text-sm font-bold shadow-lg">
-                                {{ $plan['badge'] }} ✨
+                                {{ $plan->badge }} ✨
                             </span>
                         </div>
                     @endif
-                    
+
                     <div class="p-8">
+                        {{-- HEADER --}}
                         <div class="flex justify-between items-start mb-6">
-                            <div class="font-bold text-lg bg-gradient-to-r {{ $plan['gradient'] }} bg-clip-text text-transparent">
-                                {{ $plan['name'] }}
+                            <div class="font-bold text-lg bg-gradient-to-r {{ $plan->gradient }} bg-clip-text text-transparent">
+                                {{ $plan->name }}
                             </div>
-                            <span class="bg-gray-100 text-gray-600 text-xs font-medium px-3 py-1 rounded-full group-hover:bg-gray-200 transition-colors duration-300">
-                                {{ $plan['membersCount'] }} members
-                            </span>
+
+                            @if($plan->members_count)
+                                <span class="bg-gray-100 text-gray-600 text-xs font-medium px-3 py-1 rounded-full">
+                                    {{ $plan->members_count }} members
+                                </span>
+                            @endif
                         </div>
-                        
+
+                        {{-- PRICE --}}
                         <div class="mb-6">
-                            <span class="price-display text-5xl font-bold text-gray-900" data-plan="{{ $plan['id'] }}" data-monthly="{{ $plan['price']['monthly'] }}" data-annual="{{ $plan['price']['annual'] }}">
-                                ${{ $plan['price']['annual'] }}
+                            <span
+                                class="price-display text-5xl font-bold text-gray-900"
+                                data-plan="{{ $plan->slug }}"
+                                data-monthly="{{ $plan->monthly_price }}"
+                                data-annual="{{ $plan->annual_price }}"
+                            >
+                                ${{ number_format($plan->annual_price, 2) }}
                             </span>
-                            <span class="period-display text-gray-600 ml-2 text-lg" data-plan="{{ $plan['id'] }}">
+                            <span class="period-display text-gray-600 ml-2 text-lg">
                                 /year
                             </span>
                         </div>
-                        
-                        <div class="savings-display hidden bg-gradient-to-r from-green-50 to-emerald-50 border border-green-200 rounded-2xl p-4 mb-6 group-hover:shadow-md transition-shadow duration-300" 
-                             data-plan="{{ $plan['id'] }}"
-                             data-savings="{{ $savings }}"
-                             data-percentage="{{ $percentage }}">
-                            <div class="text-green-700 font-semibold text-lg">
-                                Save ${{ $savings }} ({{ $percentage }}%)
+
+                        {{-- SAVINGS --}}
+                        @if($savings > 0)
+                            <div
+                                class="savings-display hidden bg-gradient-to-r from-green-50 to-emerald-50 border border-green-200 rounded-2xl p-4 mb-6"
+                                data-plan="{{ $plan->slug }}"
+                                data-savings="{{ $savings }}"
+                                data-percentage="{{ $percentage }}"
+                            >
+                                <div class="text-green-700 font-semibold text-lg">
+                                    Save ${{ number_format($savings, 2) }} ({{ $percentage }}%)
+                                </div>
+                                <div class="text-green-600 text-sm">
+                                    Compared to monthly billing
+                                </div>
                             </div>
-                            <div class="text-green-600 text-sm">
-                                Compared to monthly billing
-                            </div>
-                        </div>
-                        
-                        <p class="text-gray-600 mb-8 leading-relaxed">{{ $plan['description'] }}</p>
-                        
+                        @endif
+
+                        {{-- DESCRIPTION --}}
+                        <p class="text-gray-600 mb-8 leading-relaxed">
+                            {{ $plan->description }}
+                        </p>
+
+                        {{-- FEATURES --}}
                         <ul class="space-y-4 mb-8">
-                            @foreach($plan['features'] as $feature)
+                            @foreach($plan->features as $feature)
                                 <li class="flex items-center group">
                                     <div class="w-6 h-6 bg-green-100 rounded-full flex items-center justify-center mr-3 group-hover:bg-green-500 transition-colors duration-300">
-                                        <svg class="w-4 h-4 text-green-500 group-hover:text-white transition-colors duration-300" fill="currentColor" viewBox="0 0 20 20">
-                                            <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd" />
+                                        <svg class="w-4 h-4 text-green-500 group-hover:text-white transition-colors duration-300"
+                                             fill="currentColor" viewBox="0 0 20 20">
+                                            <path fill-rule="evenodd"
+                                                  d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"
+                                                  clip-rule="evenodd"/>
                                         </svg>
                                     </div>
-                                    <span class="text-gray-700 group-hover:text-gray-900 transition-colors duration-300">{{ $feature }}</span>
+                                    <span class="text-gray-700 group-hover:text-gray-900 transition-colors duration-300">
+                                        {{ $feature->feature }}
+                                    </span>
                                 </li>
                             @endforeach
                         </ul>
-                        
+
+                        {{-- CTA --}}
                         <button
-                            onclick="subscribeToPlan('{{ $plan['id'] }}')"
-                            class="subscribe-btn w-full py-4 px-6 rounded-2xl font-semibold transition-all duration-300 {{ $plan['popular'] ? 'bg-gradient-to-r from-blue-500 to-purple-500 hover:from-blue-600 hover:to-purple-600 text-white shadow-lg hover:shadow-xl transform hover:scale-105' : 'bg-gray-100 hover:bg-gray-200 text-gray-900 hover:shadow-lg' }}"
-                            data-plan="{{ $plan['id'] }}"
+                            onclick="subscribeToPlan('{{ $plan->slug }}')"
+                            class="subscribe-btn w-full py-4 px-6 rounded-2xl font-semibold transition-all duration-300
+                                {{ $plan->is_popular
+                                    ? 'bg-gradient-to-r from-blue-500 to-purple-500 hover:from-blue-600 hover:to-purple-600 text-white shadow-lg hover:shadow-xl transform hover:scale-105'
+                                    : 'bg-gray-100 hover:bg-gray-200 text-gray-900 hover:shadow-lg'
+                                }}"
                         >
                             Get Started
                         </button>
                     </div>
                 </div>
             @endforeach
+
         </div>
     </div>
 </section>
+
+
+
+
+
 
 {{-- ================= BENEFITS SECTION ================= --}}
 <section class="py-20 bg-gradient-to-br from-gray-50 via-blue-50/30 to-purple-50/30 px-4 md:px-8">

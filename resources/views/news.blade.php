@@ -7,7 +7,7 @@
 <style>
     .font-poppins { font-family: 'Poppins', sans-serif; }
     
-    /* 自定义样式 */
+
     .news-card {
         background: white;
         border-radius: 16px;
@@ -131,7 +131,7 @@
         border-radius: 50%;
     }
     
-    /* 加载动画 */
+
     @keyframes fadeInUp {
         from {
             opacity: 0;
@@ -146,8 +146,7 @@
     .animate-fadeInUp {
         animation: fadeInUp 0.6s ease-out forwards;
     }
-    
-    /* 自定义滚动条 */
+
     .custom-scrollbar::-webkit-scrollbar {
         width: 6px;
     }
@@ -165,8 +164,7 @@
     .custom-scrollbar::-webkit-scrollbar-thumb:hover {
         background: #a5b4fc;
     }
-    
-    /* 响应式调整 */
+   
     @media (max-width: 768px) {
         .news-card {
             border-radius: 12px;
@@ -184,7 +182,7 @@
 @section('content')
 
 <div class="min-h-screen bg-gradient-to-b from-gray-50 to-gray-100 font-poppins">
-    <!-- 头部区域 -->
+    
     <div class="relative overflow-hidden">
         <div class="absolute inset-0 bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500 opacity-5"></div>
         <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-12 relative">
@@ -195,8 +193,7 @@
                 <p class="text-lg text-gray-600 max-w-3xl mx-auto">
                     Stay updated with the latest news, events, and announcements from Cambodia Academy of Entrepreneurship, Design, and Art.
                 </p>
-                
-                <!-- 搜索和筛选 -->
+             
                 <div class="mt-8 max-w-md mx-auto">
                     <div class="relative">
                         <input 
@@ -211,9 +208,9 @@
         </div>
     </div>
 
-    <!-- 主要内容区域 -->
+ 
     <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 pb-16">
-        <!-- 统计信息 -->
+      
         <div class="flex flex-col sm:flex-row items-center justify-between mb-8 p-4 bg-white rounded-xl shadow-sm">
             <div class="flex items-center space-x-6 mb-4 sm:mb-0">
                 <div class="text-center">
@@ -230,7 +227,7 @@
                 </div>
             </div>
             
-            <!-- 排序选项 -->
+           
             <div class="flex items-center space-x-4">
                 <span class="text-sm text-gray-600">Sort by:</span>
                 <select class="px-4 py-2 rounded-lg border border-gray-300 focus:ring-2 focus:ring-indigo-500 focus:border-transparent outline-none transition-all duration-200">
@@ -244,12 +241,12 @@
             </div>
         </div>
 
-        {{-- 新闻列表 --}}
+     
         <div class="space-y-8">
             @forelse($news as $index => $post)
                 <article class="news-card animate-fadeInUp" style="animation-delay: {{ $index * 0.1 }}s;">
                     <div class="p-6 md:p-8">
-                        {{-- 作者信息 --}}
+                     
                         <div class="flex items-start justify-between mb-6">
                             <div class="flex items-center space-x-4">
                                 <div class="relative avatar-ring online">
@@ -287,7 +284,7 @@
                             </div>
                         </div>
 
-                        {{-- 标题和摘要 --}}
+                    
                         @if($post->title)
                             <h2 class="text-2xl font-bold text-gray-900 mb-3 leading-tight">
                                 <a href="#" class="hover:text-indigo-600 transition-colors duration-200">
@@ -300,7 +297,7 @@
                             <p class="text-gray-700 text-lg mb-6">{{ $post->excerpt }}</p>
                         @endif
 
-                        {{-- 图片 --}}
+                
                         @if($post->image)
                             <div class="news-image-container mb-6">
                                 <img 
@@ -311,7 +308,7 @@
                             </div>
                         @endif
 
-                        {{-- 内容预览 --}}
+                   
                         <div class="text-gray-800 mb-6 leading-relaxed">
                             {!! Str::limit(strip_tags($post->content), 400) !!}
                             @if(strlen(strip_tags($post->content)) > 400)
@@ -321,7 +318,6 @@
                             @endif
                         </div>
 
-                        {{-- 标签 --}}
                         @if(!empty($post->tags))
                             <div class="mb-6 flex flex-wrap gap-2">
                                 @foreach($post->tags as $tag)
@@ -333,10 +329,9 @@
                             </div>
                         @endif
 
-                        {{-- 互动统计和操作 --}}
                         <div class="pt-6 border-t border-gray-200">
                             <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
-                                {{-- 统计信息 --}}
+                            
                                 <div class="flex items-center space-x-6 text-sm text-gray-600">
                                     <div class="flex items-center space-x-2">
                                         <span class="w-8 h-8 bg-blue-50 rounded-full flex items-center justify-center text-blue-600">
@@ -363,7 +358,7 @@
                                     </div>
                                 </div>
 
-                                {{-- 操作按钮 --}}
+                        
                                 <div class="flex items-center space-x-2">
                                     <button 
                                         onclick="likePost({{ $post->id }}, this)" 
@@ -437,7 +432,7 @@
                                 </div>
                             </div>
 
-                            {{-- 评论列表 --}}
+                    
                             <div 
                                 id="comments-section-{{ $post->id }}" 
                                 class="mt-6 space-y-4 max-h-80 overflow-y-auto custom-scrollbar p-2 hidden"
@@ -470,7 +465,7 @@
                                 @endif
                             </div>
 
-                            {{-- 评论表单 --}}
+                       
                             <form 
                                 id="comment-form-{{ $post->id }}" 
                                 onsubmit="submitComment(event, {{ $post->id }})" 
@@ -557,7 +552,6 @@
             @endforelse
         </div>
 
-        {{-- 分页 --}}
         @if($news->hasPages())
             <div class="mt-12 bg-white rounded-xl shadow-sm p-6">
                 <div class="flex flex-col sm:flex-row items-center justify-between gap-4">
@@ -573,7 +567,7 @@
     </div>
 </div>
 
-<!-- 回到顶部按钮 -->
+
 <button 
     id="back-to-top" 
     class="fixed bottom-6 right-6 w-12 h-12 bg-gradient-to-r from-indigo-600 to-purple-600 text-white rounded-full shadow-lg hover:shadow-xl transition-all duration-300 hidden z-50"
@@ -588,7 +582,7 @@
 <script>
     const csrfToken = '{{ csrf_token() }}';
     
-    // 显示/隐藏回到顶部按钮
+  
     window.addEventListener('scroll', () => {
         const backToTopBtn = document.getElementById('back-to-top');
         if (window.scrollY > 300) {
