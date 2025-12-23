@@ -18,6 +18,7 @@ use App\Http\Controllers\NewsController;
 use App\Http\Controllers\TeamController;
 use App\Http\Controllers\PartnersController;
 use App\Http\Controllers\WorkshopController;
+use App\Http\Controllers\SpeakersController;
 
 // Admin Controllers
 use App\Http\Controllers\Admin\AboutAdminController;
@@ -37,6 +38,11 @@ use App\Http\Controllers\Admin\FaqController;
 use App\Http\Controllers\Admin\PricingPlanController;
 use App\Http\Controllers\Admin\FeatureController;
 use App\Http\Controllers\Admin\FooterController;
+use App\Http\Controllers\Admin\SpeakerController;
+use App\Http\Controllers\Admin\HeroCarouselController;
+use App\Http\Controllers\Admin\WelcomeSectionController;
+use App\Http\Controllers\Admin\TimelineEventController;
+use App\Http\Controllers\Admin\FeaturedEventController;
 
 
 // ==============================
@@ -65,6 +71,11 @@ Route::get('/our-team', [TeamController::class, 'index'])->name('our-team');
 Route::get('/partners', [PartnersController::class, 'index'])->name('partners');
 Route::get('/events', [EventController::class, 'index'])->name('events');
 Route::get('/events/{event}', [EventController::class, 'show'])->name('events.show');
+
+
+Route::get('/speakers', [SpeakersController::class, 'index'])->name('speakers.index');
+Route::get('/speakers/{speaker}', [SpeakersController::class, 'show'])->name('speakers.show');
+
 Route::get('/news', [NewsController::class, 'index'])->name('news');
 
 
@@ -120,6 +131,9 @@ Route::middleware(['auth'])->prefix('admin')->name('admin.')->group(function () 
     // Dashboard
     Route::get('/', [AboutAdminController::class, 'index'])->name('dashboard');
 
+    //Hero Carousel
+    Route::resource('hero_carousels', HeroCarouselController::class);
+
     // About
     Route::get('/about', [AboutAdminController::class, 'index'])->name('about.index');
 
@@ -170,6 +184,17 @@ Route::middleware(['auth'])->prefix('admin')->name('admin.')->group(function () 
 
     //FooterController
     Route::resource('footer', FooterController::class);
-    
+
+    // Speakers
+    Route::resource('speakers', SpeakerController::class);
+
+    // Welcome Section
+    Route::resource('welcome_sections', WelcomeSectionController::class);
+
+    // Timeline Events
+    Route::resource('timeline_events',TimelineEventController::class);
+
+    // Featured Events
+    Route::resource('featured_events', FeaturedEventController::class);
 });
 

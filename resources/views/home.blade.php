@@ -90,39 +90,36 @@
                 </div>
             </div>
 
-            {{-- RIGHT SIDE CAROUSEL --}}
-            <div class="lg:w-1/2 relative">
-                <div class="relative overflow-hidden rounded-3xl shadow-2xl w-full border-4 border-white/20 backdrop-blur-sm" style="min-height: 500px">
+      {{-- RIGHT SIDE CAROUSEL --}}
+<div class="lg:w-1/2 relative">
+    <div class="relative overflow-hidden rounded-3xl shadow-2xl w-full border-4 border-white/20 backdrop-blur-sm" style="min-height: 500px">
 
-                    <div id="hero-carousel">
-                        @foreach([
-                            ['src' => '/assets/ASEAN-01-01.png', 'alt' => 'Campus 1'],
-                            ['src' => '/assets/stu-one.jpg', 'alt' => 'Campus 2'],
-                            ['src' => '/assets/stu-tow.png', 'alt' => 'Campus 3']
-                        ] as $index => $image)
-                            <img src="{{ $image['src'] }}" alt="{{ $image['alt'] }}"
-                                 class="absolute inset-0 w-full h-full object-cover transition-opacity duration-500 {{ $index === 0 ? 'opacity-100' : 'opacity-0' }}"
-                                 onerror="this.src='/assets/defaultcourse.jpg'">
-                        @endforeach
-                    </div>
+        <div id="hero-carousel">
+            @foreach($heroSlides as $index => $slide)
+                <img src="{{ $slide->image }}" alt="{{ $slide->title }}"
+                     class="absolute inset-0 w-full h-full object-cover transition-opacity duration-500 {{ $index === 0 ? 'opacity-100' : 'opacity-0' }}"
+                     onerror="this.src='/assets/defaultcourse.jpg'">
+            @endforeach
+        </div>
 
-                    {{-- NAV BUTTONS --}}
-                    <button id="prev-slide" class="absolute left-4 top-1/2 -translate-y-1/2 bg-white/80 p-2 rounded-full shadow-lg hover:bg-white hover:scale-110 transition">
-                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/>
-                        </svg>
-                    </button>
+        {{-- NAV BUTTONS --}}
+        <button id="prev-slide" class="absolute left-4 top-1/2 -translate-y-1/2 bg-white/80 p-2 rounded-full shadow-lg hover:bg-white hover:scale-110 transition">
+            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/>
+            </svg>
+        </button>
 
-                    <button id="next-slide" class="absolute right-4 top-1/2 -translate-y-1/2 bg-white/80 p-2 rounded-full shadow-lg hover:bg-white hover:scale-110 transition">
-                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/>
-                        </svg>
-                    </button>
+        <button id="next-slide" class="absolute right-4 top-1/2 -translate-y-1/2 bg-white/80 p-2 rounded-full shadow-lg hover:bg-white hover:scale-110 transition">
+            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/>
+            </svg>
+        </button>
 
-                    {{-- DOTS --}}
-                    <div id="hero-dots" class="absolute bottom-4 left-1/2 -translate-x-1/2 flex gap-2"></div>
-                </div>
-            </div>
+        {{-- DOTS --}}
+        <div id="hero-dots" class="absolute bottom-4 left-1/2 -translate-x-1/2 flex gap-2"></div>
+    </div>
+</div>
+
 
         </div>
     </div>
@@ -151,33 +148,30 @@
     </div>
 </section>
 
-{{-- ================= ABOUT US SECTION ================= --}}
+{{-- ================= WELCOME US SECTION ================= --}}
+@php
+    // Fetch the first active welcome section
+    $welcome = \App\Models\WelcomeSection::where('is_active', true)->first();
+@endphp
+
+@if($welcome)
 <section data-animate class="py-20 px-4 md:px-8 bg-white/80 backdrop-blur-sm">
     <div class="max-w-7xl mx-auto">
         <div class="flex flex-col lg:flex-row items-start gap-12">
+
+            {{-- LEFT TEXT --}}
             <div class="lg:w-1/2">
                 <div class="mb-8">
                     <h2 class="text-4xl md:text-5xl font-bold text-gray-900 mb-6 font-cinzel">
-                        Welcome to <span class="text-blue-900 animate-pulse">CAEDA</span>
+                        {!! $welcome->title !!}
                     </h2>
-                    
+
                     <div class="space-y-4 text-lg text-gray-700 leading-relaxed">
-                        <p class="text-gray-800 transform transition-all duration-500 hover:translate-x-2">
-                            The Cambodia-ASEAN Educational Development Association is dedicated to building
-                            high-quality human capital for Cambodia and the region.
-                        </p>
-                        
-                        <p class="text-gray-800 transform transition-all duration-500 hover:translate-x-2 delay-100">
-                            Guided by the vision of empowering youth with essential 21st-century skills, 
-                            we focus on strengthening foreign languages, digital competency, leadership, 
-                            and innovation.
-                        </p>
-                        
-                        <p class="text-gray-800 transform transition-all duration-500 hover:translate-x-2 delay-200">
-                            By bridging academic knowledge with real labor-market demands, CAEDA strives 
-                            to prepare future leaders who can contribute to national development and ASEAN 
-                            integration with confidence and purpose.
-                        </p>
+                        @foreach($welcome->description as $index => $paragraph)
+                            <p class="text-gray-800 transform transition-all duration-500 hover:translate-x-2 delay-{{ $index * 100 }}">
+                                {!! $paragraph !!}
+                            </p>
+                        @endforeach
                     </div>
                 </div>
 
@@ -185,12 +179,9 @@
                 <div class="border-t-2 border-blue-200 pt-8 mt-8 transform transition-all duration-500 hover:shadow-lg rounded-xl p-6">
                     <div class="text-gray-900 space-y-2">
                         <p class="text-xl font-semibold text-blue-900">
-                            Cambodia-ASEAN Educational Development Association,
+                            {{ $welcome->signature_name }},
                         </p>
-                        <p class="text-lg text-gray-700">H.T.Samdolfe (Presh Abilitar Sujazhala)</p>
-                        <p class="text-lg text-gray-700">Mahasarajahasajah (Presh BOUR RXY)</p>
-                        <p class="text-lg text-gray-700">Samdolfe (Presh Mahasarajahasajah) of</p>
-                        <p class="text-lg text-gray-700">Dharmayatibiantilaya of</p>
+                        <p class="text-lg text-gray-700">{{ $welcome->signature_title }}</p>
                     </div>
                 </div>
             </div>
@@ -198,33 +189,39 @@
             {{-- RIGHT IMAGE --}}
             <div class="lg:w-1/2 relative">
                 <div class="relative transform transition-all duration-500 hover:scale-105">
-                    <img src="https://st3.depositphotos.com/3049830/15926/i/450/depositphotos_159267468-stock-photo-group-of-asian-students-in.jpg"
-                         alt="Caeda Campus"
+                    <img src="{{ $welcome->image }}" alt="Caeda Campus"
                          class="rounded-3xl shadow-2xl w-full h-96 object-cover border-4 border-white shadow-lg backdrop-blur-sm">
+
                     {{-- FLOATING BADGES --}}
-                    <div class="absolute -top-4 -right-4 bg-yellow-400 text-blue-900 px-4 py-2 rounded-xl font-bold shadow-lg animate-bounce">
-                        Excellence
-                    </div>
-                    <div class="absolute -bottom-4 -left-4 bg-red-400 text-white px-4 py-2 rounded-xl font-bold shadow-lg animate-bounce delay-500">
-                        Quality
-                    </div>
+                    @if($welcome->badges)
+                        @foreach($welcome->badges as $badge)
+                            <div class="absolute {{ $badge['position'] ?? '-top-4 -right-4' }} 
+                                        bg-{{ $badge['color'] ?? 'yellow' }}-400 text-{{ $badge['text_color'] ?? 'blue' }}-900 
+                                        px-4 py-2 rounded-xl font-bold shadow-lg animate-bounce">
+                                {{ $badge['text'] }}
+                            </div>
+                        @endforeach
+                    @endif
                 </div>
 
                 {{-- ENHANCED STATS --}}
+                @if($welcome->stats)
                 <div class="grid grid-cols-2 gap-6 mt-12">
-                    <div class="text-center p-6 bg-gradient-to-br from-blue-50 to-blue-100 rounded-2xl border border-blue-200 transform transition-all duration-300 hover:-translate-y-2 hover:shadow-lg">
-                        <div class="text-3xl font-bold text-blue-900 mb-2">50+</div>
-                        <div class="text-gray-700 font-medium">Years of Excellence</div>
-                    </div>
-                    <div class="text-center p-6 bg-gradient-to-br from-green-50 to-green-100 rounded-2xl border border-green-200 transform transition-all duration-300 hover:-translate-y-2 hover:shadow-lg">
-                        <div class="text-3xl font-bold text-green-900 mb-2">10K+</div>
-                        <div class="text-gray-700 font-medium">Students Graduated</div>
-                    </div>
+                    @foreach($welcome->stats as $stat)
+                        <div class="text-center p-6 bg-gradient-to-br from-blue-50 to-blue-100 rounded-2xl border border-blue-200 transform transition-all duration-300 hover:-translate-y-2 hover:shadow-lg">
+                            <div class="text-3xl font-bold text-blue-900 mb-2">{{ $stat['number'] }}</div>
+                            <div class="text-gray-700 font-medium">{{ $stat['label'] }}</div>
+                        </div>
+                    @endforeach
                 </div>
+                @endif
             </div>
+
         </div>
     </div>
 </section>
+@endif
+
 
 
 {{-- ================= COURSES SECTION ================= --}}

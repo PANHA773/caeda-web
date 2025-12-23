@@ -10,6 +10,8 @@ use App\Models\User;
 use App\Models\Staff;
 use App\Models\Feature;
 use App\Models\Footer;
+use App\Models\HeroCarousel;
+use App\Models\WelcomeSection;
 
 class HomeController extends Controller
 {
@@ -39,33 +41,50 @@ class HomeController extends Controller
             ->orderBy('sort_order')
             ->get();
 
+        // Hero carousel slides
+        $heroSlides = HeroCarousel::where('is_active', true)
+            ->orderBy('order')
+            ->get();
+
         // Footer data
         $footer = Footer::first();
+
+        // Welcome Section (active only)
+        $welcomeSection = WelcomeSection::where('is_active', true)->first();
 
         // Stats
         $stats = [
             [
-                'number' => number_format(User::count()), 
-                'label'  => 'Students Enrolled', 
+                'number' => number_format(User::count()),
+                'label'  => 'Students Enrolled',
                 'color'  => 'from-blue-500 to-cyan-500'
             ],
             [
-                'number' => number_format(Staff::count()), 
-                'label'  => 'Expert Instructors', 
+                'number' => number_format(Staff::count()),
+                'label'  => 'Expert Instructors',
                 'color'  => 'from-purple-500 to-pink-500'
             ],
             [
-                'number' => number_format(Program::active()->count()), 
-                'label'  => 'Courses Available', 
+                'number' => number_format(Program::active()->count()),
+                'label'  => 'Courses Available',
                 'color'  => 'from-green-500 to-teal-500'
             ],
             [
-                'number' => '95%', 
-                'label'  => 'Satisfaction Rate', 
+                'number' => '95%',
+                'label'  => 'Satisfaction Rate',
                 'color'  => 'from-orange-500 to-red-500'
             ]
         ];
 
-        return view('home', compact('faculties', 'programs', 'coreValues', 'features', 'stats', 'footer'));
+        return view('home', compact(
+            'faculties',
+            'programs',
+            'coreValues',
+            'features',
+            'stats',
+            'footer',
+            'heroSlides',
+            'welcomeSection'
+        ));
     }
 }

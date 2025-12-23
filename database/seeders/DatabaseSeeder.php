@@ -16,19 +16,15 @@ class DatabaseSeeder extends Seeder
     public function run(): void
     {
         $this->call([
+
+            
             // AdminSeeder::class,
             // UserSeeder::class,
             // StaffSeeder::class,
             // TeamMembersSeeder::class,
             // CoreValuesSeeder::class,
-         
-            
-
             // ProgramSeeder::class,
             // EventSeeder::class,
-          
-          
-
             // CommitteeMemberSeeder::class,
             // OfficeManagerSeeder::class,
             // FacultiesSeeder::class,
@@ -41,7 +37,15 @@ class DatabaseSeeder extends Seeder
             // FaqSeeder::class,
             // PricingPlanSeeder::class,
             // FeatureSeeder::class,
-            FooterSeeder::class,
+            // FooterSeeder::class,
+            // CalendarSeeder::class,
+            // WorkshopSeeder::class,
+            // SpeakerSeeder::class,
+            // HeroCarouselSeeder::class,
+            // WelcomeSectionSeeder::class,
+            // TimelineEventSeeder::class,
+            // FeaturedEventSeeder::class,
+
 
         ]);
     }

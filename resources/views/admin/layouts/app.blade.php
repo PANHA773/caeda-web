@@ -301,7 +301,7 @@
                 </div>
 
 
-                                <!-- home Dropdown -->
+                <!-- home Dropdown -->
                 <div class="relative">
                     <button class="dropdown-btn w-full flex items-center justify-between px-4 py-3 rounded-xl text-gray-300 hover:text-white transition-all duration-200 focus:outline-none {{ request()->routeIs('admin.our-team*') ? 'active' : '' }}">
                         <span class="flex items-center space-x-3">
@@ -310,14 +310,24 @@
                         </span>
                         <i class="fas fa-chevron-down transition-transform duration-200 text-sm"></i>
                     </button>
-
+                    <!-- welcome Section -->
                     <div class="dropdown-menu hidden pl-12 mt-1 space-y-1">
+                        <a href="{{ route('admin.welcome_sections.index') }}" class="dropdown-link flex items-center space-x-3 px-4 py-2 rounded-lg text-gray-400 hover:text-white hover:bg-gray-800 {{ request()->routeIs('admin.welcome_sections*') ? 'active' : '' }}">
+                            <i class="fas fa-user-tie w-5 text-center"></i>
+                            <span>Welcome Section</span>
+                        </a>
+                        <!-- Hero Carousel -->
+                        <a href="{{ route('admin.hero_carousels.index') }}" class="dropdown-link flex items-center space-x-3 px-4 py-2 rounded-lg text-gray-400 hover:text-white hover:bg-gray-800 {{ request()->routeIs('admin.hero_carousels*') ? 'active' : '' }}">
+                            <i class="fas fa-user-tie w-5 text-center"></i>
+                            <span>Hero Carousel</span>
+                        </a>
+                        <!-- Features -->
                         <a href="{{ route('admin.features.index') }}" class="dropdown-link flex items-center space-x-3 px-4 py-2 rounded-lg text-gray-400 hover:text-white hover:bg-gray-800 {{ request()->routeIs('admin.office-managers*') ? 'active' : '' }}">
                             <i class="fas fa-user-tie w-5 text-center"></i>
                             <span>Features</span>
                         </a>
 
-                         <a href="{{ route('admin.footer.index') }}" class="dropdown-link flex items-center space-x-3 px-4 py-2 rounded-lg text-gray-400 hover:text-white hover:bg-gray-800 {{ request()->routeIs('admin.office-managers*') ? 'active' : '' }}">
+                        <a href="{{ route('admin.footer.index') }}" class="dropdown-link flex items-center space-x-3 px-4 py-2 rounded-lg text-gray-400 hover:text-white hover:bg-gray-800 {{ request()->routeIs('admin.office-managers*') ? 'active' : '' }}">
                             <i class="fas fa-user-tie w-5 text-center"></i>
                             <span>Footer</span>
                         </a>
@@ -409,7 +419,7 @@
                             <i class="fas fa-building w-5 text-center"></i>
                             <span>Partners</span>
                         </a>
-                         <a href="{{ route('admin.pricing.index') }}" class="dropdown-link flex items-center space-x-3 px-4 py-2 rounded-lg text-gray-400 hover:text-white hover:bg-gray-800 {{ request()->routeIs('admin.pricing*') ? 'active' : '' }}">
+                        <a href="{{ route('admin.pricing.index') }}" class="dropdown-link flex items-center space-x-3 px-4 py-2 rounded-lg text-gray-400 hover:text-white hover:bg-gray-800 {{ request()->routeIs('admin.pricing*') ? 'active' : '' }}">
                             <i class="fas fa-building w-5 text-center"></i>
                             <span>Pricing</span>
                         </a>
@@ -427,9 +437,24 @@
                     </button>
 
                     <div class="dropdown-menu hidden pl-12 mt-1 space-y-1">
+                        <!-- Featured Events -->
+                        <a href="{{ route('admin.featured_events.index') }}" class="dropdown-link flex items-center space-x-3 px-4 py-2 rounded-lg text-gray-400 hover:text-white hover:bg-gray-800 {{ request()->routeIs('admin.featured_events*') ? 'active' : '' }}">
+                            <i class="fas fa-calendar-check w-5 text-center"></i>
+                            <span>Featured Events</span>
+                        </a>
+                        <!-- Events -->
                         <a href="{{ route('admin.events.index') }}" class="dropdown-link flex items-center space-x-3 px-4 py-2 rounded-lg text-gray-400 hover:text-white hover:bg-gray-800 {{ request()->routeIs('admin.events*') ? 'active' : '' }}">
                             <i class="fas fa-calendar-check w-5 text-center"></i>
                             <span>Events</span>
+                        </a>
+                        <!-- Speakers -->
+                        <a href="{{ route('admin.speakers.index') }}" class="dropdown-link flex items-center space-x-3 px-4 py-2 rounded-lg text-gray-400 hover:text-white hover:bg-gray-800 {{ request()->routeIs('admin.speakers*') ? 'active' : '' }}">
+                            <i class="fas fa-calendar-check w-5 text-center"></i>
+                            <span>Speakers</span>
+                        </a>
+                        <a href="{{ route('admin.timeline_events.index') }}" class="dropdown-link flex items-center space-x-3 px-4 py-2 rounded-lg text-gray-400 hover:text-white hover:bg-gray-800 {{ request()->routeIs('admin.timeline-events*') ? 'active' : '' }}">
+                            <i class="fas fa-calendar-check w-5 text-center"></i>
+                            <span>Timeline Events</span>
                         </a>
                     </div>
                 </div>
@@ -455,13 +480,13 @@
                             <span>Contact-Info</span>
                         </a>
 
-                             <a href="{{ route('admin.faqs.index') }}" class="dropdown-link flex items-center space-x-3 px-4 py-2 rounded-lg text-gray-400 hover:text-white hover:bg-gray-800 {{ request()->routeIs('admin.social*') ? 'active' : '' }}">
+                        <a href="{{ route('admin.faqs.index') }}" class="dropdown-link flex items-center space-x-3 px-4 py-2 rounded-lg text-gray-400 hover:text-white hover:bg-gray-800 {{ request()->routeIs('admin.social*') ? 'active' : '' }}">
                             <i class="fas fa-calendar-check w-5 text-center"></i>
                             <span>Faqs</span>
                         </a>
                     </div>
 
-                    
+
                 </div>
 
 
