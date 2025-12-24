@@ -54,6 +54,7 @@
                 ['label' => 'Latest News', 'href' => route('news')],
                 ['label' => 'Donation', 'href' => route('donation')],
                 ['label' => 'Achieve', 'href' => route('achieve')],
+            
             ]
         ],
         ['name' => 'contact', 'href' => route('contact')],

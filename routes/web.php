@@ -43,6 +43,8 @@ use App\Http\Controllers\Admin\HeroCarouselController;
 use App\Http\Controllers\Admin\WelcomeSectionController;
 use App\Http\Controllers\Admin\TimelineEventController;
 use App\Http\Controllers\Admin\FeaturedEventController;
+use App\Http\Controllers\Admin\ContactCeadaController;
+use App\Http\Controllers\Admin\LeaderTeamController;
 
 
 // ==============================
@@ -61,6 +63,7 @@ Route::view('/volunteer', 'volunteer')->name('volunteer.signup');
 Route::view('/resources', 'resources')->name('resources.download');
 Route::view('/achieve', 'achieve')->name('achieve');
 Route::view('/contact', 'contact')->name('contact');
+Route::view('/coffee', 'coffee')->name('coffee');
 
 // Dynamic Pages
 Route::get('/workshop', [WorkshopController::class, 'index'])->name('workshop');
@@ -93,6 +96,9 @@ Route::get('/courses', [CourseController::class, 'index'])->name('courses');
 Route::post('/contact', [ContactController::class, 'store'])->name('contact.submit');
 
 Route::get('/contact', [ContactController::class, 'index'])->name('contact');
+
+
+Route::post('/contact', [ContactController::class, 'store'])->name('contact.store');
 
 Route::post('/newsletter', [NewsletterController::class, 'subscribe'])->name('newsletter.subscribe');
 
@@ -196,5 +202,11 @@ Route::middleware(['auth'])->prefix('admin')->name('admin.')->group(function () 
 
     // Featured Events
     Route::resource('featured_events', FeaturedEventController::class);
+
+    // Contacts from users
+    Route::resource('contacts',ContactCeadaController::class);
+
+    // Leader Teams
+    Route::resource('leader-teams', LeaderTeamController::class);
 });
 

@@ -282,204 +282,121 @@
 <section id="contact-form" class="py-20 px-4 md:px-8">
     <div class="max-w-7xl mx-auto">
         <div class="grid grid-cols-1 lg:grid-cols-2 gap-12">
-            {{-- CONTACT FORM --}}
-            <div class="animate-fade-in-up">
-                <div class="glass-effect rounded-3xl p-8 shadow-2xl">
-                    <h2 class="text-3xl font-bold text-gray-900 mb-2">Send Us a Message</h2>
-                    <p class="text-gray-600 mb-8">We'll get back to you within 2 hours during business hours.</p>
 
-                    {{-- FORM SUCCESS MESSAGE --}}
-                    <div id="form-success" class="hidden bg-gradient-to-r from-green-50 to-emerald-50 border border-green-200 rounded-2xl p-6 mb-8 text-center message-sent">
-                        <div class="success-icon text-5xl text-green-500 mb-4">
-                            <i class="fas fa-check-circle"></i>
-                        </div>
-                        <h3 class="text-xl font-bold text-gray-900 mb-2">Message Sent Successfully!</h3>
-                        <p class="text-gray-700">Thank you for contacting us. We'll get back to you within 2 hours.</p>
-                        <button onclick="resetForm()" class="mt-4 text-blue-600 hover:text-blue-800 font-medium">
-                            Send another message
-                        </button>
-                    </div>
+{{-- ================= CONTACT FORM ================= --}}
+<div class="animate-fade-in-up">
+    <div class="glass-effect rounded-3xl p-8 shadow-2xl">
+        <h2 class="text-3xl font-bold text-gray-900 mb-2">Send Us a Message</h2>
+        <p class="text-gray-600 mb-8">We'll get back to you within 2 hours during business hours.</p>
 
-                    {{-- CONTACT FORM --}}
-                    <form id="contactForm" class="space-y-6">
-                        @csrf
-
-                        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                            <div>
-                                <label for="first_name" class="block text-sm font-semibold text-gray-700 mb-2">
-                                    First Name *
-                                </label>
-                                <div class="relative">
-                                    <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                                        <i class="fas fa-user text-gray-400"></i>
-                                    </div>
-                                    <input type="text"
-                                        id="first_name"
-                                        name="first_name"
-                                        class="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all duration-300 form-input-focus bg-white/50"
-                                        placeholder="John"
-                                        required>
-                                </div>
-                            </div>
-
-                            <div>
-                                <label for="last_name" class="block text-sm font-semibold text-gray-700 mb-2">
-                                    Last Name *
-                                </label>
-                                <div class="relative">
-                                    <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                                        <i class="fas fa-user text-gray-400"></i>
-                                    </div>
-                                    <input type="text"
-                                        id="last_name"
-                                        name="last_name"
-                                        class="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all duration-300 form-input-focus bg-white/50"
-                                        placeholder="Doe"
-                                        required>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div>
-                            <label for="email" class="block text-sm font-semibold text-gray-700 mb-2">
-                                Email Address *
-                            </label>
-                            <div class="relative">
-                                <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                                    <i class="fas fa-envelope text-gray-400"></i>
-                                </div>
-                                <input type="email"
-                                    id="email"
-                                    name="email"
-                                    class="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all duration-300 form-input-focus bg-white/50"
-                                    placeholder="john@example.com"
-                                    required>
-                            </div>
-                        </div>
-
-                        <div>
-                            <label for="phone" class="block text-sm font-semibold text-gray-700 mb-2">
-                                Phone Number
-                            </label>
-                            <div class="relative">
-                                <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                                    <i class="fas fa-phone text-gray-400"></i>
-                                </div>
-                                <input type="tel"
-                                    id="phone"
-                                    name="phone"
-                                    class="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all duration-300 form-input-focus bg-white/50"
-                                    placeholder="+855 12 345 678">
-                            </div>
-                        </div>
-
-                        <div>
-                            <label for="subject" class="block text-sm font-semibold text-gray-700 mb-2">
-                                Subject *
-                            </label>
-                            <div class="relative">
-                                <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                                    <i class="fas fa-tag text-gray-400"></i>
-                                </div>
-                                <select id="subject"
-                                    name="subject"
-                                    class="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all duration-300 form-input-focus bg-white/50 appearance-none">
-                                    <option value="">Select a subject</option>
-                                    <option value="admissions">Admissions & Enrollment</option>
-                                    <option value="courses">Course Information</option>
-                                    <option value="technical">Technical Support</option>
-                                    <option value="billing">Billing & Payments</option>
-                                    <option value="partnership">Partnership Opportunities</option>
-                                    <option value="other">Other</option>
-                                </select>
-                                <div class="absolute inset-y-0 right-0 pr-3 flex items-center pointer-events-none">
-                                    <i class="fas fa-chevron-down text-gray-400"></i>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div>
-                            <label for="message" class="block text-sm font-semibold text-gray-700 mb-2">
-                                Message *
-                            </label>
-                            <div class="relative">
-                                <div class="absolute top-3 left-3">
-                                    <i class="fas fa-comment text-gray-400"></i>
-                                </div>
-                                <textarea id="message"
-                                    name="message"
-                                    rows="5"
-                                    class="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all duration-300 form-input-focus bg-white/50 resize-none"
-                                    placeholder="Tell us how we can help you..."
-                                    required></textarea>
-                            </div>
-                        </div>
-
-                        <div class="flex items-center">
-                            <input type="checkbox"
-                                id="newsletter"
-                                name="newsletter"
-                                class="w-4 h-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500">
-                            <label for="newsletter" class="ml-2 text-sm text-gray-600">
-                                Subscribe to our newsletter for updates and offers
-                            </label>
-                        </div>
-
-                        <button type="submit"
-                            id="submit-btn"
-                            class="w-full bg-gradient-to-r from-blue-500 to-purple-500 hover:from-blue-600 hover:to-purple-600 text-white font-bold py-4 px-6 rounded-xl transition-all duration-300 transform hover:-translate-y-1 hover:shadow-xl flex items-center justify-center group">
-                            <span id="submit-text">Send Message</span>
-                            <svg id="submit-spinner" class="hidden animate-spin ml-3 h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
-                                <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
-                                <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
-                            </svg>
-                            <i id="submit-icon" class="fas fa-paper-plane ml-3 transform group-hover:translate-x-1 transition-transform"></i>
-                        </button>
-                    </form>
-                </div>
+        {{-- FORM SUCCESS MESSAGE --}}
+        <div id="form-success" class="hidden bg-gradient-to-r from-green-50 to-emerald-50 border border-green-200 rounded-2xl p-6 mb-8 text-center message-sent">
+            <div class="success-icon text-5xl text-green-500 mb-4">
+                <i class="fas fa-check-circle"></i>
             </div>
-
-            {{-- CONTACT INFORMATION --}}
-            <div class="space-y-8 animate-fade-in-up" style="animation-delay: 200ms">
-
-
-
-        {{-- CONTACT CARDS --}}
-<div class="glass-effect rounded-3xl p-8 shadow-2xl">
-    <h2 class="text-3xl font-bold text-gray-900 mb-8">Contact Information</h2>
-
-    <div class="space-y-6">
-        @foreach($contacts as $contact)
-        <div class="contact-card-hover bg-white/50 p-6 rounded-2xl border border-gray-200 hover:border-transparent transition-all duration-300 group">
-            <div class="flex items-start">
-                <div class="w-14 h-14 bg-gradient-to-br {{ $contact->color }} rounded-xl flex items-center justify-center mr-4 transform transition-all duration-300 group-hover:scale-110">
-                    <i class="{{ $contact->icon }} text-white text-xl"></i>
-                </div>
-                <div class="flex-1">
-                    <h3 class="font-bold text-gray-900 text-lg mb-2">{{ $contact->title }}</h3>
-                    <div class="text-gray-600 leading-relaxed">
-                        {!! $contact->content !!}
-                    </div>
-                </div>
-            </div>
-
-            @if($contact->action)
-            <button onclick="contactAction('{{ strtolower($contact->title) }}')"
-                class="mt-4 text-blue-600 hover:text-blue-800 font-medium flex items-center transition-all duration-300 group-hover:translate-x-2">
-                <i class="{{ $contact->action_icon }} mr-2"></i>
-                {{ $contact->action }}
+            <h3 class="text-xl font-bold text-gray-900 mb-2">Message Sent Successfully!</h3>
+            <p class="text-gray-700">Thank you for contacting us. We'll get back to you within 2 hours.</p>
+            <button onclick="resetForm()" class="mt-4 text-blue-600 hover:text-blue-800 font-medium">
+                Send another message
             </button>
-            @endif
         </div>
-        @endforeach
+
+        {{-- CONTACT FORM --}}
+        <form id="contactForm" class="space-y-6" action="{{ route('contact.store') }}" method="POST">
+            @csrf
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <x-input-field name="first_name" label="First Name *" icon="fas fa-user" placeholder="John" required/>
+                <x-input-field name="last_name" label="Last Name *" icon="fas fa-user" placeholder="Doe" required/>
+            </div>
+
+            <x-input-field name="email" label="Email Address *" icon="fas fa-envelope" placeholder="john@example.com" type="email" required/>
+            <x-input-field name="phone" label="Phone Number" icon="fas fa-phone" placeholder="+855 12 345 678"/>
+
+            {{-- Subject --}}
+            <div>
+                <label for="subject" class="block text-sm font-semibold text-gray-700 mb-2">Subject *</label>
+                <div class="relative">
+                    <select id="subject" name="subject" class="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all duration-300 form-input-focus bg-white/50 appearance-none" required>
+                        <option value="">Select a subject</option>
+                        <option value="admissions">Admissions & Enrollment</option>
+                        <option value="courses">Course Information</option>
+                        <option value="technical">Technical Support</option>
+                        <option value="billing">Billing & Payments</option>
+                        <option value="partnership">Partnership Opportunities</option>
+                        <option value="other">Other</option>
+                    </select>
+                    <div class="absolute inset-y-0 right-0 pr-3 flex items-center pointer-events-none">
+                        <i class="fas fa-chevron-down text-gray-400"></i>
+                    </div>
+                </div>
+            </div>
+
+            {{-- Message --}}
+            <div>
+                <label for="message" class="block text-sm font-semibold text-gray-700 mb-2">Message *</label>
+                <div class="relative">
+                    <div class="absolute top-3 left-3">
+                        <i class="fas fa-comment text-gray-400"></i>
+                    </div>
+                    <textarea id="message" name="message" rows="5" class="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all duration-300 form-input-focus bg-white/50 resize-none" placeholder="Tell us how we can help you..." required></textarea>
+                </div>
+            </div>
+
+            {{-- Newsletter --}}
+            <div class="flex items-center">
+                <input type="checkbox" id="newsletter" name="newsletter" class="w-4 h-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500">
+                <label for="newsletter" class="ml-2 text-sm text-gray-600">
+                    Subscribe to our newsletter for updates and offers
+                </label>
+            </div>
+
+            {{-- Submit --}}
+            <button type="submit" id="submit-btn" class="w-full bg-gradient-to-r from-blue-500 to-purple-500 hover:from-blue-600 hover:to-purple-600 text-white font-bold py-4 px-6 rounded-xl transition-all duration-300 transform hover:-translate-y-1 hover:shadow-xl flex items-center justify-center group">
+                <span id="submit-text">Send Message</span>
+                <svg id="submit-spinner" class="hidden animate-spin ml-3 h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                    <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                    <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                </svg>
+                <i id="submit-icon" class="fas fa-paper-plane ml-3 transform group-hover:translate-x-1 transition-transform"></i>
+            </button>
+        </form>
     </div>
 </div>
 
 
+            {{-- CONTACT INFORMATION --}}
+            <div class="space-y-8 animate-fade-in-up" style="animation-delay: 200ms">
+                {{-- CONTACT CARDS --}}
+                <div class="glass-effect rounded-3xl p-8 shadow-2xl">
+                    <h2 class="text-3xl font-bold text-gray-900 mb-8">Contact Information</h2>
 
+                    <div class="space-y-6">
+                        @foreach($contacts as $contact)
+                        <div class="contact-card-hover bg-white/50 p-6 rounded-2xl border border-gray-200 hover:border-transparent transition-all duration-300 group">
+                            <div class="flex items-start">
+                                <div class="w-14 h-14 bg-gradient-to-br {{ $contact->color }} rounded-xl flex items-center justify-center mr-4 transform transition-all duration-300 group-hover:scale-110">
+                                    <i class="{{ $contact->icon }} text-white text-xl"></i>
+                                </div>
+                                <div class="flex-1">
+                                    <h3 class="font-bold text-gray-900 text-lg mb-2">{{ $contact->title }}</h3>
+                                    <div class="text-gray-600 leading-relaxed">
+                                        {!! $contact->content !!}
+                                    </div>
+                                </div>
+                            </div>
 
-
-
+                            @if($contact->action)
+                            <button onclick="contactAction('{{ strtolower($contact->title) }}')"
+                                class="mt-4 text-blue-600 hover:text-blue-800 font-medium flex items-center transition-all duration-300 group-hover:translate-x-2">
+                                <i class="{{ $contact->action_icon }} mr-2"></i>
+                                {{ $contact->action }}
+                            </button>
+                            @endif
+                        </div>
+                        @endforeach
+                    </div>
+                </div>
                 {{-- SOCIAL MEDIA --}}
                 <div class="glass-effect rounded-3xl p-8 shadow-2xl">
                     <h3 class="text-xl font-bold text-gray-900 mb-6">Connect With Us</h3>
@@ -629,28 +546,28 @@
 
         <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
             @foreach($faqs->chunk(ceil($faqs->count()/2)) as $column)
-                <div class="space-y-6">
-                    @foreach($column as $index => $faq)
-                        <div class="faq-item bg-white border border-gray-200 rounded-2xl p-6 hover:shadow-xl transition-all duration-300 cursor-pointer animate-fade-in-up" style="animation-delay: {{ $index * 100 }}ms">
-                            <div class="flex items-start">
-                                <div class="w-12 h-12 bg-gradient-to-br {{ 
+            <div class="space-y-6">
+                @foreach($column as $index => $faq)
+                <div class="faq-item bg-white border border-gray-200 rounded-2xl p-6 hover:shadow-xl transition-all duration-300 cursor-pointer animate-fade-in-up" style="animation-delay: {{ $index * 100 }}ms">
+                    <div class="flex items-start">
+                        <div class="w-12 h-12 bg-gradient-to-br {{ 
                                     $faq->color == 'blue' ? 'from-blue-500 to-cyan-500' : 
                                     ($faq->color == 'purple' ? 'from-purple-500 to-pink-500' : 
                                     ($faq->color == 'green' ? 'from-green-500 to-teal-500' : 'from-orange-500 to-red-500')) 
                                 }} rounded-xl flex items-center justify-center mr-4 flex-shrink-0">
-                                    <i class="{{ $faq->icon }} text-white"></i>
-                                </div>
-                                <div class="flex-1">
-                                    <h4 class="font-bold text-gray-900 text-lg mb-2">{{ $faq->question }}</h4>
-                                    <p class="text-gray-600">{{ $faq->answer }}</p>
-                                </div>
-                                <div class="ml-4">
-                                    <i class="fas fa-chevron-down text-gray-400 transform transition-transform duration-300"></i>
-                                </div>
-                            </div>
+                            <i class="{{ $faq->icon }} text-white"></i>
                         </div>
-                    @endforeach
+                        <div class="flex-1">
+                            <h4 class="font-bold text-gray-900 text-lg mb-2">{{ $faq->question }}</h4>
+                            <p class="text-gray-600">{{ $faq->answer }}</p>
+                        </div>
+                        <div class="ml-4">
+                            <i class="fas fa-chevron-down text-gray-400 transform transition-transform duration-300"></i>
+                        </div>
+                    </div>
                 </div>
+                @endforeach
+            </div>
             @endforeach
         </div>
 
@@ -934,5 +851,43 @@
         document.getElementById('contactForm').reset();
         scrollToContactForm();
     }
+
+    document.getElementById('contactForm').addEventListener('submit', async function(e) {
+    e.preventDefault();
+
+    const formData = new FormData(this);
+    const submitBtn = document.getElementById('submit-btn');
+    const spinner = document.getElementById('submit-spinner');
+    const submitText = document.getElementById('submit-text');
+
+    submitBtn.disabled = true;
+    spinner.classList.remove('hidden');
+    submitText.textContent = 'Sending...';
+
+    try {
+        const response = await fetch("{{ route('contact.store') }}", {
+            method: 'POST',
+            headers: { 'X-CSRF-TOKEN': document.querySelector('input[name="_token"]').value },
+            body: formData
+        });
+
+        const result = await response.json();
+
+        if(result.success) {
+            document.getElementById('form-success').classList.remove('hidden');
+            this.reset();
+        }
+    } catch(err) {
+        alert('Something went wrong. Please try again.');
+    } finally {
+        submitBtn.disabled = false;
+        spinner.classList.add('hidden');
+        submitText.textContent = 'Send Message';
+    }
+});
+
+function resetForm() {
+    document.getElementById('form-success').classList.add('hidden');
+}
 </script>
 @endsection

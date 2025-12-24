@@ -91,66 +91,49 @@
             </div>
         </div>
 
-        {{-- ================= ENHANCED COMMITTEE MEMBERS SECTION ================= --}}
-        <div data-animate class="mb-16">
-            <div class="text-center mb-12">
-                <h2 class="text-3xl md:text-4xl font-bold text-gray-900 mb-4 bg-gradient-to-r from-blue-900 to-purple-900 bg-clip-text text-transparent">
-                    Cambodia-ASEAN Educational Development Association
-                </h2>
-                <div class="w-20 h-1.5 bg-gradient-to-r from-blue-500 to-purple-500 mx-auto rounded-full animate-pulse"></div>
-            </div>
+{{-- ================= LEADER TEAM SECTION ================= --}}
+<div data-animate class="mb-16">
+    <div class="text-center mb-12">
+        <h2 class="text-3xl md:text-4xl font-bold bg-gradient-to-r from-blue-900 to-purple-900 bg-clip-text text-transparent mb-4">
+            Cambodia-ASEAN Educational Development Association
+        </h2>
+        <div class="w-24 h-1.5 bg-gradient-to-r from-blue-500 to-purple-500 mx-auto rounded-full animate-pulse"></div>
+    </div>
 
-            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                @foreach($committeeMembers as $index => $member)
-                <div class="group bg-white/80 backdrop-blur-sm border border-gray-200/50 rounded-2xl p-6 hover:shadow-xl transition-all duration-500 hover:-translate-y-2"
-                    style="animation-delay: {{ $index * 100 }}ms">
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+        @foreach($leaderTeams as $index => $leader)
+        <div class="group bg-white/80 backdrop-blur-sm border border-gray-200/50 rounded-2xl p-6 hover:shadow-2xl transition-transform duration-500 hover:-translate-y-3"
+            style="animation-delay: {{ $index * 100 }}ms">
+            
+            <div class="flex flex-col items-center text-center gap-4">
 
-                    <div class="flex items-start gap-4">
-
-                        <!-- Image Box -->
-                        <div class="relative flex-shrink-0">
-                            <div class="w-22 h-27 bg-gradient-to-br {{ $member->gradient }} rounded-[15px]
-                                flex items-center justify-center text-white font-bold shadow-lg
-                                transform transition-all duration-500 group-hover:scale-110 group-hover:rotate-6">
-
-                                @if($member->image)
-                                <img src="{{ $member->image }}"
-                                    alt="{{ $member->name }}"
-                                    class="w-full h-full rounded-[15px] object-cover"
-                                    onerror="this.style.display='none'; this.nextElementSibling.style.display='flex'">
-                                @endif
-
-                                @php
-                                $initials = implode('', array_map(fn($n) => strtoupper(substr($n, 0, 1)), explode(' ', $member->name)));
-                                @endphp
-
-                                <div class="w-full h-full rounded-[15px] bg-gradient-to-br {{ $member->gradient }}
-                                    flex items-center justify-center text-white font-bold text-sm 
-                                    {{ $member->image ? 'hidden' : 'flex' }}">
-                                    {{ $initials }}
-                                </div>
-                            </div>
-                        </div>
-
-                        <!-- Text -->
-                        <div class="flex-1 min-w-0">
-                            <h3 class="text-lg font-bold text-gray-900 mb-1 leading-tight">
-                                {{ $member->name }}
-                            </h3>
-                            <p class="text-gray-600 text-sm font-medium leading-relaxed">
-                                {{ $member->position }}
-                            </p>
-                        </div>
-
+                {{-- Image / Initials --}}
+                <div class="w-36 h-36 rounded-2xl overflow-hidden relative flex items-center justify-center shadow-lg transform transition-all duration-500 group-hover:scale-105 group-hover:rotate-3">
+                    @if($leader->image)
+                    <img src="{{ $leader->image }}" alt="{{ $leader->name }}" class="w-full h-full object-cover">
+                    @else
+                    @php
+                        $initials = implode('', array_map(fn($n) => strtoupper(substr($n, 0, 1)), explode(' ', $leader->name)));
+                    @endphp
+                    <div class="w-full h-full bg-gradient-to-br {{ $leader->gradient }} flex items-center justify-center text-white text-2xl font-bold">
+                        {{ $initials }}
                     </div>
+                    @endif
                 </div>
-                @endforeach
+
+                {{-- Text --}}
+                <div class="flex flex-col gap-1">
+                    <h3 class="text-lg font-bold text-gray-900">{{ $leader->name }}</h3>
+                    <p class="text-gray-600 text-sm font-medium">{{ $leader->position }}</p>
+                </div>
             </div>
-
-
-
-
         </div>
+        @endforeach
+    </div>
+</div>
+
+
+
 
         {{-- ================= ENHANCED PROJECT OVERVIEW ================= --}}
         <div data-animate class="group bg-gradient-to-br from-blue-50/50 to-purple-50/50 backdrop-blur-sm rounded-3xl p-8 md:p-10 mb-16 border border-blue-200/50 shadow-lg hover:shadow-2xl transition-all duration-500 hover:-translate-y-2">
@@ -174,51 +157,80 @@
             </div>
         </div>
 
-        {{-- ================= ENHANCED INTERNATIONAL ADVISORY BOARD ================= --}}
-        <div data-animate class="mb-16">
-            <div class="text-center mb-12">
-                <h2 class="text-3xl md:text-4xl font-bold text-gray-900 mb-4 bg-gradient-to-r from-green-900 to-teal-900 bg-clip-text text-transparent font-english">
-                    Office Manager
-                </h2>
-                <div class="w-20 h-1.5 bg-gradient-to-r from-green-500 to-teal-500 mx-auto rounded-full animate-pulse"></div>
-            </div>
+   {{-- ================= ENHANCED INTERNATIONAL ADVISORY BOARD ================= --}}
+<div data-animate class="mb-16">
+    <div class="text-center mb-12">
+        <h2 class="text-3xl md:text-4xl font-bold bg-gradient-to-r from-green-900 to-teal-900 bg-clip-text text-transparent font-english mb-4">
+            Office Manager
+        </h2>
+        <div class="w-20 h-1.5 bg-gradient-to-r from-green-500 to-teal-500 mx-auto rounded-full animate-pulse"></div>
+    </div>
 
-            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                @foreach($managers as $index => $member)
-                <div class="group bg-white/80 backdrop-blur-sm border border-gray-200/50 rounded-2xl p-6 hover:shadow-xl transition-all duration-500 hover:-translate-y-2"
-                    style="animation-delay: {{ $index * 100 }}ms">
-                    <div class="flex items-start gap-4">
-                        <div class="relative flex-shrink-0">
-                            <div class="w-16 h-20 bg-gradient-to-br {{ $member->gradient }} rounded-[15px] flex items-center justify-center text-white font-bold shadow-lg transform transition-all duration-500 group-hover:scale-110 group-hover:rotate-6">
-                                @if($member->image)
-                                <img src="{{ asset('storage/' . $member->image) }}"
-                                    alt="{{ $member->name }}"
-                                    class="w-full h-full rounded-[15px] object-cover"
-                                    onerror="this.style.display='none'; this.nextElementSibling.style.display='flex'">
-                                @endif
-                                <div class="w-full h-full rounded-[15px] bg-gradient-to-br {{ $member->gradient }} flex items-center justify-center text-white font-bold text-sm {{ $member->image ? 'hidden' : 'flex' }}">
-                                    @php
-                                    $initials = implode('', array_map(function($name) {
-                                    return strtoupper(substr($name, 0, 1));
-                                    }, explode(' ', $member->name)));
-                                    @endphp
-                                    {{ $initials }}
-                                </div>
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+        @foreach($managers as $index => $member)
+        <div
+            class="group bg-white/90 backdrop-blur-md border border-gray-200/60 rounded-3xl p-6
+                   hover:shadow-2xl transition-all duration-500 hover:-translate-y-3"
+            style="animation-delay: {{ $index * 100 }}ms"
+        >
+            <div class="flex items-center gap-5">
+
+                <!-- IMAGE -->
+                <div class="relative flex-shrink-0">
+                    <div
+                        class="w-20 h-24 rounded-2xl overflow-hidden
+                               ring-2 ring-white shadow-lg
+                               bg-gradient-to-br {{ $member->gradient }}
+                               transform transition-all duration-500
+                               group-hover:scale-110 group-hover:rotate-3"
+                    >
+                        @if($member->image)
+                            <img
+                                src="{{ asset('storage/' . $member->image) }}"
+                                alt="{{ $member->name }}"
+                                class="w-full h-full object-cover"
+                            >
+                        @else
+                            @php
+                                $initials = collect(explode(' ', $member->name))
+                                    ->map(fn($n) => strtoupper(substr($n, 0, 1)))
+                                    ->implode('');
+                            @endphp
+                            <div class="w-full h-full flex items-center justify-center
+                                        text-white text-lg font-bold tracking-wide">
+                                {{ $initials }}
                             </div>
-                        </div>
-                        <div class="flex-1 min-w-0">
-                            <h3 class="text-lg font-bold text-gray-900 mb-1 leading-tight group-hover:text-gray-800 transition-colors duration-300 font-english">
-                                {{ $member->name }}
-                            </h3>
-                            <p class="text-gray-600 text-sm font-medium leading-relaxed group-hover:text-gray-700 transition-colors duration-300 font-english">
-                                {{ $member->position }}
-                            </p>
-                        </div>
+                        @endif
                     </div>
+
+                    <!-- Glow Effect -->
+                    <div class="absolute inset-0 rounded-2xl blur-lg opacity-30
+                                bg-gradient-to-br {{ $member->gradient }}
+                                -z-10 group-hover:opacity-60 transition"></div>
                 </div>
-                @endforeach
+
+                <!-- TEXT -->
+                <div class="flex-1 min-w-0">
+                    <h3
+                        class="text-lg font-bold text-gray-900 leading-tight
+                               group-hover:text-green-700 transition font-english"
+                    >
+                        {{ $member->name }}
+                    </h3>
+                    <p
+                        class="text-sm text-gray-600 font-medium mt-1
+                               group-hover:text-gray-700 transition font-english"
+                    >
+                        {{ $member->position }}
+                    </p>
+                </div>
+
             </div>
         </div>
+        @endforeach
+    </div>
+</div>
+
 
 
 

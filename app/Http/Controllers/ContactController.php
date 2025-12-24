@@ -5,7 +5,8 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\SocialLink;
 use App\Models\ContactMethod;
-use App\Models\Faq; // New: FAQs
+use App\Models\Faq;
+use App\Models\Contact;
 
 class ContactController extends Controller
 {
@@ -14,13 +15,8 @@ class ContactController extends Controller
      */
     public function index()
     {
-        // Fetch active social links
         $socialLinks = SocialLink::where('is_active', true)->get();
-
-        // Fetch active contact methods
         $contacts = ContactMethod::where('is_active', true)->get();
-
-        // Fetch active FAQs (optional: latest first)
         $faqs = Faq::where('is_active', true)->latest()->get();
 
         return view('contact', compact('socialLinks', 'contacts', 'faqs'));
@@ -31,17 +27,38 @@ class ContactController extends Controller
      */
     public function store(Request $request)
     {
+        // Validate request data
         $validated = $request->validate([
-            'name'    => 'required|string|max:100',
-            'email'   => 'required|email',
-            'message' => 'required|string|max:2000',
+            'first_name' => 'required|string|max:100',
+            'last_name'  => 'required|string|max:100',
+            'email'      => 'required|email|max:150',
+            'phone'      => 'nullable|string|max:20',
+            'subject'    => 'required|string|max:150',
+            'message'    => 'required|string|max:2000',
+            'newsletter' => 'nullable|boolean',
         ]);
 
-        // Example: save to DB or send mail
-        // Contact::create($validated);
+        // Combine first and last name
+        $name = trim($validated['first_name'] . ' ' . $validated['last_name']);
 
-        return redirect()
-            ->route('contact')
-            ->with('success', 'Your message has been sent successfully!');
+        // Save to database
+
+
+        $contact = Contact::create([
+            'first_name' => $validated['first_name'],
+            'last_name'  => $validated['last_name'],
+            'email'      => $validated['email'],
+            'phone'      => $validated['phone'] ?? null,
+            'subject'    => $validated['subject'],
+            'message'    => $validated['message'],
+            'newsletter' => $request->has('newsletter'),
+        ]);
+
+
+        // Return JSON response for AJAX
+        return response()->json([
+            'success' => true,
+            'message' => 'Your message has been sent successfully!',
+        ]);
     }
 }

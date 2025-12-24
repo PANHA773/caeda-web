@@ -375,6 +375,12 @@
                     </button>
 
                     <div class="dropdown-menu hidden pl-12 mt-1 space-y-1">
+
+                          <a href="{{ route('admin.leader-teams.index') }}" class="dropdown-link flex items-center space-x-3 px-4 py-2 rounded-lg text-gray-400 hover:text-white hover:bg-gray-800 {{ request()->routeIs('admin.leader-teams*') ? 'active' : '' }}">
+                            <i class="fas fa-user-tie w-5 text-center"></i>
+                            <span>Leader Team</span>
+                        </a>
+
                         <a href="{{ route('admin.office-managers.index') }}" class="dropdown-link flex items-center space-x-3 px-4 py-2 rounded-lg text-gray-400 hover:text-white hover:bg-gray-800 {{ request()->routeIs('admin.office-managers*') ? 'active' : '' }}">
                             <i class="fas fa-user-tie w-5 text-center"></i>
                             <span>Office Manager</span>
@@ -471,10 +477,17 @@
                     </button>
 
                     <div class="dropdown-menu hidden pl-12 mt-1 space-y-1">
+
+                         <a href="{{ route('admin.contacts.index') }}" class="dropdown-link flex items-center space-x-3 px-4 py-2 rounded-lg text-gray-400 hover:text-white hover:bg-gray-800 {{ request()->routeIs('admin.contacts*') ? 'active' : '' }}">
+                            <i class="fas fa-calendar-check w-5 text-center"></i>
+                            <span>User-Messages</span>
+                        </a>
+                        <!-- Social -->
                         <a href="{{ route('admin.social.index') }}" class="dropdown-link flex items-center space-x-3 px-4 py-2 rounded-lg text-gray-400 hover:text-white hover:bg-gray-800 {{ request()->routeIs('admin.social*') ? 'active' : '' }}">
                             <i class="fas fa-calendar-check w-5 text-center"></i>
                             <span>Social</span>
                         </a>
+                        <!-- Contact Information -->
                         <a href="{{ route('admin.contact-information.index') }}" class="dropdown-link flex items-center space-x-3 px-4 py-2 rounded-lg text-gray-400 hover:text-white hover:bg-gray-800 {{ request()->routeIs('admin.social*') ? 'active' : '' }}">
                             <i class="fas fa-calendar-check w-5 text-center"></i>
                             <span>Contact-Info</span>
