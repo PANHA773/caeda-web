@@ -127,30 +127,61 @@
             </div>
         </div>
 
-        {{-- Accreditation & Recognition --}}
-        <div data-animate class="bg-gradient-to-br from-gray-800 via-gray-900 to-blue-900 rounded-3xl p-8 md:p-10 mb-16 text-white shadow-2xl hover:shadow-3xl transition-all duration-500 hover:-translate-y-2">
-            <div class="text-center mb-10">
-                <h2 class="text-3xl md:text-4xl font-bold mb-4 bg-gradient-to-r from-blue-300 to-purple-300 bg-clip-text text-transparent font-cinzel">
-                    Accreditation & Recognition
-                </h2>
-                <div class="w-20 h-1.5 bg-gradient-to-r from-blue-400 to-purple-400 mx-auto rounded-full animate-pulse"></div>
+{{-- ================= ENHANCED ACCREDITATION SECTION ================= --}}
+<div data-animate class="bg-gradient-to-br from-gray-800 via-gray-900 to-blue-900 rounded-3xl p-8 md:p-10 text-white shadow-2xl hover:shadow-3xl transition-all duration-500 hover:-translate-y-2 relative overflow-hidden">
+    {{-- Background Elements --}}
+    <div class="absolute top-0 right-0 w-32 h-32 bg-white/10 rounded-full translate-x-1/2 -translate-y-1/2"></div>
+    <div class="absolute bottom-0 left-0 w-48 h-48 bg-white/10 rounded-full -translate-x-1/3 translate-y-1/3"></div>
+
+    <div class="relative z-10 font-english">
+        <div class="text-center mb-10">
+            <h2 class="text-2xl md:text-3xl font-bold mb-4 bg-gradient-to-r from-blue-300 to-purple-300 bg-clip-text text-transparent">
+                Accreditations & Recognition
+            </h2>
+            <div class="w-20 h-1.5 bg-gradient-to-r from-blue-400 to-purple-400 mx-auto rounded-full animate-pulse"></div>
+        </div>
+
+        <p class="text-gray-300 text-center mb-10 text-lg max-w-3xl mx-auto font-english">
+            PSBU's commitment to academic excellence is reflected in our prestigious accreditations and international recognitions.
+        </p>
+
+        <div class="grid md:grid-cols-2 gap-8">
+            {{-- International Accreditations --}}
+            <div class="transform transition-all duration-500 hover:-translate-y-1">
+                <h3 class="text-xl md:text-2xl font-bold mb-6 text-blue-300 bg-blue-900/30 p-4 rounded-2xl text-center font-english">
+                    International Accreditations
+                </h3>
+                <ul class="space-y-3 text-gray-300">
+                    @foreach($accreditations->where('type', 'international') as $item)
+                        <li class="flex items-center space-x-3 group">
+                            <div class="w-2 h-2 bg-blue-400 rounded-full group-hover:scale-150 transition-transform duration-300"></div>
+                            <span class="group-hover:text-white transition-colors duration-300 text-sm">
+                                {{ $item->title }}
+                            </span>
+                        </li>
+                    @endforeach
+                </ul>
             </div>
-            <div class="grid md:grid-cols-2 gap-8">
-                @foreach([['title'=>'Official Accreditation','items'=>$officialAccreditations ?? [],'from'=>'blue-400','to'=>'blue-900/30'],['title'=>'International Recognition','items'=>$internationalAccreditations ?? [],'from'=>'purple-400','to'=>'purple-900/30']] as $accred)
-                    <div class="transform transition-all duration-500 hover:-translate-y-1">
-                        <h3 class="text-xl md:text-2xl font-bold mb-6 text-{{ $accred['from'] }} bg-{{ $accred['to'] }}/30 p-4 rounded-2xl text-center">{{ $accred['title'] }}</h3>
-                        <ul class="space-y-4 text-gray-300">
-                            @foreach($accred['items'] as $item)
-                                <li class="flex items-center space-x-3 group">
-                                    <div class="w-2 h-2 bg-{{ $accred['from'] }} rounded-full group-hover:scale-150 transition-transform duration-300"></div>
-                                    <span class="group-hover:text-white transition-colors duration-300">{{ $item->name }}</span>
-                                </li>
-                            @endforeach
-                        </ul>
-                    </div>
-                @endforeach
+
+            {{-- Memberships --}}
+            <div class="transform transition-all duration-500 hover:-translate-y-1">
+                <h3 class="text-xl md:text-2xl font-bold mb-6 text-purple-300 bg-purple-900/30 p-4 rounded-2xl text-center font-english">
+                    Memberships
+                </h3>
+                <ul class="space-y-3 text-gray-300">
+                    @foreach($accreditations->where('type', 'membership') as $item)
+                        <li class="flex items-center space-x-3 group">
+                            <div class="w-2 h-2 bg-purple-400 rounded-full group-hover:scale-150 transition-transform duration-300"></div>
+                            <span class="group-hover:text-white transition-colors duration-300 text-sm">
+                                {{ $item->title }}
+                            </span>
+                        </li>
+                    @endforeach
+                </ul>
             </div>
         </div>
+    </div>
+</div>
 
 {{-- Leadership Team --}}
 <div data-animate class="mb-16">

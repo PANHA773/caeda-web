@@ -357,10 +357,7 @@
                             <i class="fas fa-heart w-5 text-center"></i>
                             <span>Core Values</span>
                         </a>
-                        <a href="{{ route('admin.accreditations.index') }}" class="dropdown-link flex items-center space-x-3 px-4 py-2 rounded-lg text-gray-400 hover:text-white hover:bg-gray-800 {{ request()->routeIs('admin.accreditations*') ? 'active' : '' }}">
-                            <i class="fas fa-award w-5 text-center"></i>
-                            <span>Accreditations</span>
-                        </a>
+
                     </div>
                 </div>
 
@@ -375,19 +372,50 @@
                     </button>
 
                     <div class="dropdown-menu hidden pl-12 mt-1 space-y-1">
-
-                          <a href="{{ route('admin.leader-teams.index') }}" class="dropdown-link flex items-center space-x-3 px-4 py-2 rounded-lg text-gray-400 hover:text-white hover:bg-gray-800 {{ request()->routeIs('admin.leader-teams*') ? 'active' : '' }}">
+                        <!-- Leader Teams -->
+                        <a href="{{ route('admin.leader-teams.index') }}" class="dropdown-link flex items-center space-x-3 px-4 py-2 rounded-lg text-gray-400 hover:text-white hover:bg-gray-800 {{ request()->routeIs('admin.leader-teams*') ? 'active' : '' }}">
                             <i class="fas fa-user-tie w-5 text-center"></i>
                             <span>Leader Team</span>
                         </a>
-
+                        <!-- Project-Based Learning-->
+                        <a href="{{ route('admin.project-overviews.index') }}" class="dropdown-link flex items-center space-x-3 px-4 py-2 rounded-lg text-gray-400 hover:text-white hover:bg-gray-800 {{ request()->routeIs('admin.leader-teams*') ? 'active' : '' }}">
+                            <i class="fas fa-user-tie w-5 text-center"></i>
+                            <span>Project-Overview</span>
+                        </a>
+                        <!-- Office Managers -->
                         <a href="{{ route('admin.office-managers.index') }}" class="dropdown-link flex items-center space-x-3 px-4 py-2 rounded-lg text-gray-400 hover:text-white hover:bg-gray-800 {{ request()->routeIs('admin.office-managers*') ? 'active' : '' }}">
                             <i class="fas fa-user-tie w-5 text-center"></i>
                             <span>Office Manager</span>
                         </a>
+                        <!-- Visoin & Mission -->
+                        <a href="{{ route('admin.vision-missions.index') }}" class="dropdown-link flex items-center space-x-3 px-4 py-2 rounded-lg text-gray-400 hover:text-white hover:bg-gray-800 {{ request()->routeIs('admin.staff*') ? 'active' : '' }}">
+                            <i class="fas fa-user-friends w-5 text-center"></i>
+                            <span>Vision-Missions</span>
+                        </a>
+
                         <a href="{{ route('admin.staff.index') }}" class="dropdown-link flex items-center space-x-3 px-4 py-2 rounded-lg text-gray-400 hover:text-white hover:bg-gray-800 {{ request()->routeIs('admin.staff*') ? 'active' : '' }}">
                             <i class="fas fa-user-friends w-5 text-center"></i>
                             <span>CAEDA Staff</span>
+                        </a>
+                        <!-- Goals -->
+                        <a href="{{ route('admin.goals.index') }}" class="dropdown-link flex items-center space-x-3 px-4 py-2 rounded-lg text-gray-400 hover:text-white hover:bg-gray-800 {{ request()->routeIs('admin.goals*') ? 'active' : '' }}">
+                            <i class="fas fa-user-friends w-5 text-center"></i>
+                            <span>Goals</span>
+                        </a>
+                        <!-- Goals -->
+                        <a href="{{ route('admin.strategies.index') }}" class="dropdown-link flex items-center space-x-3 px-4 py-2 rounded-lg text-gray-400 hover:text-white hover:bg-gray-800 {{ request()->routeIs('admin.strategies*') ? 'active' : '' }}">
+                            <i class="fas fa-user-friends w-5 text-center"></i>
+                            <span>Strategy</span>
+                        </a>
+                        <!-- Value Benefits -->
+                        <a href="{{ route('admin.value-benefits.index') }}" class="dropdown-link flex items-center space-x-3 px-4 py-2 rounded-lg text-gray-400 hover:text-white hover:bg-gray-800 {{ request()->routeIs('admin.value-benefits*') ? 'active' : '' }}">
+                            <i class="fas fa-user-friends w-5 text-center"></i>
+                            <span>Benefits</span>
+                        </a>
+
+                        <a href="{{ route('admin.accreditations.index') }}" class="dropdown-link flex items-center space-x-3 px-4 py-2 rounded-lg text-gray-400 hover:text-white hover:bg-gray-800 {{ request()->routeIs('admin.accreditations*') ? 'active' : '' }}">
+                            <i class="fas fa-award w-5 text-center"></i>
+                            <span>Accreditations</span>
                         </a>
                     </div>
                 </div>
@@ -478,7 +506,7 @@
 
                     <div class="dropdown-menu hidden pl-12 mt-1 space-y-1">
 
-                         <a href="{{ route('admin.contacts.index') }}" class="dropdown-link flex items-center space-x-3 px-4 py-2 rounded-lg text-gray-400 hover:text-white hover:bg-gray-800 {{ request()->routeIs('admin.contacts*') ? 'active' : '' }}">
+                        <a href="{{ route('admin.contacts.index') }}" class="dropdown-link flex items-center space-x-3 px-4 py-2 rounded-lg text-gray-400 hover:text-white hover:bg-gray-800 {{ request()->routeIs('admin.contacts*') ? 'active' : '' }}">
                             <i class="fas fa-calendar-check w-5 text-center"></i>
                             <span>User-Messages</span>
                         </a>

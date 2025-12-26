@@ -25,7 +25,6 @@ use App\Http\Controllers\Admin\AboutAdminController;
 use App\Http\Controllers\Admin\FacultyAdminController;
 use App\Http\Controllers\Admin\TeamMemberAdminController;
 use App\Http\Controllers\Admin\CoreValueAdminController;
-use App\Http\Controllers\Admin\AccreditationAdminController;
 use App\Http\Controllers\Admin\OfficeManagerController;
 use App\Http\Controllers\Admin\ProgramCaedaController;
 use App\Http\Controllers\Admin\StaffController;
@@ -45,6 +44,12 @@ use App\Http\Controllers\Admin\TimelineEventController;
 use App\Http\Controllers\Admin\FeaturedEventController;
 use App\Http\Controllers\Admin\ContactCeadaController;
 use App\Http\Controllers\Admin\LeaderTeamController;
+use App\Http\Controllers\Admin\ValueBenefitController;
+use App\Http\Controllers\Admin\GoalController;
+use App\Http\Controllers\Admin\StrategyController;
+use App\Http\Controllers\Admin\ProjectOverviewController;
+use App\Http\Controllers\Admin\VisionMissionController;
+use App\Http\Controllers\Admin\AccreditationController;
 
 
 // ==============================
@@ -153,7 +158,7 @@ Route::middleware(['auth'])->prefix('admin')->name('admin.')->group(function () 
     Route::resource('core-values', CoreValueAdminController::class);
 
     // Accreditations
-    Route::get('/accreditations', [AccreditationAdminController::class, 'index'])->name('accreditations.index');
+    // Route::get('/accreditations', [AccreditationAdminController::class, 'index'])->name('accreditations.index');
 
     // Office Managers
     Route::resource('office-managers', OfficeManagerController::class);
@@ -208,5 +213,23 @@ Route::middleware(['auth'])->prefix('admin')->name('admin.')->group(function () 
 
     // Leader Teams
     Route::resource('leader-teams', LeaderTeamController::class);
+
+    // Value Benefits
+    Route::resource('value-benefits', ValueBenefitController::class);
+
+    // Goals
+    Route::resource('goals', GoalController::class);
+
+    // Strategies
+    Route::resource('strategies', StrategyController::class);
+
+    // Project-Based
+    Route::resource('project-overviews', ProjectOverviewController::class);
+
+    // Vision & Mission
+    Route::resource('vision-missions', VisionMissionController::class);
+
+    Route::resource('accreditations',AccreditationController::class);
+    
 });
 

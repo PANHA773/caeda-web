@@ -1,6 +1,6 @@
 @extends('admin.layouts.app')
 
-@section('title', 'Edit Accreditation')
+@section('title', 'Create Project Overview')
 
 @section('content')
 <div class="max-w-5xl mx-auto">
@@ -8,10 +8,10 @@
     {{-- Page Header --}}
     <div class="flex items-center justify-between mb-6">
         <h1 class="text-2xl font-bold text-gray-800">
-            Edit Accreditation
+            Create Project Overview
         </h1>
 
-        <a href="{{ route('admin.accreditations.index') }}"
+        <a href="{{ route('admin.project-overviews.index') }}"
            class="px-4 py-2 bg-gray-600 text-white rounded-lg hover:bg-gray-700 transition">
             ← Back
         </a>
@@ -32,9 +32,8 @@
         @endif
 
         {{-- Form --}}
-        <form action="{{ route('admin.accreditations.update', $accreditation->id) }}" method="POST">
+        <form action="{{ route('admin.project-overviews.store') }}" method="POST">
             @csrf
-            @method('PUT')
 
             {{-- Title --}}
             <div class="mb-5">
@@ -43,21 +42,20 @@
                 </label>
                 <input type="text"
                        name="title"
-                       value="{{ old('title', $accreditation->title) }}"
+                       value="{{ old('title') }}"
+                       placeholder="Project-Based Learning"
                        class="w-full border border-gray-300 rounded-lg px-4 py-2 focus:ring focus:ring-blue-200 focus:border-blue-500">
             </div>
 
-            {{-- Type --}}
+            {{-- Description --}}
             <div class="mb-5">
                 <label class="block font-semibold text-gray-700 mb-2">
-                    Type <span class="text-red-500">*</span>
+                    Description <span class="text-red-500">*</span>
                 </label>
-                <select name="type"
-                        class="w-full border border-gray-300 rounded-lg px-4 py-2 focus:ring focus:ring-blue-200 focus:border-blue-500">
-                    <option value="">Select Type</option>
-                    <option value="international" {{ old('type', $accreditation->type) == 'international' ? 'selected' : '' }}>International Accreditation</option>
-                    <option value="membership" {{ old('type', $accreditation->type) == 'membership' ? 'selected' : '' }}>Membership</option>
-                </select>
+                <textarea name="description"
+                          rows="8"
+                          placeholder="Describe the project overview..."
+                          class="w-full border border-gray-300 rounded-lg px-4 py-2 focus:ring focus:ring-blue-200 focus:border-blue-500">{{ old('description') }}</textarea>
             </div>
 
             {{-- Active --}}
@@ -65,8 +63,7 @@
                 <input type="checkbox"
                        name="is_active"
                        id="is_active"
-                       value="1"
-                       {{ old('is_active', $accreditation->is_active) ? 'checked' : '' }}
+                       {{ old('is_active', true) ? 'checked' : '' }}
                        class="rounded border-gray-300 text-blue-600 focus:ring-blue-500">
                 <label for="is_active" class="text-gray-700 font-medium">
                     Active
@@ -75,14 +72,14 @@
 
             {{-- Actions --}}
             <div class="flex justify-end gap-3">
-                <a href="{{ route('admin.accreditations.index') }}"
+                <a href="{{ route('admin.project-overviews.index') }}"
                    class="px-5 py-2 bg-gray-300 text-gray-800 rounded-lg hover:bg-gray-400 transition">
                     Cancel
                 </a>
 
                 <button type="submit"
                         class="px-6 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition shadow">
-                    Update
+                    Save
                 </button>
             </div>
         </form>

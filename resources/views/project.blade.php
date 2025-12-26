@@ -132,30 +132,32 @@
     </div>
 </div>
 
+{{-- ================= ENHANCED PROJECT OVERVIEW ================= --}}
+@if($projectOverviews->count())
+    @foreach($projectOverviews as $overview)
+        <div data-animate
+            class="group bg-gradient-to-br from-blue-50/50 to-purple-50/50 backdrop-blur-sm rounded-3xl p-8 md:p-10 mb-16 border border-blue-200/50 shadow-lg hover:shadow-2xl transition-all duration-500 hover:-translate-y-2">
 
-
-
-        {{-- ================= ENHANCED PROJECT OVERVIEW ================= --}}
-        <div data-animate class="group bg-gradient-to-br from-blue-50/50 to-purple-50/50 backdrop-blur-sm rounded-3xl p-8 md:p-10 mb-16 border border-blue-200/50 shadow-lg hover:shadow-2xl transition-all duration-500 hover:-translate-y-2">
-            <h2 class="text-3xl md:text-4xl font-bold text-gray-900 mb-6 bg-gradient-to-r from-blue-900 to-purple-900 bg-clip-text text-transparent text-center font-english">
-                Project-Based Learning
+            {{-- Title --}}
+            <h2
+                class="text-3xl md:text-4xl font-bold text-gray-900 mb-6 bg-gradient-to-r from-blue-900 to-purple-900 bg-clip-text text-transparent text-center font-english">
+                {{ $overview->title }}
             </h2>
+
+            {{-- Content --}}
             <div class="prose prose-lg max-w-none text-gray-700 leading-relaxed space-y-6 font-english">
-                <p class="transform transition-all duration-500 hover:translate-x-2 hover:text-gray-900">
-                    The Project-Based Learning (PBL) approach at PSBU Leadership Academy integrates theoretical knowledge with practical application through hands-on projects. Students engage in collaborative, real-world projects that address current challenges and opportunities in their field of study. PBL enhances critical thinking, problem-solving, and teamwork skills while fostering creativity and innovation.
-                    Students develop practical solutions and gain valuable experience that prepares them for successful careers and entrepreneurial endeavors.
-                </p>
-                <p class="transform transition-all duration-500 hover:translate-x-2 hover:text-gray-900 delay-75">
-                    This ambitious project creates significant opportunities for diverse individuals including school children,
-                    teachers, government servants, private sector employees, school leavers, job seekers, and those currently
-                    employed who aspire to advance their education and career prospects.
-                </p>
-                <p class="font-medium text-gray-900 transform transition-all duration-500 hover:scale-105 bg-yellow-50 p-6 rounded-2xl border border-yellow-200 shadow-sm">
-                    The project empowers individuals across various sectors to achieve career development and personal growth,
-                    ensuring participants receive qualifications recognized both locally and internationally.
-                </p>
+                @foreach(explode("\n\n", $overview->description) as $paragraph)
+                    <p class="transform transition-all duration-500 hover:translate-x-2 hover:text-gray-900">
+                        {{ $paragraph }}
+                    </p>
+                @endforeach
             </div>
         </div>
+    @endforeach
+@endif
+
+
+
 
    {{-- ================= ENHANCED INTERNATIONAL ADVISORY BOARD ================= --}}
 <div data-animate class="mb-16">
@@ -285,269 +287,204 @@
             </div>
         </div>
 
-
-
-        {{-- ================= ENHANCED VISION & MISSION SECTION ================= --}}
-        <div data-animate class="grid md:grid-cols-2 gap-8 mb-16">
-            <div class="group bg-white/80 backdrop-blur-sm border border-gray-200/50 rounded-3xl p-8 shadow-lg hover:shadow-2xl transition-all duration-500 hover:-translate-y-2">
-                <div class="flex items-center mb-6">
-                    <div class="w-14 h-14 bg-gradient-to-br from-purple-500 to-pink-600 rounded-2xl flex items-center justify-center mr-4 transform transition-all duration-500 group-hover:scale-110 group-hover:rotate-12 shadow-lg">
-                        <span class="text-2xl">🌍</span>
-                    </div>
-                    <h3 class="text-2xl font-bold text-gray-900 bg-gradient-to-r from-purple-900 to-pink-900 bg-clip-text text-transparent font-english">
-                        Vision
-                    </h3>
+{{-- ================= ENHANCED VISION & MISSION SECTION ================= --}}
+<div data-animate class="grid md:grid-cols-2 gap-8 mb-16">
+    @foreach($visionMissions as $vm)
+        <div class="group bg-white/80 backdrop-blur-sm border border-gray-200/50 rounded-3xl p-8 shadow-lg hover:shadow-2xl transition-all duration-500 hover:-translate-y-2">
+            <div class="flex items-center mb-6">
+                <div class="w-14 h-14 
+                    {{ $vm->type === 'vision' ? 'bg-gradient-to-br from-purple-500 to-pink-600' : 'bg-gradient-to-br from-blue-500 to-cyan-600' }} 
+                    rounded-2xl flex items-center justify-center mr-4 transform transition-all duration-500 group-hover:scale-110 group-hover:rotate-12 shadow-lg">
+                    <span class="text-2xl">
+                        {{ $vm->type === 'vision' ? '🌍' : '🎯' }}
+                    </span>
                 </div>
-                <p class="text-gray-700 leading-relaxed text-lg transform transition-all duration-500 group-hover:translate-x-2 group-hover:text-gray-900 font-english">
-                    To create a world where quality education is accessible to every person, regardless of their
-                    socio-economic background, geographic location, or cultural heritage, empowering under-represented
-                    communities to achieve their fullest potential.
-                </p>
+                <h3 class="text-2xl font-bold text-gray-900 
+                    {{ $vm->type === 'vision' ? 'bg-gradient-to-r from-purple-900 to-pink-900' : 'bg-gradient-to-r from-blue-900 to-cyan-900' }} 
+                    bg-clip-text text-transparent font-english">
+                    {{ ucfirst($vm->type) }}
+                </h3>
             </div>
-
-            <div class="group bg-white/80 backdrop-blur-sm border border-gray-200/50 rounded-3xl p-8 shadow-lg hover:shadow-2xl transition-all duration-500 hover:-translate-y-2">
-                <div class="flex items-center mb-6">
-                    <div class="w-14 h-14 bg-gradient-to-br from-blue-500 to-cyan-600 rounded-2xl flex items-center justify-center mr-4 transform transition-all duration-500 group-hover:scale-110 group-hover:rotate-12 shadow-lg">
-                        <span class="text-2xl">🎯</span>
-                    </div>
-                    <h3 class="text-2xl font-bold text-gray-900 bg-gradient-to-r from-blue-900 to-cyan-900 bg-clip-text text-transparent font-english">
-                        Mission
-                    </h3>
-                </div>
-                <p class="text-gray-700 leading-relaxed text-lg transform transition-all duration-500 group-hover:translate-x-2 group-hover:text-gray-900 font-english">
-                    Our mission is to bridge educational gaps by providing inclusive, equitable, and high-quality
-                    learning opportunities for everyone through innovative programs and international collaboration.
-                </p>
-            </div>
+            <p class="text-gray-700 leading-relaxed text-lg transform transition-all duration-500 group-hover:translate-x-2 group-hover:text-gray-900 font-english">
+                {{ $vm->description }}
+            </p>
         </div>
+    @endforeach
+</div>
 
-        {{-- ================= ENHANCED GOALS & STRATEGIES ================= --}}
-        <div data-animate class="mb-16">
-            <div class="text-center mb-12">
-                <h2 class="text-3xl md:text-4xl font-bold text-gray-900 mb-4 bg-gradient-to-r from-blue-900 to-purple-900 bg-clip-text text-transparent font-english">
-                    Goals & Strategies
-                </h2>
-                <div class="w-20 h-1.5 bg-gradient-to-r from-blue-500 to-purple-500 mx-auto rounded-full animate-pulse"></div>
-            </div>
 
-            <div class="grid md:grid-cols-2 gap-8">
-                <div>
-                    <h3 class="text-2xl font-bold text-gray-900 mb-8 text-center bg-white/80 backdrop-blur-sm p-4 rounded-2xl border border-gray-200/50 font-english">
-                        Our Goals
-                    </h3>
-                    <div class="space-y-6">
-                        @php
-                        $goals = [
-                        [
-                        'title' => "Increase Access",
-                        'description' => "Expand educational opportunities by developing infrastructure and resources for remote and under-represented areas.",
-                        'icon' => "🚀"
-                        ],
-                        [
-                        'title' => "Improve Quality",
-                        'description' => "Enhance education through teacher training, quality materials, and innovative teaching methods.",
-                        'icon' => "⭐"
-                        ],
-                        [
-                        'title' => "Support Community Engagement",
-                        'description' => "Foster local involvement and ownership of educational programs for long-term sustainability.",
-                        'icon' => "🤝"
-                        ],
-                        [
-                        'title' => "Monitor and Evaluate",
-                        'description' => "Conduct continuous assessment to measure impact and make necessary program adjustments.",
-                        'icon' => "📊"
-                        ]
-                        ];
-                        @endphp
 
-                        @foreach($goals as $index => $goal)
-                        <div class="group bg-white/80 backdrop-blur-sm border border-gray-200/50 rounded-2xl p-6 hover:shadow-xl transition-all duration-500 hover:-translate-y-2"
-                            style="animation-delay: {{ $index * 100 }}ms">
-                            <div class="flex items-start space-x-4">
-                                <div class="text-3xl transform transition-all duration-500 group-hover:scale-110 group-hover:rotate-12">
-                                    {{ $goal['icon'] }}
-                                </div>
-                                <div class="flex-1">
-                                    <h4 class="text-2xl font-bold text-gray-900 mb-3 group-hover:text-gray-800 transition-colors duration-300 font-english">
-                                        {{ $goal['title'] }}
-                                    </h4>
-                                    <p class="text-gray-600 text-lg leading-relaxed group-hover:text-gray-700 transition-colors duration-300 font-english">
-                                        {{ $goal['description'] }}
-                                    </p>
-                                </div>
-                            </div>
+  {{-- ================= ENHANCED GOALS & STRATEGIES ================= --}}
+<div data-animate class="mb-16">
+    <div class="text-center mb-12">
+        <h2 class="text-3xl md:text-4xl font-bold text-gray-900 mb-4 bg-gradient-to-r from-blue-900 to-purple-900 bg-clip-text text-transparent font-english">
+            Goals & Strategies
+        </h2>
+        <div class="w-20 h-1.5 bg-gradient-to-r from-blue-500 to-purple-500 mx-auto rounded-full animate-pulse"></div>
+    </div>
+
+    <div class="grid md:grid-cols-2 gap-8">
+        {{-- Goals --}}
+        <div>
+            <h3 class="text-2xl font-bold text-gray-900 mb-8 text-center bg-white/80 backdrop-blur-sm p-4 rounded-2xl border border-gray-200/50 font-english">
+                Our Goals
+            </h3>
+            <div class="space-y-6">
+                @foreach($goals as $index => $goal)
+                <div class="group bg-white/80 backdrop-blur-sm border border-gray-200/50 rounded-2xl p-6 hover:shadow-xl transition-all duration-500 hover:-translate-y-2"
+                    style="animation-delay: {{ $index * 100 }}ms">
+                    <div class="flex items-start space-x-4">
+                        <div class="text-3xl transform transition-all duration-500 group-hover:scale-110 group-hover:rotate-12">
+                            {{ $goal->icon }}
                         </div>
-                        @endforeach
-                    </div>
-                </div>
-
-                <div>
-                    <h3 class="text-2xl font-bold text-gray-900 mb-8 text-center bg-white/80 backdrop-blur-sm p-4 rounded-2xl border border-gray-200/50 font-english">
-                        Our Strategies
-                    </h3>
-                    <div class="space-y-6">
-                        @php
-                        $strategies = [
-                        [
-                        'title' => "Partnership Building",
-                        'description' => "Form strategic alliances with NGOs, government bodies, and private sector stakeholders.",
-                        'icon' => "🌐"
-                        ],
-                        [
-                        'title' => "Technology Integration",
-                        'description' => "Use digital platforms and technology to bridge geographical gaps in education.",
-                        'icon' => "💻"
-                        ],
-                        [
-                        'title' => "Capacity Building",
-                        'description' => "Focus on training and professional development for teachers and administrators.",
-                        'icon' => "🎯"
-                        ],
-                        [
-                        'title' => "Advocacy & Policy Work",
-                        'description' => "Influence educational policies and secure funding for under-represented areas.",
-                        'icon' => "⚖️"
-                        ]
-                        ];
-                        @endphp
-
-                        @foreach($strategies as $index => $strategy)
-                        <div class="group bg-white/80 backdrop-blur-sm border border-gray-200/50 rounded-2xl p-6 hover:shadow-xl transition-all duration-500 hover:-translate-y-2"
-                            style="animation-delay: {{ $index * 100 }}ms">
-                            <div class="flex items-start space-x-4">
-                                <div class="text-3xl transform transition-all duration-500 group-hover:scale-110 group-hover:rotate-12">
-                                    {{ $strategy['icon'] }}
-                                </div>
-                                <div class="flex-1">
-                                    <h4 class="text-xl font-bold text-gray-900 mb-3 group-hover:text-gray-800 transition-colors duration-300 font-english">
-                                        {{ $strategy['title'] }}
-                                    </h4>
-                                    <p class="text-gray-600 leading-relaxed group-hover:text-gray-700 transition-colors duration-300 font-english">
-                                        {{ $strategy['description'] }}
-                                    </p>
-                                </div>
-                            </div>
+                        <div class="flex-1">
+                            <h4 class="text-2xl font-bold text-gray-900 mb-3 group-hover:text-gray-800 transition-colors duration-300 font-english">
+                                {{ $goal->title }}
+                            </h4>
+                            <p class="text-gray-600 text-lg leading-relaxed group-hover:text-gray-700 transition-colors duration-300 font-english">
+                                {{ $goal->description }}
+                            </p>
                         </div>
-                        @endforeach
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        {{-- ================= ENHANCED VALUES & BENEFITS ================= --}}
-        <div data-animate class="bg-gradient-to-br from-blue-50/80 to-purple-50/80 backdrop-blur-sm rounded-3xl p-8 md:p-10 mb-16 border border-blue-200/50 shadow-lg hover:shadow-2xl transition-all duration-500 hover:-translate-y-2">
-            <div class="text-center mb-10">
-                <h2 class="text-2xl md:text-3xl font-bold text-gray-900 mb-4 bg-gradient-to-r from-blue-900 to-purple-900 bg-clip-text text-transparent font-english">
-                    Values and Benefits of Studying at PSBU
-                </h2>
-                <div class="w-20 h-1.5 bg-gradient-to-r from-blue-500 to-purple-500 mx-auto rounded-full animate-pulse"></div>
-            </div>
-
-            <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-4">
-                @php
-                $valuesBenefits = [
-                "Royal and Governmental Endorsement",
-                "National Accreditation",
-                "Recognition by the Ministry of Education and Sports",
-                "Cultural and Religious Accreditation",
-                "Inclusivity and Outreach",
-                "International Association of Universities Membership",
-                "Global Recognition in Key Databases",
-                "International Accreditations and Recognitions",
-                "Sustainability of Educational Programs",
-                "Collaboration with Stakeholders",
-                "Empowerment of Educators and Communities",
-                "Advocacy for Systemic Change",
-                "Premier Membership in Times Higher Education",
-                "Recognition by University Grants Commission of Sri Lanka",
-                "Curriculum Quality and Supervision",
-                "Pathways to Advanced Degrees"
-                ];
-                @endphp
-
-                @foreach($valuesBenefits as $index => $value)
-                <div class="group bg-white/90 backdrop-blur-sm rounded-xl p-4 border border-gray-200/50 hover:shadow-lg transition-all duration-300 hover:-translate-y-2 cursor-pointer"
-                    style="animation-delay: {{ $index * 50 }}ms">
-                    <div class="flex items-center space-x-3">
-                        <div class="w-8 h-8 bg-gradient-to-br from-blue-500 to-blue-600 rounded-full flex items-center justify-center text-white font-bold text-xs transform transition-all duration-300 group-hover:scale-110 group-hover:rotate-12 shadow-md flex-shrink-0">
-                            {{ $index + 1 }}
-                        </div>
-                        <p class="text-gray-700 text-sm font-medium group-hover:text-gray-900 transition-colors duration-300 leading-relaxed font-english">
-                            {{ $value }}
-                        </p>
                     </div>
                 </div>
                 @endforeach
             </div>
         </div>
 
-        {{-- ================= ENHANCED ACCREDITATION SECTION ================= --}}
-        <div data-animate class="bg-gradient-to-br from-gray-800 via-gray-900 to-blue-900 rounded-3xl p-8 md:p-10 text-white shadow-2xl hover:shadow-3xl transition-all duration-500 hover:-translate-y-2 relative overflow-hidden">
-            {{-- Background Elements --}}
-            <div class="absolute top-0 right-0 w-32 h-32 bg-white/10 rounded-full translate-x-1/2 -translate-y-1/2"></div>
-            <div class="absolute bottom-0 left-0 w-48 h-48 bg-white/10 rounded-full -translate-x-1/3 translate-y-1/3"></div>
-
-            <div class="relative z-10 font-english">
-                <div class="text-center mb-10">
-                    <h2 class="text-2xl md:text-3xl font-bold mb-4 bg-gradient-to-r from-blue-300 to-purple-300 bg-clip-text text-transparent">
-                        Accreditations & Recognition
-                    </h2>
-                    <div class="w-20 h-1.5 bg-gradient-to-r from-blue-400 to-purple-400 mx-auto rounded-full animate-pulse"></div>
-                </div>
-
-                <p class="text-gray-300 text-center mb-10 text-lg max-w-3xl mx-auto font-english">
-                    PSBU's commitment to academic excellence is reflected in our prestigious accreditations and international recognitions.
-                </p>
-
-                <div class="grid md:grid-cols-2 gap-8">
-                    <div class="transform transition-all duration-500 hover:-translate-y-1">
-                        <h3 class="text-xl md:text-2xl font-bold mb-6 text-blue-300 bg-blue-900/30 p-4 rounded-2xl text-center font-english">
-                            International Accreditations
-                        </h3>
-                        <ul class="space-y-3 text-gray-300">
-                            @php
-                            $internationalAccreditations = [
-                            "Accreditation Service for International Schools, Colleges and Universities (ASIC)",
-                            "International Association for Quality Assurance in Pre-Tertiary & Higher Education (QAHE)",
-                            "World Education Services (WES)",
-                            "International Network for Quality Assurance Agencies in Higher Education (INQAAHE)"
-                            ];
-                            @endphp
-
-                            @foreach($internationalAccreditations as $item)
-                            <li class="flex items-center space-x-3 group">
-                                <div class="w-2 h-2 bg-blue-400 rounded-full group-hover:scale-150 transition-transform duration-300"></div>
-                                <span class="group-hover:text-white transition-colors duration-300 text-sm">{{ $item }}</span>
-                            </li>
-                            @endforeach
-                        </ul>
-                    </div>
-                    <div class="transform transition-all duration-500 hover:-translate-y-1">
-                        <h3 class="text-xl md:text-2xl font-bold mb-6 text-purple-300 bg-purple-900/30 p-4 rounded-2xl text-center font-english">
-                            Memberships
-                        </h3>
-                        <ul class="space-y-3 text-gray-300">
-                            @php
-                            $memberships = [
-                            "International Association of Universities (IAU)",
-                            "Times Higher Education (THE)",
-                            "International Education Accreditation Council (IEAC)",
-                            "Accreditation Committee of Cambodia (ACC)"
-                            ];
-                            @endphp
-
-                            @foreach($memberships as $item)
-                            <li class="flex items-center space-x-3 group">
-                                <div class="w-2 h-2 bg-purple-400 rounded-full group-hover:scale-150 transition-transform duration-300"></div>
-                                <span class="group-hover:text-white transition-colors duration-300 text-sm">{{ $item }}</span>
-                            </li>
-                            @endforeach
-                        </ul>
+        {{-- Strategies --}}
+        <div>
+            <h3 class="text-2xl font-bold text-gray-900 mb-8 text-center bg-white/80 backdrop-blur-sm p-4 rounded-2xl border border-gray-200/50 font-english">
+                Our Strategies
+            </h3>
+            <div class="space-y-6">
+                @foreach($strategies as $index => $strategy)
+                <div class="group bg-white/80 backdrop-blur-sm border border-gray-200/50 rounded-2xl p-6 hover:shadow-xl transition-all duration-500 hover:-translate-y-2"
+                    style="animation-delay: {{ $index * 100 }}ms">
+                    <div class="flex items-start space-x-4">
+                        <div class="text-3xl transform transition-all duration-500 group-hover:scale-110 group-hover:rotate-12">
+                            {{ $strategy->icon }}
+                        </div>
+                        <div class="flex-1">
+                            <h4 class="text-xl font-bold text-gray-900 mb-3 group-hover:text-gray-800 transition-colors duration-300 font-english">
+                                {{ $strategy->title }}
+                            </h4>
+                            <p class="text-gray-600 leading-relaxed group-hover:text-gray-700 transition-colors duration-300 font-english">
+                                {{ $strategy->description }}
+                            </p>
+                        </div>
                     </div>
                 </div>
+                @endforeach
             </div>
         </div>
+    </div>
+</div>
+
+
+   {{-- ================= ENHANCED VALUES & BENEFITS ================= --}}
+<div data-animate
+    class="bg-gradient-to-br from-blue-50/80 to-purple-50/80 backdrop-blur-sm rounded-3xl p-8 md:p-10 mb-16 border border-blue-200/50 shadow-lg hover:shadow-2xl transition-all duration-500 hover:-translate-y-2">
+
+    {{-- Header --}}
+    <div class="text-center mb-10">
+        <h2
+            class="text-2xl md:text-3xl font-bold text-gray-900 mb-4 bg-gradient-to-r from-blue-900 to-purple-900 bg-clip-text text-transparent font-english">
+            Values and Benefits of Studying at PSBU
+        </h2>
+        <div class="w-20 h-1.5 bg-gradient-to-r from-blue-500 to-purple-500 mx-auto rounded-full animate-pulse"></div>
+    </div>
+
+    {{-- Content --}}
+    <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-4">
+        @forelse($valuesBenefits as $index => $benefit)
+            <div class="group bg-white/90 backdrop-blur-sm rounded-xl p-4 border border-gray-200/50
+                        hover:shadow-lg transition-all duration-300 hover:-translate-y-2 cursor-pointer"
+                style="animation-delay: {{ $index * 60 }}ms">
+
+                <div class="flex items-center space-x-3">
+                    {{-- Number --}}
+                    <div
+                        class="w-8 h-8 bg-gradient-to-br from-blue-500 to-blue-600 rounded-full
+                               flex items-center justify-center text-white font-bold text-xs
+                               transform transition-all duration-300
+                               group-hover:scale-110 group-hover:rotate-12 shadow-md flex-shrink-0">
+                        {{ $index + 1 }}
+                    </div>
+
+                    {{-- Text --}}
+                    <p
+                        class="text-gray-700 text-sm font-medium leading-relaxed
+                               group-hover:text-gray-900 transition-colors duration-300 font-english">
+                        {{ $benefit->title }}
+                    </p>
+                </div>
+            </div>
+        @empty
+            <p class="col-span-full text-center text-gray-500 text-sm">
+                No values & benefits available at the moment.
+            </p>
+        @endforelse
+    </div>
+</div>
+
+{{-- ================= ENHANCED ACCREDITATION SECTION ================= --}}
+<div data-animate class="bg-gradient-to-br from-gray-800 via-gray-900 to-blue-900 rounded-3xl p-8 md:p-10 text-white shadow-2xl hover:shadow-3xl transition-all duration-500 hover:-translate-y-2 relative overflow-hidden">
+    {{-- Background Elements --}}
+    <div class="absolute top-0 right-0 w-32 h-32 bg-white/10 rounded-full translate-x-1/2 -translate-y-1/2"></div>
+    <div class="absolute bottom-0 left-0 w-48 h-48 bg-white/10 rounded-full -translate-x-1/3 translate-y-1/3"></div>
+
+    <div class="relative z-10 font-english">
+        <div class="text-center mb-10">
+            <h2 class="text-2xl md:text-3xl font-bold mb-4 bg-gradient-to-r from-blue-300 to-purple-300 bg-clip-text text-transparent">
+                Accreditations & Recognition
+            </h2>
+            <div class="w-20 h-1.5 bg-gradient-to-r from-blue-400 to-purple-400 mx-auto rounded-full animate-pulse"></div>
+        </div>
+
+        <p class="text-gray-300 text-center mb-10 text-lg max-w-3xl mx-auto font-english">
+            PSBU's commitment to academic excellence is reflected in our prestigious accreditations and international recognitions.
+        </p>
+
+        <div class="grid md:grid-cols-2 gap-8">
+            {{-- International Accreditations --}}
+            <div class="transform transition-all duration-500 hover:-translate-y-1">
+                <h3 class="text-xl md:text-2xl font-bold mb-6 text-blue-300 bg-blue-900/30 p-4 rounded-2xl text-center font-english">
+                    International Accreditations
+                </h3>
+                <ul class="space-y-3 text-gray-300">
+                    @foreach($accreditations->where('type', 'international') as $item)
+                        <li class="flex items-center space-x-3 group">
+                            <div class="w-2 h-2 bg-blue-400 rounded-full group-hover:scale-150 transition-transform duration-300"></div>
+                            <span class="group-hover:text-white transition-colors duration-300 text-sm">
+                                {{ $item->title }}
+                            </span>
+                        </li>
+                    @endforeach
+                </ul>
+            </div>
+
+            {{-- Memberships --}}
+            <div class="transform transition-all duration-500 hover:-translate-y-1">
+                <h3 class="text-xl md:text-2xl font-bold mb-6 text-purple-300 bg-purple-900/30 p-4 rounded-2xl text-center font-english">
+                    Memberships
+                </h3>
+                <ul class="space-y-3 text-gray-300">
+                    @foreach($accreditations->where('type', 'membership') as $item)
+                        <li class="flex items-center space-x-3 group">
+                            <div class="w-2 h-2 bg-purple-400 rounded-full group-hover:scale-150 transition-transform duration-300"></div>
+                            <span class="group-hover:text-white transition-colors duration-300 text-sm">
+                                {{ $item->title }}
+                            </span>
+                        </li>
+                    @endforeach
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
 
     </div>
 </div>

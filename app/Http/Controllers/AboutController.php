@@ -6,6 +6,7 @@ use App\Models\AboutContent;
 use App\Models\Faculty;
 use App\Models\TeamMember;
 use App\Models\CoreValue;
+use App\Models\Accreditation;
 use Illuminate\Http\Request;
 
 class AboutController extends Controller
@@ -42,11 +43,14 @@ class AboutController extends Controller
             ->orderBy('order')
             ->get();
 
+            $accreditations = Accreditation::where('is_active', true)->get();
+
         return view('about', compact(
             'aboutContent',
             'faculties',
             'teamMembers',
-            'coreValues'
+            'coreValues',
+            'accreditations',
         ));
     }
 }
