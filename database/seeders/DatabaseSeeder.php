@@ -49,8 +49,12 @@ class DatabaseSeeder extends Seeder
             // LeaderTeamSeeder::class,
             // ValueBenefitSeeder::class,
             // ProjectOverviewSeeder::class,
-            VisionMissionSeeder::class,
-            AccreditationSeeder::class,
+            // VisionMissionSeeder::class,
+            // AccreditationSeeder::class,
+            // HeroSeeder::class,
+            // ImpactStorySeeder::class,
+            DonationSeeder::class,
+            
 
 
         ]);

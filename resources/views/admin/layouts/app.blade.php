@@ -313,22 +313,22 @@
                     <!-- welcome Section -->
                     <div class="dropdown-menu hidden pl-12 mt-1 space-y-1">
                         <a href="{{ route('admin.welcome_sections.index') }}" class="dropdown-link flex items-center space-x-3 px-4 py-2 rounded-lg text-gray-400 hover:text-white hover:bg-gray-800 {{ request()->routeIs('admin.welcome_sections*') ? 'active' : '' }}">
-                            <i class="fas fa-user-tie w-5 text-center"></i>
+                            <i class="fas fa-hand-sparkles w-5 text-center"></i>
                             <span>Welcome Section</span>
                         </a>
                         <!-- Hero Carousel -->
                         <a href="{{ route('admin.hero_carousels.index') }}" class="dropdown-link flex items-center space-x-3 px-4 py-2 rounded-lg text-gray-400 hover:text-white hover:bg-gray-800 {{ request()->routeIs('admin.hero_carousels*') ? 'active' : '' }}">
-                            <i class="fas fa-user-tie w-5 text-center"></i>
+                            <i class="fas fa-images w-5 text-center"></i>
                             <span>Hero Carousel</span>
                         </a>
                         <!-- Features -->
-                        <a href="{{ route('admin.features.index') }}" class="dropdown-link flex items-center space-x-3 px-4 py-2 rounded-lg text-gray-400 hover:text-white hover:bg-gray-800 {{ request()->routeIs('admin.office-managers*') ? 'active' : '' }}">
-                            <i class="fas fa-user-tie w-5 text-center"></i>
+                        <a href="{{ route('admin.features.index') }}" class="dropdown-link flex items-center space-x-3 px-4 py-2 rounded-lg text-gray-400 hover:text-white hover:bg-gray-800 {{ request()->routeIs('admin.features*') ? 'active' : '' }}">
+                            <i class="fas fa-star w-5 text-center"></i>
                             <span>Features</span>
                         </a>
 
-                        <a href="{{ route('admin.footer.index') }}" class="dropdown-link flex items-center space-x-3 px-4 py-2 rounded-lg text-gray-400 hover:text-white hover:bg-gray-800 {{ request()->routeIs('admin.office-managers*') ? 'active' : '' }}">
-                            <i class="fas fa-user-tie w-5 text-center"></i>
+                        <a href="{{ route('admin.footer.index') }}" class="dropdown-link flex items-center space-x-3 px-4 py-2 rounded-lg text-gray-400 hover:text-white hover:bg-gray-800 {{ request()->routeIs('admin.footer*') ? 'active' : '' }}">
+                            <i class="fas fa-shoe-prints w-5 text-center"></i>
                             <span>Footer</span>
                         </a>
                     </div>
@@ -346,7 +346,7 @@
 
                     <div class="dropdown-menu hidden pl-12 mt-1 space-y-1">
                         <a href="{{ route('admin.faculties.index') }}" class="dropdown-link flex items-center space-x-3 px-4 py-2 rounded-lg text-gray-400 hover:text-white hover:bg-gray-800 {{ request()->routeIs('admin.faculties*') ? 'active' : '' }}">
-                            <i class="fas fa-building w-5 text-center"></i>
+                            <i class="fas fa-building-columns w-5 text-center"></i>
                             <span>Faculties</span>
                         </a>
                         <a href="{{ route('admin.team-members.index') }}" class="dropdown-link flex items-center space-x-3 px-4 py-2 rounded-lg text-gray-400 hover:text-white hover:bg-gray-800 {{ request()->routeIs('admin.team-members*') ? 'active' : '' }}">
@@ -354,7 +354,7 @@
                             <span>Team Members</span>
                         </a>
                         <a href="{{ route('admin.core-values.index') }}" class="dropdown-link flex items-center space-x-3 px-4 py-2 rounded-lg text-gray-400 hover:text-white hover:bg-gray-800 {{ request()->routeIs('admin.core-values*') ? 'active' : '' }}">
-                            <i class="fas fa-heart w-5 text-center"></i>
+                            <i class="fas fa-gem w-5 text-center"></i>
                             <span>Core Values</span>
                         </a>
 
@@ -374,42 +374,42 @@
                     <div class="dropdown-menu hidden pl-12 mt-1 space-y-1">
                         <!-- Leader Teams -->
                         <a href="{{ route('admin.leader-teams.index') }}" class="dropdown-link flex items-center space-x-3 px-4 py-2 rounded-lg text-gray-400 hover:text-white hover:bg-gray-800 {{ request()->routeIs('admin.leader-teams*') ? 'active' : '' }}">
-                            <i class="fas fa-user-tie w-5 text-center"></i>
+                            <i class="fas fa-crown w-5 text-center"></i>
                             <span>Leader Team</span>
                         </a>
                         <!-- Project-Based Learning-->
-                        <a href="{{ route('admin.project-overviews.index') }}" class="dropdown-link flex items-center space-x-3 px-4 py-2 rounded-lg text-gray-400 hover:text-white hover:bg-gray-800 {{ request()->routeIs('admin.leader-teams*') ? 'active' : '' }}">
-                            <i class="fas fa-user-tie w-5 text-center"></i>
+                        <a href="{{ route('admin.project-overviews.index') }}" class="dropdown-link flex items-center space-x-3 px-4 py-2 rounded-lg text-gray-400 hover:text-white hover:bg-gray-800 {{ request()->routeIs('admin.project-overviews*') ? 'active' : '' }}">
+                            <i class="fas fa-project-diagram w-5 text-center"></i>
                             <span>Project-Overview</span>
                         </a>
                         <!-- Office Managers -->
                         <a href="{{ route('admin.office-managers.index') }}" class="dropdown-link flex items-center space-x-3 px-4 py-2 rounded-lg text-gray-400 hover:text-white hover:bg-gray-800 {{ request()->routeIs('admin.office-managers*') ? 'active' : '' }}">
-                            <i class="fas fa-user-tie w-5 text-center"></i>
+                            <i class="fas fa-briefcase w-5 text-center"></i>
                             <span>Office Manager</span>
                         </a>
                         <!-- Visoin & Mission -->
-                        <a href="{{ route('admin.vision-missions.index') }}" class="dropdown-link flex items-center space-x-3 px-4 py-2 rounded-lg text-gray-400 hover:text-white hover:bg-gray-800 {{ request()->routeIs('admin.staff*') ? 'active' : '' }}">
-                            <i class="fas fa-user-friends w-5 text-center"></i>
+                        <a href="{{ route('admin.vision-missions.index') }}" class="dropdown-link flex items-center space-x-3 px-4 py-2 rounded-lg text-gray-400 hover:text-white hover:bg-gray-800 {{ request()->routeIs('admin.vision-missions*') ? 'active' : '' }}">
+                            <i class="fas fa-bullseye w-5 text-center"></i>
                             <span>Vision-Missions</span>
                         </a>
 
                         <a href="{{ route('admin.staff.index') }}" class="dropdown-link flex items-center space-x-3 px-4 py-2 rounded-lg text-gray-400 hover:text-white hover:bg-gray-800 {{ request()->routeIs('admin.staff*') ? 'active' : '' }}">
-                            <i class="fas fa-user-friends w-5 text-center"></i>
+                            <i class="fas fa-user-tie w-5 text-center"></i>
                             <span>CAEDA Staff</span>
                         </a>
                         <!-- Goals -->
                         <a href="{{ route('admin.goals.index') }}" class="dropdown-link flex items-center space-x-3 px-4 py-2 rounded-lg text-gray-400 hover:text-white hover:bg-gray-800 {{ request()->routeIs('admin.goals*') ? 'active' : '' }}">
-                            <i class="fas fa-user-friends w-5 text-center"></i>
+                            <i class="fas fa-flag-checkered w-5 text-center"></i>
                             <span>Goals</span>
                         </a>
                         <!-- Goals -->
                         <a href="{{ route('admin.strategies.index') }}" class="dropdown-link flex items-center space-x-3 px-4 py-2 rounded-lg text-gray-400 hover:text-white hover:bg-gray-800 {{ request()->routeIs('admin.strategies*') ? 'active' : '' }}">
-                            <i class="fas fa-user-friends w-5 text-center"></i>
+                            <i class="fas fa-chess-knight w-5 text-center"></i>
                             <span>Strategy</span>
                         </a>
                         <!-- Value Benefits -->
                         <a href="{{ route('admin.value-benefits.index') }}" class="dropdown-link flex items-center space-x-3 px-4 py-2 rounded-lg text-gray-400 hover:text-white hover:bg-gray-800 {{ request()->routeIs('admin.value-benefits*') ? 'active' : '' }}">
-                            <i class="fas fa-user-friends w-5 text-center"></i>
+                            <i class="fas fa-gift w-5 text-center"></i>
                             <span>Benefits</span>
                         </a>
 
@@ -432,7 +432,7 @@
 
                     <div class="dropdown-menu hidden pl-12 mt-1 space-y-1">
                         <a href="{{ route('admin.programs.index') }}" class="dropdown-link flex items-center space-x-3 px-4 py-2 rounded-lg text-gray-400 hover:text-white hover:bg-gray-800 {{ request()->routeIs('admin.programs*') ? 'active' : '' }}">
-                            <i class="fas fa-list-alt w-5 text-center"></i>
+                            <i class="fas fa-book-open w-5 text-center"></i>
                             <span>CAEDA Programs</span>
                         </a>
                     </div>
@@ -450,11 +450,11 @@
 
                     <div class="dropdown-menu hidden pl-12 mt-1 space-y-1">
                         <a href="{{ route('admin.partners.index') }}" class="dropdown-link flex items-center space-x-3 px-4 py-2 rounded-lg text-gray-400 hover:text-white hover:bg-gray-800 {{ request()->routeIs('admin.partners*') ? 'active' : '' }}">
-                            <i class="fas fa-building w-5 text-center"></i>
+                            <i class="fas fa-handshake-angle w-5 text-center"></i>
                             <span>Partners</span>
                         </a>
                         <a href="{{ route('admin.pricing.index') }}" class="dropdown-link flex items-center space-x-3 px-4 py-2 rounded-lg text-gray-400 hover:text-white hover:bg-gray-800 {{ request()->routeIs('admin.pricing*') ? 'active' : '' }}">
-                            <i class="fas fa-building w-5 text-center"></i>
+                            <i class="fas fa-tags w-5 text-center"></i>
                             <span>Pricing</span>
                         </a>
                     </div>
@@ -462,9 +462,9 @@
 
                 <!-- Events Page Dropdown -->
                 <div class="relative">
-                    <button class="dropdown-btn w-full flex items-center justify-between px-4 py-3 rounded-xl text-gray-300 hover:text-white transition-all duration-200 focus:outline-none {{ request()->routeIs('admin.events*') ? 'active' : '' }}">
+                    <button class="dropdown-btn w-full flex items-center justify-between px-4 py-3 rounded-xl text-gray-300 hover:text-white transition-all duration-200 focus:outline-none {{ request()->routeIs('admin.events*') || request()->routeIs('admin.featured_events*') || request()->routeIs('admin.speakers*') || request()->routeIs('admin.timeline_events*') ? 'active' : '' }}">
                         <span class="flex items-center space-x-3">
-                            <i class="fas fa-calendar-alt w-5 text-center text-lg"></i>
+                            <i class="fas fa-calendar-star w-5 text-center text-lg"></i>
                             <span class="font-medium">Events Page</span>
                         </span>
                         <i class="fas fa-chevron-down transition-transform duration-200 text-sm"></i>
@@ -478,92 +478,120 @@
                         </a>
                         <!-- Events -->
                         <a href="{{ route('admin.events.index') }}" class="dropdown-link flex items-center space-x-3 px-4 py-2 rounded-lg text-gray-400 hover:text-white hover:bg-gray-800 {{ request()->routeIs('admin.events*') ? 'active' : '' }}">
-                            <i class="fas fa-calendar-check w-5 text-center"></i>
+                            <i class="fas fa-calendar-day w-5 text-center"></i>
                             <span>Events</span>
                         </a>
                         <!-- Speakers -->
                         <a href="{{ route('admin.speakers.index') }}" class="dropdown-link flex items-center space-x-3 px-4 py-2 rounded-lg text-gray-400 hover:text-white hover:bg-gray-800 {{ request()->routeIs('admin.speakers*') ? 'active' : '' }}">
-                            <i class="fas fa-calendar-check w-5 text-center"></i>
+                            <i class="fas fa-microphone w-5 text-center"></i>
                             <span>Speakers</span>
                         </a>
-                        <a href="{{ route('admin.timeline_events.index') }}" class="dropdown-link flex items-center space-x-3 px-4 py-2 rounded-lg text-gray-400 hover:text-white hover:bg-gray-800 {{ request()->routeIs('admin.timeline-events*') ? 'active' : '' }}">
-                            <i class="fas fa-calendar-check w-5 text-center"></i>
+                        <a href="{{ route('admin.timeline_events.index') }}" class="dropdown-link flex items-center space-x-3 px-4 py-2 rounded-lg text-gray-400 hover:text-white hover:bg-gray-800 {{ request()->routeIs('admin.timeline_events*') ? 'active' : '' }}">
+                            <i class="fas fa-stream w-5 text-center"></i>
                             <span>Timeline Events</span>
                         </a>
                     </div>
                 </div>
 
+                <!-- Donation Page Dropdown -->
+                <div class="relative">
+                    <button class="dropdown-btn w-full flex items-center justify-between px-4 py-3 rounded-xl text-gray-300 hover:text-white transition-all duration-200 focus:outline-none {{ request()->routeIs('admin.heroes*') || request()->routeIs('admin.recent-donors*') || request()->routeIs('admin.stories*') ? 'active' : '' }}">
+                        <span class="flex items-center space-x-3">
+                            <i class="fas fa-hand-holding-heart w-5 text-center text-lg"></i>
+                            <span class="font-medium">Donation Page</span>
+                        </span>
+                        <i class="fas fa-chevron-down transition-transform duration-200 text-sm"></i>
+                    </button>
+
+                    <div class="dropdown-menu hidden pl-12 mt-1 space-y-1">
+                        <!-- Hero Sections -->
+                        <a href="{{ route('admin.heroes.index') }}" class="dropdown-link flex items-center space-x-3 px-4 py-2 rounded-lg text-gray-400 hover:text-white hover:bg-gray-800 {{ request()->routeIs('admin.heroes*') ? 'active' : '' }}">
+                            <i class="fas fa-image w-5 text-center"></i>
+                            <span>Hero Sections</span>
+                        </a>
+                        <!-- Recent Donors -->
+                        <a href="{{ route('admin.recent-donors.index') }}" class="dropdown-link flex items-center space-x-3 px-4 py-2 rounded-lg text-gray-400 hover:text-white hover:bg-gray-800 {{ request()->routeIs('admin.recent-donors*') ? 'active' : '' }}">
+                            <i class="fas fa-users w-5 text-center"></i>
+                            <span>Recent Donors</span>
+                        </a>
+                        <!-- Impact Stories -->
+                        <a href="{{ route('admin.stories.index') }}" class="dropdown-link flex items-center space-x-3 px-4 py-2 rounded-lg text-gray-400 hover:text-white hover:bg-gray-800 {{ request()->routeIs('admin.stories*') ? 'active' : '' }}">
+                            <i class="fas fa-book-open w-5 text-center"></i>
+                            <span>Impact Stories</span>
+                        </a>
+                    </div>
+                </div>
 
                 <!-- Contact Page Dropdown -->
                 <div class="relative">
-                    <button class="dropdown-btn w-full flex items-center justify-between px-4 py-3 rounded-xl text-gray-300 hover:text-white transition-all duration-200 focus:outline-none {{ request()->routeIs('admin.events*') ? 'active' : '' }}">
+                    <button class="dropdown-btn w-full flex items-center justify-between px-4 py-3 rounded-xl text-gray-300 hover:text-white transition-all duration-200 focus:outline-none {{ request()->routeIs('admin.contacts*') || request()->routeIs('admin.social*') || request()->routeIs('admin.contact-information*') || request()->routeIs('admin.faqs*') ? 'active' : '' }}">
                         <span class="flex items-center space-x-3">
-                            <i class="fas fa-calendar-alt w-5 text-center text-lg"></i>
+                            <i class="fas fa-envelope-open-text w-5 text-center text-lg"></i>
                             <span class="font-medium">Contact Page</span>
                         </span>
                         <i class="fas fa-chevron-down transition-transform duration-200 text-sm"></i>
                     </button>
 
                     <div class="dropdown-menu hidden pl-12 mt-1 space-y-1">
-
                         <a href="{{ route('admin.contacts.index') }}" class="dropdown-link flex items-center space-x-3 px-4 py-2 rounded-lg text-gray-400 hover:text-white hover:bg-gray-800 {{ request()->routeIs('admin.contacts*') ? 'active' : '' }}">
-                            <i class="fas fa-calendar-check w-5 text-center"></i>
-                            <span>User-Messages</span>
+                            <i class="fas fa-message w-5 text-center"></i>
+                            <span>User Messages</span>
                         </a>
                         <!-- Social -->
                         <a href="{{ route('admin.social.index') }}" class="dropdown-link flex items-center space-x-3 px-4 py-2 rounded-lg text-gray-400 hover:text-white hover:bg-gray-800 {{ request()->routeIs('admin.social*') ? 'active' : '' }}">
-                            <i class="fas fa-calendar-check w-5 text-center"></i>
-                            <span>Social</span>
+                            <i class="fas fa-share-alt w-5 text-center"></i>
+                            <span>Social Media</span>
                         </a>
                         <!-- Contact Information -->
-                        <a href="{{ route('admin.contact-information.index') }}" class="dropdown-link flex items-center space-x-3 px-4 py-2 rounded-lg text-gray-400 hover:text-white hover:bg-gray-800 {{ request()->routeIs('admin.social*') ? 'active' : '' }}">
-                            <i class="fas fa-calendar-check w-5 text-center"></i>
-                            <span>Contact-Info</span>
+                        <a href="{{ route('admin.contact-information.index') }}" class="dropdown-link flex items-center space-x-3 px-4 py-2 rounded-lg text-gray-400 hover:text-white hover:bg-gray-800 {{ request()->routeIs('admin.contact-information*') ? 'active' : '' }}">
+                            <i class="fas fa-address-card w-5 text-center"></i>
+                            <span>Contact Info</span>
                         </a>
-
-                        <a href="{{ route('admin.faqs.index') }}" class="dropdown-link flex items-center space-x-3 px-4 py-2 rounded-lg text-gray-400 hover:text-white hover:bg-gray-800 {{ request()->routeIs('admin.social*') ? 'active' : '' }}">
-                            <i class="fas fa-calendar-check w-5 text-center"></i>
-                            <span>Faqs</span>
+                        <!-- FAQs -->
+                        <a href="{{ route('admin.faqs.index') }}" class="dropdown-link flex items-center space-x-3 px-4 py-2 rounded-lg text-gray-400 hover:text-white hover:bg-gray-800 {{ request()->routeIs('admin.faqs*') ? 'active' : '' }}">
+                            <i class="fas fa-question-circle w-5 text-center"></i>
+                            <span>FAQs</span>
                         </a>
                     </div>
-
-
                 </div>
-
 
                 <!-- Workshop Page Dropdown -->
                 <div class="relative">
-                    <button class="dropdown-btn w-full flex items-center justify-between px-4 py-3 rounded-xl text-gray-300 hover:text-white transition-all duration-200 focus:outline-none {{ request()->routeIs('admin.events*') ? 'active' : '' }}">
+                    <button class="dropdown-btn w-full flex items-center justify-between px-4 py-3 rounded-xl text-gray-300 hover:text-white transition-all duration-200 focus:outline-none {{ request()->routeIs('admin.workshops*') ? 'active' : '' }}">
                         <span class="flex items-center space-x-3">
-                            <i class="fas fa-chalkboard w-5 text-center text-lg"></i>
-
+                            <i class="fas fa-chalkboard-teacher w-5 text-center text-lg"></i>
                             <span class="font-medium">Workshop Page</span>
                         </span>
-                        <i class="fas fa-chevron-down transition-transform duration-200 text-sm "></i>
+                        <i class="fas fa-chevron-down transition-transform duration-200 text-sm"></i>
                     </button>
 
                     <div class="dropdown-menu hidden pl-12 mt-1 space-y-1">
-                        <a href="{{ route('admin.workshops.index') }}" class="dropdown-link flex items-center space-x-3 px-4 py-2 rounded-lg text-gray-400 hover:text-white hover:bg-gray-800 {{ request()->routeIs('admin.events*') ? 'active' : '' }}">
+                        <a href="{{ route('admin.workshops.index') }}" class="dropdown-link flex items-center space-x-3 px-4 py-2 rounded-lg text-gray-400 hover:text-white hover:bg-gray-800 {{ request()->routeIs('admin.workshops*') ? 'active' : '' }}">
                             <i class="fas fa-video w-5 text-center"></i>
-                            <span>Videos</span>
+                            <span>Workshop Videos</span>
                         </a>
                     </div>
                 </div>
 
                 <!-- Settings -->
                 <div class="mt-6 mb-2 px-4">
-                    <p class="text-xs font-semibold text-gray-400 uppercase tracking-wider">Settings</p>
+                    <p class="text-xs font-semibold text-gray-400 uppercase tracking-wider">System Settings</p>
                 </div>
 
                 <a href="#" class="nav-link flex items-center space-x-3 px-4 py-3 rounded-xl text-gray-300 hover:text-white transition-all duration-200">
-                    <i class="fas fa-cog w-5 text-center text-lg"></i>
-                    <span class="font-medium">Settings</span>
+                    <i class="fas fa-cogs w-5 text-center text-lg"></i>
+                    <span class="font-medium">System Settings</span>
                 </a>
 
                 <a href="#" class="nav-link flex items-center space-x-3 px-4 py-3 rounded-xl text-gray-300 hover:text-white transition-all duration-200">
                     <i class="fas fa-bell w-5 text-center text-lg"></i>
                     <span class="font-medium">Notifications</span>
                     <span class="badge badge-primary">3</span>
+                </a>
+
+                <a href="#" class="nav-link flex items-center space-x-3 px-4 py-3 rounded-xl text-gray-300 hover:text-white transition-all duration-200">
+                    <i class="fas fa-user-shield w-5 text-center text-lg"></i>
+                    <span class="font-medium">User Management</span>
                 </a>
             </div>
         </nav>
@@ -572,7 +600,7 @@
         <div class="p-4 border-t border-gray-800 space-y-3">
             <a href="{{ route('home') }}"
                 class="flex items-center justify-center space-x-2 px-4 py-3 bg-gray-800 hover:bg-gray-700 rounded-xl text-gray-300 hover:text-white font-medium transition-colors duration-200">
-                <i class="fas fa-globe"></i>
+                <i class="fas fa-globe-americas"></i>
                 <span>View Website</span>
             </a>
 
@@ -608,6 +636,19 @@
                         <span class="absolute top-1 right-1 w-2 h-2 bg-red-500 rounded-full"></span>
                     </button>
 
+                    <!-- Quick Actions -->
+                    <div class="hidden md:flex items-center space-x-2">
+                        <button class="p-2 text-gray-600 hover:text-indigo-600 transition-colors duration-200" title="Quick Add">
+                            <i class="fas fa-plus-circle text-lg"></i>
+                        </button>
+                        <button class="p-2 text-gray-600 hover:text-indigo-600 transition-colors duration-200" title="Export Data">
+                            <i class="fas fa-file-export text-lg"></i>
+                        </button>
+                        <button class="p-2 text-gray-600 hover:text-indigo-600 transition-colors duration-200" title="Refresh">
+                            <i class="fas fa-sync-alt text-lg"></i>
+                        </button>
+                    </div>
+
                     <!-- Search -->
                     <div class="relative hidden md:block">
                         <input type="text" placeholder="Search..."
@@ -617,11 +658,11 @@
 
                     <!-- User Menu -->
                     <div class="relative">
-                        <button id="user-menu" class="flex items-center space-x-2 focus:outline-none">
-                            <div class="w-8 h-8 bg-gradient-to-br from-indigo-500 to-purple-600 rounded-full flex items-center justify-center text-white font-semibold text-sm">
+                        <button id="user-menu" class="flex items-center space-x-2 focus:outline-none group">
+                            <div class="w-8 h-8 bg-gradient-to-br from-indigo-500 to-purple-600 rounded-full flex items-center justify-center text-white font-semibold text-sm shadow-md group-hover:shadow-lg transition-shadow">
                                 {{ substr(optional(Auth::user())->name ?? 'A', 0, 1) }}
                             </div>
-                            <i class="fas fa-chevron-down text-gray-600 text-xs"></i>
+                            <i class="fas fa-chevron-down text-gray-600 text-xs group-hover:text-indigo-600 transition-colors"></i>
                         </button>
                     </div>
                 </div>
@@ -736,10 +777,10 @@
                 const toast = document.createElement('div');
 
                 const colors = {
-                    success: 'bg-green-500',
-                    error: 'bg-red-500',
-                    warning: 'bg-yellow-500',
-                    info: 'bg-blue-500'
+                    success: 'bg-gradient-to-r from-green-500 to-emerald-600',
+                    error: 'bg-gradient-to-r from-red-500 to-pink-600',
+                    warning: 'bg-gradient-to-r from-yellow-500 to-orange-600',
+                    info: 'bg-gradient-to-r from-blue-500 to-indigo-600'
                 };
 
                 const icons = {
@@ -751,9 +792,11 @@
 
                 toast.className = `flex items-center p-4 rounded-xl text-white shadow-lg transform transition-all duration-300 translate-x-full ${colors[type]}`;
                 toast.innerHTML = `
-                    <i class="fas ${icons[type]} mr-3 text-lg"></i>
-                    <span>${message}</span>
-                    <button class="ml-auto text-white hover:text-gray-200">
+                    <div class="flex items-center">
+                        <i class="fas ${icons[type]} mr-3 text-xl"></i>
+                        <span class="font-medium">${message}</span>
+                    </div>
+                    <button class="ml-6 text-white hover:text-gray-200 opacity-70 hover:opacity-100 transition-opacity">
                         <i class="fas fa-times"></i>
                     </button>
                 `;
@@ -798,6 +841,25 @@
                     showToast('Welcome to CAEDA Admin Dashboard!', 'success');
                 }, 1000);
             }
+
+            // Quick action buttons
+            document.querySelectorAll('[title="Quick Add"]').forEach(btn => {
+                btn.addEventListener('click', () => {
+                    showToast('Quick add action triggered', 'info');
+                });
+            });
+
+            document.querySelectorAll('[title="Export Data"]').forEach(btn => {
+                btn.addEventListener('click', () => {
+                    showToast('Export data action triggered', 'info');
+                });
+            });
+
+            document.querySelectorAll('[title="Refresh"]').forEach(btn => {
+                btn.addEventListener('click', () => {
+                    window.location.reload();
+                });
+            });
         });
     </script>
 

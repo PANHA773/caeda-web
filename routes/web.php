@@ -50,6 +50,9 @@ use App\Http\Controllers\Admin\StrategyController;
 use App\Http\Controllers\Admin\ProjectOverviewController;
 use App\Http\Controllers\Admin\VisionMissionController;
 use App\Http\Controllers\Admin\AccreditationController;
+use App\Http\Controllers\Admin\HeroController;
+use App\Http\Controllers\Admin\ImpactStoryController;
+use App\Http\Controllers\Admin\DonorController;
 
 
 // ==============================
@@ -91,8 +94,13 @@ Route::get('/news', [NewsController::class, 'index'])->name('news');
 Route::post('/news/{news}/comments', [\App\Http\Controllers\CommentController::class, 'store'])->name('news.comments.store');
 Route::post('/news/{news}/like', [\App\Http\Controllers\NewsController::class, 'toggleLike'])->name('news.like');
 
-// Donations
+
+
+// web.php
+Route::get('/donation', [DonationController::class, 'show'])->name('donation.show');
 Route::post('/donation', [DonationController::class, 'submit'])->name('donation.submit');
+
+
 
 // Courses
 Route::get('/courses', [CourseController::class, 'index'])->name('courses');
@@ -215,7 +223,7 @@ Route::middleware(['auth'])->prefix('admin')->name('admin.')->group(function () 
     Route::resource('leader-teams', LeaderTeamController::class);
 
     // Value Benefits
-    Route::resource('value-benefits', ValueBenefitController::class);
+    Route::resource('value-benefits', ValueBenefitController::class);                                                       
 
     // Goals
     Route::resource('goals', GoalController::class);
@@ -229,7 +237,21 @@ Route::middleware(['auth'])->prefix('admin')->name('admin.')->group(function () 
     // Vision & Mission
     Route::resource('vision-missions', VisionMissionController::class);
 
+    // accreditations
     Route::resource('accreditations',AccreditationController::class);
+    
+    // heroes
+    Route::resource('heroes', HeroController::class);
+
+    // stories
+    Route::resource('stories', ImpactStoryController::class);
+
+    // recent-donors
+    Route::resource('recent-donors', DonorController::class);
+
+
+  
+    
     
 });
 

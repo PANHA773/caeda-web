@@ -52,7 +52,9 @@
             'name' => 'news',
             'dropdown' => [
                 ['label' => 'Latest News', 'href' => route('news')],
-                ['label' => 'Donation', 'href' => route('donation')],
+          
+                ['label' => 'Donation', 'href' => route('donation.show')],
+
                 ['label' => 'Achieve', 'href' => route('achieve')],
             
             ]
