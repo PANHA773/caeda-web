@@ -3,633 +3,140 @@
 @section('title', 'Create Workshop')
 
 @section('content')
-<div class="max-w-6xl mx-auto py-8 px-4 sm:px-6 lg:px-8">
+
+<div class="max-w-4xl mx-auto px-6 py-8">
+
     {{-- Header --}}
-    <div class="mb-8">
-        <div class="flex items-center justify-between">
-            <div>
-                <h1 class="text-3xl font-bold text-gray-900">Create New Workshop</h1>
-                <p class="mt-2 text-sm text-gray-600">Fill in all required details to create a new workshop</p>
-            </div>
+    <div class="mb-6">
+        <h1 class="text-2xl font-bold text-gray-800">Create Workshop</h1>
+        <p class="text-gray-500">Add a new workshop</p>
+    </div>
+
+    {{-- Error Messages --}}
+    @if ($errors->any())
+        <div class="bg-red-100 text-red-700 p-4 rounded mb-6">
+            <ul class="list-disc list-inside">
+                @foreach ($errors->all() as $error)
+                    <li>{{ $error }}</li>
+                @endforeach
+            </ul>
+        </div>
+    @endif
+
+    {{-- Form --}}
+    <form action="{{ route('admin.workshops.store') }}"
+          method="POST"
+          enctype="multipart/form-data"
+          class="bg-white shadow rounded-xl p-6 space-y-6">
+
+        @csrf
+
+        {{-- Title --}}
+        <div>
+            <label class="block text-sm font-medium text-gray-700">Title</label>
+            <input type="text" name="title"
+                   value="{{ old('title') }}"
+                   class="w-full mt-1 border rounded-lg px-4 py-2"
+                   required>
+        </div>
+
+        {{-- Category --}}
+        <div>
+            <label class="block text-sm font-medium text-gray-700">Category</label>
+            <input type="text" name="category"
+                   value="{{ old('category') }}"
+                   class="w-full mt-1 border rounded-lg px-4 py-2"
+                   placeholder="Design, Development..."
+                   required>
+        </div>
+
+        {{-- Instructor --}}
+        <div>
+            <label class="block text-sm font-medium text-gray-700">Instructor</label>
+            <input type="text" name="instructor"
+                   value="{{ old('instructor') }}"
+                   class="w-full mt-1 border rounded-lg px-4 py-2"
+                   required>
+        </div>
+
+        {{-- Instructor Image --}}
+        <div>
+            <label class="block text-sm font-medium text-gray-700">Instructor Image</label>
+            <input type="file" name="instructor_image"
+                   class="w-full mt-1 border rounded-lg px-4 py-2"
+                   accept="image/*">
+        </div>
+
+        {{-- Level --}}
+        <div>
+            <label class="block text-sm font-medium text-gray-700">Level</label>
+            <select name="level"
+                    class="w-full mt-1 border rounded-lg px-4 py-2"
+                    required>
+                <option value="">-- Select Level --</option>
+                <option value="beginner" {{ old('level')=='beginner'?'selected':'' }}>Beginner</option>
+                <option value="intermediate" {{ old('level')=='intermediate'?'selected':'' }}>Intermediate</option>
+                <option value="advanced" {{ old('level')=='advanced'?'selected':'' }}>Advanced</option>
+            </select>
+        </div>
+
+        {{-- Duration --}}
+        <div>
+            <label class="block text-sm font-medium text-gray-700">Duration</label>
+            <input type="text" name="duration"
+                   value="{{ old('duration') }}"
+                   class="w-full mt-1 border rounded-lg px-4 py-2"
+                   placeholder="e.g., 2h 30m">
+        </div>
+
+        {{-- Date --}}
+        <div>
+            <label class="block text-sm font-medium text-gray-700">Date</label>
+            <input type="date" name="date"
+                   value="{{ old('date') ?? now()->format('Y-m-d') }}"
+                   class="w-full mt-1 border rounded-lg px-4 py-2">
+        </div>
+
+        {{-- Video URL --}}
+        <div>
+            <label class="block text-sm font-medium text-gray-700">Video URL</label>
+            <input type="url" name="video_url"
+                   value="{{ old('video_url') }}"
+                   class="w-full mt-1 border rounded-lg px-4 py-2"
+                   placeholder="https://youtube.com/...">
+        </div>
+
+        {{-- Thumbnail --}}
+        <div>
+            <label class="block text-sm font-medium text-gray-700">Thumbnail</label>
+            <input type="file" name="image"
+                   class="w-full mt-1 border rounded-lg px-4 py-2"
+                   accept="image/*"
+                   required>
+        </div>
+
+        {{-- Status --}}
+        <div class="flex items-center gap-3">
+            <input type="checkbox" name="status" value="1"
+                   {{ old('status', true) ? 'checked' : '' }}>
+            <label class="text-sm text-gray-700">Active</label>
+        </div>
+
+        {{-- Buttons --}}
+        <div class="flex justify-end gap-3">
             <a href="{{ route('admin.workshops.index') }}"
-               class="inline-flex items-center gap-2 px-4 py-2.5 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-xl hover:bg-gray-50 hover:shadow-sm transition-all">
-                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"/>
-                </svg>
-                Back to Workshops
+               class="px-4 py-2 border rounded-lg text-gray-700">
+                Cancel
             </a>
+
+            <button type="submit"
+                    class="px-6 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700">
+                Save Workshop
+            </button>
         </div>
 
-        {{-- Progress Indicator --}}
-        <div class="mt-6 flex items-center gap-3">
-            <div class="flex items-center gap-2">
-                <div class="w-8 h-8 rounded-full bg-blue-600 text-white flex items-center justify-center text-sm font-medium">1</div>
-                <span class="text-sm font-medium text-gray-700">Create Workshop Details</span>
-            </div>
-            <div class="h-px flex-1 bg-gray-300"></div>
-            <div class="flex items-center gap-2">
-                <div class="w-8 h-8 rounded-full bg-gray-200 text-gray-500 flex items-center justify-center text-sm font-medium">2</div>
-                <span class="text-sm text-gray-500">Manage Content</span>
-            </div>
-        </div>
-    </div>
+    </form>
 
-    {{-- Form Container --}}
-    <div class="bg-white rounded-2xl border border-gray-200 shadow-sm overflow-hidden">
-        <form action="{{ route('admin.workshops.store') }}" method="POST" enctype="multipart/form-data" class="needs-validation" novalidate>
-            @csrf
-
-            <div class="p-8 space-y-8">
-                {{-- Basic Information Section --}}
-                <div class="space-y-6">
-                    <div class="flex items-center gap-3">
-                        <div class="p-2 bg-blue-100 rounded-lg">
-                            <svg class="w-5 h-5 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>
-                            </svg>
-                        </div>
-                        <h2 class="text-lg font-semibold text-gray-900">Basic Information</h2>
-                    </div>
-
-                    {{-- Title --}}
-                    <div>
-                        <label class="block text-sm font-medium text-gray-700 mb-2">
-                            Workshop Title
-                            <span class="text-red-500">*</span>
-                        </label>
-                        <div class="relative">
-                            <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                                <svg class="h-5 w-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"/>
-                                </svg>
-                            </div>
-                            <input type="text"
-                                   name="title"
-                                   value="{{ old('title') }}"
-                                   class="pl-10 w-full border border-gray-300 rounded-xl py-3 px-4 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition @error('title') border-red-500 @enderror"
-                                   placeholder="Enter workshop title"
-                                   required>
-                        </div>
-                        @error('title')
-                            <p class="mt-2 text-sm text-red-600">{{ $message }}</p>
-                        @enderror
-                    </div>
-
-                    {{-- Category & Level --}}
-                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                        <div>
-                            <label class="block text-sm font-medium text-gray-700 mb-2">
-                                Category
-                                <span class="text-red-500">*</span>
-                            </label>
-                            <div class="relative">
-                                <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                                    <svg class="h-5 w-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/>
-                                    </svg>
-                                </div>
-                                <select name="category"
-                                        class="pl-10 w-full border border-gray-300 rounded-xl py-3 px-4 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition @error('category') border-red-500 @enderror"
-                                        required>
-                                    <option value="">-- Select Category --</option>
-                                    <option value="technology" {{ old('category') == 'technology' ? 'selected' : '' }}>Technology</option>
-                                    <option value="buddhist" {{ old('category') == 'buddhist' ? 'selected' : '' }}>Buddhist</option>
-                                    <option value="education" {{ old('category') == 'education' ? 'selected' : '' }}>Education</option>
-                                    <option value="research" {{ old('category') == 'research' ? 'selected' : '' }}>Research</option>
-                                    <option value="creative" {{ old('category') == 'creative' ? 'selected' : '' }}>Creative</option>
-                                    <option value="wellness" {{ old('category') == 'wellness' ? 'selected' : '' }}>Wellness</option>
-                                </select>
-                            </div>
-                            @error('category')
-                                <p class="mt-2 text-sm text-red-600">{{ $message }}</p>
-                            @enderror
-                        </div>
-
-                        <div>
-                            <label class="block text-sm font-medium text-gray-700 mb-2">
-                                Level
-                                <span class="text-red-500">*</span>
-                            </label>
-                            <div class="relative">
-                                <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                                    <svg class="h-5 w-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"/>
-                                    </svg>
-                                </div>
-                                <select name="level"
-                                        class="pl-10 w-full border border-gray-300 rounded-xl py-3 px-4 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition @error('level') border-red-500 @enderror"
-                                        required>
-                                    <option value="beginner" {{ old('level') == 'beginner' ? 'selected' : '' }}>Beginner</option>
-                                    <option value="intermediate" {{ old('level') == 'intermediate' ? 'selected' : '' }}>Intermediate</option>
-                                    <option value="advanced" {{ old('level') == 'advanced' ? 'selected' : '' }}>Advanced</option>
-                                    <option value="all" {{ old('level') == 'all' ? 'selected' : '' }}>All Levels</option>
-                                </select>
-                            </div>
-                            @error('level')
-                                <p class="mt-2 text-sm text-red-600">{{ $message }}</p>
-                            @enderror
-                        </div>
-                    </div>
-                </div>
-
-                {{-- Workshop Details Section --}}
-                <div class="space-y-6">
-                    <div class="flex items-center gap-3">
-                        <div class="p-2 bg-purple-100 rounded-lg">
-                            <svg class="w-5 h-5 text-purple-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/>
-                            </svg>
-                        </div>
-                        <h2 class="text-lg font-semibold text-gray-900">Workshop Details</h2>
-                    </div>
-
-                    {{-- Instructor & Date --}}
-                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                        <div>
-                            <label class="block text-sm font-medium text-gray-700 mb-2">
-                                Instructor Name
-                                <span class="text-red-500">*</span>
-                            </label>
-                            <div class="relative">
-                                <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                                    <svg class="h-5 w-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"/>
-                                    </svg>
-                                </div>
-                                <input type="text"
-                                       name="instructor"
-                                       value="{{ old('instructor') }}"
-                                       class="pl-10 w-full border border-gray-300 rounded-xl py-3 px-4 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition @error('instructor') border-red-500 @enderror"
-                                       placeholder="Enter instructor name"
-                                       required>
-                            </div>
-                            @error('instructor')
-                                <p class="mt-2 text-sm text-red-600">{{ $message }}</p>
-                            @enderror
-                        </div>
-
-                        <div>
-                            <label class="block text-sm font-medium text-gray-700 mb-2">
-                                Workshop Date
-                                <span class="text-red-500">*</span>
-                            </label>
-                            <div class="relative">
-                                <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                                    <svg class="h-5 w-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/>
-                                    </svg>
-                                </div>
-                                <input type="date"
-                                       name="date"
-                                       value="{{ old('date') }}"
-                                       class="pl-10 w-full border border-gray-300 rounded-xl py-3 px-4 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition @error('date') border-red-500 @enderror"
-                                       required>
-                            </div>
-                            @error('date')
-                                <p class="mt-2 text-sm text-red-600">{{ $message }}</p>
-                            @enderror
-                        </div>
-                    </div>
-
-                    {{-- Duration & Seats --}}
-                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                        <div>
-                            <label class="block text-sm font-medium text-gray-700 mb-2">
-                                Duration
-                                <span class="text-red-500">*</span>
-                            </label>
-                            <div class="relative">
-                                <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                                    <svg class="h-5 w-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/>
-                                    </svg>
-                                </div>
-                                <input type="text"
-                                       name="duration"
-                                       value="{{ old('duration') }}"
-                                       class="pl-10 w-full border border-gray-300 rounded-xl py-3 px-4 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition @error('duration') border-red-500 @enderror"
-                                       placeholder="e.g., 2 hours, 1 day"
-                                       required>
-                            </div>
-                            @error('duration')
-                                <p class="mt-2 text-sm text-red-600">{{ $message }}</p>
-                            @enderror
-                        </div>
-
-                        <div>
-                            <label class="block text-sm font-medium text-gray-700 mb-2">
-                                Seats Available
-                            </label>
-                            <div class="relative">
-                                <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                                    <svg class="h-5 w-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"/>
-                                    </svg>
-                                </div>
-                                <input type="number"
-                                       name="seats_available"
-                                       value="{{ old('seats_available') }}"
-                                       class="pl-10 w-full border border-gray-300 rounded-xl py-3 px-4 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition @error('seats_available') border-red-500 @enderror"
-                                       placeholder="Enter number of seats">
-                            </div>
-                            @error('seats_available')
-                                <p class="mt-2 text-sm text-red-600">{{ $message }}</p>
-                            @enderror
-                        </div>
-                    </div>
-
-                    {{-- Price & Status --}}
-                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                        <div>
-                            <label class="block text-sm font-medium text-gray-700 mb-2">
-                                Price ($)
-                            </label>
-                            <div class="relative">
-                                <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                                    <span class="text-gray-400">$</span>
-                                </div>
-                                <input type="number"
-                                       step="0.01"
-                                       name="price"
-                                       value="{{ old('price', '0') }}"
-                                       class="pl-10 w-full border border-gray-300 rounded-xl py-3 px-4 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition @error('price') border-red-500 @enderror"
-                                       placeholder="0.00">
-                            </div>
-                            <p class="mt-2 text-sm text-gray-500">Enter 0 for free workshops</p>
-                            @error('price')
-                                <p class="mt-2 text-sm text-red-600">{{ $message }}</p>
-                            @enderror
-                        </div>
-
-                        <div>
-                            <label class="block text-sm font-medium text-gray-700 mb-2">
-                                Status
-                            </label>
-                            <div class="relative">
-                                <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                                    <svg class="h-5 w-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
-                                    </svg>
-                                </div>
-                                <select name="status"
-                                        class="pl-10 w-full border border-gray-300 rounded-xl py-3 px-4 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition @error('status') border-red-500 @enderror">
-                                    <option value="active" {{ old('status') == 'active' ? 'selected' : '' }}>Active</option>
-                                    <option value="completed" {{ old('status') == 'completed' ? 'selected' : '' }}>Completed</option>
-                                    <option value="cancelled" {{ old('status') == 'cancelled' ? 'selected' : '' }}>Cancelled</option>
-                                </select>
-                            </div>
-                            @error('status')
-                                <p class="mt-2 text-sm text-red-600">{{ $message }}</p>
-                            @enderror
-                        </div>
-                    </div>
-                </div>
-
-                {{-- Content Section --}}
-                <div class="space-y-6">
-                    <div class="flex items-center gap-3">
-                        <div class="p-2 bg-green-100 rounded-lg">
-                            <svg class="w-5 h-5 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 8h10M7 12h4m1 8l-4-4H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-3l-4 4z"/>
-                            </svg>
-                        </div>
-                        <h2 class="text-lg font-semibold text-gray-900">Content</h2>
-                    </div>
-
-                    {{-- Description --}}
-                    <div>
-                        <label class="block text-sm font-medium text-gray-700 mb-2">
-                            Full Description
-                            <span class="text-red-500">*</span>
-                        </label>
-                        <textarea name="description"
-                                  rows="6"
-                                  class="w-full border border-gray-300 rounded-xl py-3 px-4 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition resize-vertical @error('description') border-red-500 @enderror"
-                                  placeholder="Describe the workshop in detail, including agenda, learning objectives, and requirements"
-                                  required>{{ old('description') }}</textarea>
-                        <div class="mt-2 flex items-center justify-between text-sm text-gray-500">
-                            <span>Detailed information about the workshop</span>
-                            <span id="descCharCount">{{ strlen(old('description')) }}/5000</span>
-                        </div>
-                        @error('description')
-                            <p class="mt-2 text-sm text-red-600">{{ $message }}</p>
-                        @enderror
-                    </div>
-
-                    {{-- Short Description --}}
-                    <div>
-                        <label class="block text-sm font-medium text-gray-700 mb-2">
-                            Short Description
-                        </label>
-                        <textarea name="short_description"
-                                  rows="3"
-                                  class="w-full border border-gray-300 rounded-xl py-3 px-4 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition resize-vertical @error('short_description') border-red-500 @enderror"
-                                  placeholder="Brief summary for listings and previews">{{ old('short_description') }}</textarea>
-                        <div class="mt-2 flex items-center justify-between text-sm text-gray-500">
-                            <span>Brief summary for cards and listings</span>
-                            <span id="shortDescCharCount">{{ strlen(old('short_description')) }}/500</span>
-                        </div>
-                        @error('short_description')
-                            <p class="mt-2 text-sm text-red-600">{{ $message }}</p>
-                        @enderror
-                    </div>
-                </div>
-
-                {{-- Media Section --}}
-                <div class="space-y-6">
-                    <div class="flex items-center gap-3">
-                        <div class="p-2 bg-orange-100 rounded-lg">
-                            <svg class="w-5 h-5 text-orange-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"/>
-                            </svg>
-                        </div>
-                        <h2 class="text-lg font-semibold text-gray-900">Media</h2>
-                    </div>
-
-                    <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
-                        {{-- Image Upload with Drag & Drop --}}
-                        <div>
-                            <label class="block text-sm font-medium text-gray-700 mb-4">
-                                Workshop Image
-                                <span class="text-sm font-normal text-gray-500">(Recommended)</span>
-                            </label>
-                            
-                            <div class="border-2 border-dashed border-gray-300 rounded-2xl p-8 text-center hover:border-blue-400 hover:bg-blue-50 transition-colors"
-                                 id="dropzone">
-                                <div class="space-y-4">
-                                    <div class="mx-auto w-12 h-12 bg-blue-100 rounded-full flex items-center justify-center">
-                                        <svg class="w-6 h-6 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12"/>
-                                        </svg>
-                                    </div>
-                                    <div class="space-y-2">
-                                        <p class="text-sm font-medium text-gray-900">
-                                            <label for="image" class="cursor-pointer text-blue-600 hover:text-blue-700">
-                                                Click to upload
-                                            </label>
-                                            or drag and drop[citation:3]
-                                        </p>
-                                        <p class="text-xs text-gray-500">PNG, JPG, GIF up to 5MB</p>
-                                    </div>
-                                </div>
-                                <input type="file"
-                                       name="image"
-                                       id="image"
-                                       class="hidden"
-                                       accept="image/*">
-                                <div id="fileName" class="mt-4 text-sm text-gray-600 hidden"></div>
-                                <div id="imagePreview" class="mt-4"></div>
-                            </div>
-                            @error('image')
-                                <p class="mt-2 text-sm text-red-600">{{ $message }}</p>
-                            @enderror
-                        </div>
-
-                        {{-- YouTube Video URL --}}
-                        <div>
-                            <label class="block text-sm font-medium text-gray-700 mb-4">
-                                YouTube Embed URL
-                                <span class="text-sm font-normal text-gray-500">(Optional)</span>
-                            </label>
-                            <div class="relative">
-                                <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                                    <svg class="h-5 w-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 10l4.553-2.276A1 1 0 0121 8.618v6.764a1 1 0 01-1.447.894L15 14M5 18h8a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v8a2 2 0 002 2z"/>
-                                    </svg>
-                                </div>
-                                <input type="text"
-                                       name="video"
-                                       value="{{ old('video') }}"
-                                       class="pl-10 w-full border border-gray-300 rounded-xl py-3 px-4 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition @error('video') border-red-500 @enderror"
-                                       placeholder="https://www.youtube.com/embed/...">
-                            </div>
-                            <p class="mt-2 text-sm text-gray-500">Use the embed URL from YouTube</p>
-                            @error('video')
-                                <p class="mt-2 text-sm text-red-600">{{ $message }}</p>
-                            @enderror
-                        </div>
-                    </div>
-                </div>
-
-                {{-- Settings Section --}}
-                <div class="space-y-6">
-                    <div class="flex items-center gap-3">
-                        <div class="p-2 bg-indigo-100 rounded-lg">
-                            <svg class="w-5 h-5 text-indigo-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"/>
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/>
-                            </svg>
-                        </div>
-                        <h2 class="text-lg font-semibold text-gray-900">Settings</h2>
-                    </div>
-
-                    {{-- Featured & Registration --}}
-                    <div class="bg-gray-50 rounded-xl p-6 space-y-6">
-                        <div class="flex items-center justify-between">
-                            <div class="space-y-1">
-                                <label class="flex items-center gap-3 cursor-pointer">
-                                    <div class="relative">
-                                        <input type="checkbox"
-                                               name="is_featured"
-                                               value="1"
-                                               class="sr-only peer"
-                                               {{ old('is_featured') ? 'checked' : '' }}>
-                                        <div class="w-10 h-5 bg-gray-300 peer-focus:outline-none peer-focus:ring-2 peer-focus:ring-blue-500 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-4 after:w-4 after:transition-all peer-checked:bg-blue-600"></div>
-                                    </div>
-                                    <div>
-                                        <span class="text-sm font-medium text-gray-900">Featured Workshop</span>
-                                        <p class="text-xs text-gray-500">Show this workshop prominently on the homepage</p>
-                                    </div>
-                                </label>
-                            </div>
-                        </div>
-
-                        <div class="flex items-center justify-between">
-                            <div class="space-y-1">
-                                <label class="flex items-center gap-3 cursor-pointer">
-                                    <div class="relative">
-                                        <input type="checkbox"
-                                               name="registration_open"
-                                               value="1"
-                                               class="sr-only peer"
-                                               {{ old('registration_open', true) ? 'checked' : '' }}>
-                                        <div class="w-10 h-5 bg-gray-300 peer-focus:outline-none peer-focus:ring-2 peer-focus:ring-blue-500 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-4 after:w-4 after:transition-all peer-checked:bg-blue-600"></div>
-                                    </div>
-                                    <div>
-                                        <span class="text-sm font-medium text-gray-900">Registration Open</span>
-                                        <p class="text-xs text-gray-500">Allow users to register for this workshop</p>
-                                    </div>
-                                </label>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            {{-- Form Footer --}}
-            <div class="px-8 py-6 bg-gray-50 border-t border-gray-200">
-                <div class="flex flex-col sm:flex-row items-center justify-between gap-4">
-                    <div class="text-sm text-gray-500">
-                        <p><span class="text-red-500">*</span> Required fields</p>
-                    </div>
-                    <div class="flex items-center gap-3">
-                        <a href="{{ route('admin.workshops.index') }}"
-                           class="px-6 py-3 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-xl hover:bg-gray-50 hover:shadow-sm transition-all">
-                            Cancel
-                        </a>
-                        <button type="submit"
-                                class="px-6 py-3 text-sm font-medium text-white bg-gradient-to-r from-green-600 to-emerald-700 rounded-xl hover:from-green-700 hover:to-emerald-800 hover:shadow-lg transition-all shadow-sm flex items-center gap-2">
-                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>
-                            </svg>
-                            Create Workshop
-                        </button>
-                    </div>
-                </div>
-            </div>
-        </form>
-    </div>
-
-    {{-- Help Section --}}
-    <div class="mt-8 bg-blue-50 border border-blue-200 rounded-xl p-6">
-        <div class="flex items-start gap-3">
-            <svg class="w-5 h-5 text-blue-600 mt-0.5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
-            </svg>
-            <div class="space-y-2">
-                <h3 class="font-medium text-blue-900">Tips for creating a successful workshop</h3>
-                <ul class="text-sm text-blue-700 space-y-1 list-disc pl-5">
-                    <li>Use a clear, descriptive title that communicates the workshop's value</li>
-                    <li>Add a compelling image to increase engagement and registrations</li>
-                    <li>Be specific about duration, level, and what participants will learn</li>
-                    <li>Set realistic seat limits based on your venue or online capacity</li>
-                    <li>Mark as "Featured" for high-visibility on the homepage</li>
-                </ul>
-            </div>
-        </div>
-    </div>
 </div>
-
-@push('scripts')
-<script>
-    // Character count for descriptions
-    document.addEventListener('DOMContentLoaded', function() {
-        const description = document.querySelector('textarea[name="description"]');
-        const shortDescription = document.querySelector('textarea[name="short_description"]');
-        const descCharCount = document.getElementById('descCharCount');
-        const shortDescCharCount = document.getElementById('shortDescCharCount');
-        
-        description?.addEventListener('input', function() {
-            descCharCount.textContent = this.value.length + '/5000';
-        });
-
-        shortDescription?.addEventListener('input', function() {
-            shortDescCharCount.textContent = this.value.length + '/500';
-        });
-
-        // Drag & drop file upload functionality[citation:3]
-        const dropzone = document.getElementById('dropzone');
-        const fileInput = document.getElementById('image');
-        const fileName = document.getElementById('fileName');
-        const imagePreview = document.getElementById('imagePreview');
-
-        dropzone?.addEventListener('click', () => fileInput.click());
-        
-        fileInput?.addEventListener('change', function(e) {
-            if (this.files.length > 0) {
-                handleFiles(this.files);
-            }
-        });
-
-        // Drag and drop events[citation:3]
-        ['dragenter', 'dragover', 'dragleave', 'drop'].forEach(eventName => {
-            dropzone?.addEventListener(eventName, preventDefaults, false);
-        });
-
-        function preventDefaults(e) {
-            e.preventDefault();
-            e.stopPropagation();
-        }
-
-        ['dragenter', 'dragover'].forEach(eventName => {
-            dropzone?.addEventListener(eventName, highlight, false);
-        });
-
-        ['dragleave', 'drop'].forEach(eventName => {
-            dropzone?.addEventListener(eventName, unhighlight, false);
-        });
-
-        function highlight() {
-            dropzone.classList.add('border-blue-400', 'bg-blue-50');
-        }
-
-        function unhighlight() {
-            dropzone.classList.remove('border-blue-400', 'bg-blue-50');
-        }
-
-        dropzone?.addEventListener('drop', handleDrop, false);
-
-        function handleDrop(e) {
-            const dt = e.dataTransfer;
-            const files = dt.files;
-            
-            if (files.length > 0) {
-                handleFiles(files);
-                fileInput.files = files;
-            }
-        }
-
-        function handleFiles(files) {
-            const file = files[0];
-            
-            if (!file.type.startsWith('image/')) {
-                alert('Please select an image file');
-                return;
-            }
-
-            if (file.size > 5 * 1024 * 1024) {
-                alert('File size must be less than 5MB');
-                return;
-            }
-
-            fileName.textContent = `Selected: ${file.name}`;
-            fileName.classList.remove('hidden');
-
-            // Preview image
-            const reader = new FileReader();
-            reader.onload = function(e) {
-                imagePreview.innerHTML = `
-                    <div class="relative group">
-                        <img src="${e.target.result}" 
-                             alt="Preview" 
-                             class="w-full h-64 object-cover rounded-2xl border-2 border-gray-200 shadow-sm">
-                        <div class="absolute inset-0 bg-black bg-opacity-40 opacity-0 group-hover:opacity-100 transition-opacity rounded-2xl flex items-center justify-center">
-                            <span class="text-white font-medium">Image Preview</span>
-                        </div>
-                    </div>
-                `;
-            };
-            reader.readAsDataURL(file);
-        }
-
-        // Bootstrap form validation[citation:2][citation:9]
-        (function () {
-            'use strict'
-            const forms = document.querySelectorAll('.needs-validation')
-            
-            Array.from(forms).forEach(function (form) {
-                form.addEventListener('submit', function (event) {
-                    if (!form.checkValidity()) {
-                        event.preventDefault()
-                        event.stopPropagation()
-                    }
-                    
-                    form.classList.add('was-validated')
-                }, false)
-            })
-        })()
-    });
-</script>
-@endpush
 
 @endsection

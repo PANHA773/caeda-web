@@ -19,6 +19,8 @@ use App\Http\Controllers\TeamController;
 use App\Http\Controllers\PartnersController;
 use App\Http\Controllers\WorkshopController;
 use App\Http\Controllers\SpeakersController;
+use App\Http\Controllers\MenuController;
+use App\Http\Controllers\AchieveController;
 
 // Admin Controllers
 use App\Http\Controllers\Admin\AboutAdminController;
@@ -53,6 +55,14 @@ use App\Http\Controllers\Admin\AccreditationController;
 use App\Http\Controllers\Admin\HeroController;
 use App\Http\Controllers\Admin\ImpactStoryController;
 use App\Http\Controllers\Admin\DonorController;
+use App\Http\Controllers\Admin\MenuCategoryController;
+use App\Http\Controllers\Admin\MilestoneController;
+use App\Http\Controllers\Admin\AwardController;
+use App\Http\Controllers\Admin\SuccessStoryController;
+use App\Http\Controllers\Admin\HeroAchievementController;
+use App\Http\Controllers\Admin\ProgressMetricsController;
+use App\Http\Controllers\Admin\UpcomingWorkshopController;
+use App\Http\Controllers\Admin\WorkshopBenefitController;
 
 
 // ==============================
@@ -82,6 +92,12 @@ Route::get('/our-team', [TeamController::class, 'index'])->name('our-team');
 Route::get('/partners', [PartnersController::class, 'index'])->name('partners');
 Route::get('/events', [EventController::class, 'index'])->name('events');
 Route::get('/events/{event}', [EventController::class, 'show'])->name('events.show');
+
+
+
+Route::get('/achieve', [AchieveController::class, 'index'])
+    ->name('achieve');
+
 
 
 Route::get('/speakers', [SpeakersController::class, 'index'])->name('speakers.index');
@@ -114,6 +130,9 @@ Route::get('/contact', [ContactController::class, 'index'])->name('contact');
 Route::post('/contact', [ContactController::class, 'store'])->name('contact.store');
 
 Route::post('/newsletter', [NewsletterController::class, 'subscribe'])->name('newsletter.subscribe');
+
+Route::get('/menu', [MenuController::class, 'index'])->name('menu.index');
+
 
 // Language Switcher
 Route::post('/switch-language', [LanguageController::class, 'switch'])->name('language.switch');
@@ -190,7 +209,7 @@ Route::middleware(['auth'])->prefix('admin')->name('admin.')->group(function () 
     Route::resource('social', SocialLinkController::class);
 
     // Contact Methods
-     Route::resource('contact-information', ContactMethodController::class);
+    Route::resource('contact-information', ContactMethodController::class);
 
     // FAQs
     Route::resource('faqs', FaqController::class);
@@ -211,19 +230,19 @@ Route::middleware(['auth'])->prefix('admin')->name('admin.')->group(function () 
     Route::resource('welcome_sections', WelcomeSectionController::class);
 
     // Timeline Events
-    Route::resource('timeline_events',TimelineEventController::class);
+    Route::resource('timeline_events', TimelineEventController::class);
 
     // Featured Events
     Route::resource('featured_events', FeaturedEventController::class);
 
     // Contacts from users
-    Route::resource('contacts',ContactCeadaController::class);
+    Route::resource('contacts', ContactCeadaController::class);
 
     // Leader Teams
     Route::resource('leader-teams', LeaderTeamController::class);
 
     // Value Benefits
-    Route::resource('value-benefits', ValueBenefitController::class);                                                       
+    Route::resource('value-benefits', ValueBenefitController::class);
 
     // Goals
     Route::resource('goals', GoalController::class);
@@ -238,8 +257,8 @@ Route::middleware(['auth'])->prefix('admin')->name('admin.')->group(function () 
     Route::resource('vision-missions', VisionMissionController::class);
 
     // accreditations
-    Route::resource('accreditations',AccreditationController::class);
-    
+    Route::resource('accreditations', AccreditationController::class);
+
     // heroes
     Route::resource('heroes', HeroController::class);
 
@@ -249,9 +268,21 @@ Route::middleware(['auth'])->prefix('admin')->name('admin.')->group(function () 
     // recent-donors
     Route::resource('recent-donors', DonorController::class);
 
+    Route::resource('menu-categories', MenuCategoryController::class);
 
-  
+    Route::resource('milestones', MilestoneController::class);
+
+    Route::resource('awards', AwardController::class);
+
+    Route::resource('success-stories', SuccessStoryController::class);
+
+    Route::resource('hero-achievements', HeroAchievementController::class);
+
+    Route::resource('progress-metrics', ProgressMetricsController::class);
     
-    
+
+    Route::resource('upcoming_workshops', UpcomingWorkshopController::class);
+
+    Route::resource('workshop_benefits', WorkshopBenefitController::class);
+
 });
-

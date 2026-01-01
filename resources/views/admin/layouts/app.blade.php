@@ -522,6 +522,68 @@
                     </div>
                 </div>
 
+                      <!-- Coffee Page Dropdown -->
+                <div class="relative">
+                    <button class="dropdown-btn w-full flex items-center justify-between px-4 py-3 rounded-xl text-gray-300 hover:text-white transition-all duration-200 focus:outline-none {{ request()->routeIs('admin.heroes*') || request()->routeIs('admin.recent-donors*') || request()->routeIs('admin.stories*') ? 'active' : '' }}">
+                        <span class="flex items-center space-x-3">
+                            <i class="fas fa-hand-holding-heart w-5 text-center text-lg"></i>
+                            <span class="font-medium">Coffe Page</span>
+                        </span>
+                        <i class="fas fa-chevron-down transition-transform duration-200 text-sm"></i>
+                    </button>
+
+                    <div class="dropdown-menu hidden pl-12 mt-1 space-y-1">
+                        <!-- category -->
+                        <a href="{{ route('admin.menu-categories.index') }}" class="dropdown-link flex items-center space-x-3 px-4 py-2 rounded-lg text-gray-400 hover:text-white hover:bg-gray-800 {{ request()->routeIs('admin.heroes*') ? 'active' : '' }}">
+                            <i class="fas fa-image w-5 text-center"></i>
+                            <span>Category</span>
+                        </a>
+
+                    </div>
+                </div>
+
+                
+                      <!-- Achieve Page Dropdown -->
+                <div class="relative">
+                    <button class="dropdown-btn w-full flex items-center justify-between px-4 py-3 rounded-xl text-gray-300 hover:text-white transition-all duration-200 focus:outline-none {{ request()->routeIs('admin.heroes*') || request()->routeIs('admin.recent-donors*') || request()->routeIs('admin.stories*') ? 'active' : '' }}">
+                        <span class="flex items-center space-x-3">
+                            <i class="fas fa-hand-holding-heart w-5 text-center text-lg"></i>
+                            <span class="font-medium">Achieve Page</span>
+                        </span>
+                        <i class="fas fa-chevron-down transition-transform duration-200 text-sm"></i>
+                    </button>
+
+                    <div class="dropdown-menu hidden pl-12 mt-1 space-y-1">
+                            <!-- heroStats -->
+                        <a href="{{ route('admin.hero-achievements.index') }}" class="dropdown-link flex items-center space-x-3 px-4 py-2 rounded-lg text-gray-400 hover:text-white hover:bg-gray-800 {{ request()->routeIs('admin.heroes*') ? 'active' : '' }}">
+                            <i class="fas fa-image w-5 text-center"></i>
+                            <span>Hero-Achieve</span>
+                        </a>
+                        <!-- Milestones -->
+                        <a href="{{ route('admin.milestones.index') }}" class="dropdown-link flex items-center space-x-3 px-4 py-2 rounded-lg text-gray-400 hover:text-white hover:bg-gray-800 {{ request()->routeIs('admin.heroes*') ? 'active' : '' }}">
+                            <i class="fas fa-image w-5 text-center"></i>
+                            <span>Milestones</span>
+                        </a>
+                            <!-- Award -->
+                        <a href="{{ route('admin.awards.index') }}" class="dropdown-link flex items-center space-x-3 px-4 py-2 rounded-lg text-gray-400 hover:text-white hover:bg-gray-800 {{ request()->routeIs('admin.heroes*') ? 'active' : '' }}">
+                            <i class="fas fa-image w-5 text-center"></i>
+                            <span>Award</span>
+                        </a>
+                                <!-- Progress-Metrics -->
+                        <a href="{{ route('admin.progress-metrics.index') }}" class="dropdown-link flex items-center space-x-3 px-4 py-2 rounded-lg text-gray-400 hover:text-white hover:bg-gray-800 {{ request()->routeIs('admin.heroes*') ? 'active' : '' }}">
+                            <i class="fas fa-image w-5 text-center"></i>
+                            <span>Progress-M</span>
+                        </a>
+
+                                <!-- successStories -->
+                        <a href="{{ route('admin.success-stories.index') }}" class="dropdown-link flex items-center space-x-3 px-4 py-2 rounded-lg text-gray-400 hover:text-white hover:bg-gray-800 {{ request()->routeIs('admin.heroes*') ? 'active' : '' }}">
+                            <i class="fas fa-image w-5 text-center"></i>
+                            <span>SuccessStories</span>
+                        </a>
+
+                    </div>
+                </div>
+
                 <!-- Contact Page Dropdown -->
                 <div class="relative">
                     <button class="dropdown-btn w-full flex items-center justify-between px-4 py-3 rounded-xl text-gray-300 hover:text-white transition-all duration-200 focus:outline-none {{ request()->routeIs('admin.contacts*') || request()->routeIs('admin.social*') || request()->routeIs('admin.contact-information*') || request()->routeIs('admin.faqs*') ? 'active' : '' }}">
@@ -569,6 +631,17 @@
                         <a href="{{ route('admin.workshops.index') }}" class="dropdown-link flex items-center space-x-3 px-4 py-2 rounded-lg text-gray-400 hover:text-white hover:bg-gray-800 {{ request()->routeIs('admin.workshops*') ? 'active' : '' }}">
                             <i class="fas fa-video w-5 text-center"></i>
                             <span>Workshop Videos</span>
+                        </a>
+
+                        <!-- upcoming-->
+                          <a href="{{ route('admin.upcoming_workshops.index') }}" class="dropdown-link flex items-center space-x-3 px-4 py-2 rounded-lg text-gray-400 hover:text-white hover:bg-gray-800 {{ request()->routeIs('admin.workshops*') ? 'active' : '' }}">
+                            <i class="fas fa-video w-5 text-center"></i>
+                            <span>Upcoming</span>
+                        </a>
+                              <!-- upcoming-->
+                          <a href="{{ route('admin.workshop_benefits.index') }}" class="dropdown-link flex items-center space-x-3 px-4 py-2 rounded-lg text-gray-400 hover:text-white hover:bg-gray-800 {{ request()->routeIs('admin.workshops*') ? 'active' : '' }}">
+                            <i class="fas fa-video w-5 text-center"></i>
+                            <span>Benefits</span>
                         </a>
                     </div>
                 </div>

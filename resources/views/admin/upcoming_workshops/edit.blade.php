@@ -1,9 +1,8 @@
 @extends('admin.layouts.app')
 
-@section('title', 'Edit Workshop')
+@section('title', 'Edit Upcoming Workshop')
 
 @section('content')
-
 <div class="max-w-4xl mx-auto px-6 py-8">
 
     {{-- Header --}}
@@ -24,7 +23,7 @@
     @endif
 
     {{-- Form --}}
-    <form action="{{ route('admin.workshops.update', $workshop->id) }}"
+    <form action="{{ route('admin.upcoming_workshops.update', $upcomingWorkshop->id) }}"
           method="POST"
           enctype="multipart/form-data"
           class="bg-white shadow rounded-xl p-6 space-y-6">
@@ -36,16 +35,7 @@
         <div>
             <label class="block text-sm font-medium text-gray-700">Title</label>
             <input type="text" name="title"
-                   value="{{ old('title', $workshop->title) }}"
-                   class="w-full mt-1 border rounded-lg px-4 py-2"
-                   required>
-        </div>
-
-        {{-- Category --}}
-        <div>
-            <label class="block text-sm font-medium text-gray-700">Category</label>
-            <input type="text" name="category"
-                   value="{{ old('category', $workshop->category) }}"
+                   value="{{ old('title', $upcomingWorkshop->title) }}"
                    class="w-full mt-1 border rounded-lg px-4 py-2"
                    required>
         </div>
@@ -54,42 +44,50 @@
         <div>
             <label class="block text-sm font-medium text-gray-700">Instructor</label>
             <input type="text" name="instructor"
-                   value="{{ old('instructor', $workshop->instructor) }}"
+                   value="{{ old('instructor', $upcomingWorkshop->instructor) }}"
                    class="w-full mt-1 border rounded-lg px-4 py-2"
                    required>
         </div>
 
-        {{-- Level --}}
+        {{-- Date --}}
         <div>
-            <label class="block text-sm font-medium text-gray-700">Level</label>
-            <select name="level"
-                    class="w-full mt-1 border rounded-lg px-4 py-2"
-                    required>
-                <option value="beginner" {{ $workshop->level == 'beginner' ? 'selected' : '' }}>Beginner</option>
-                <option value="intermediate" {{ $workshop->level == 'intermediate' ? 'selected' : '' }}>Intermediate</option>
-                <option value="advanced" {{ $workshop->level == 'advanced' ? 'selected' : '' }}>Advanced</option>
-            </select>
-        </div>
-
-        {{-- Video URL --}}
-        <div>
-            <label class="block text-sm font-medium text-gray-700">Video URL</label>
-            <input type="url" name="video"
-                   value="{{ old('video', $workshop->video) }}"
-                   class="w-full mt-1 border rounded-lg px-4 py-2">
+            <label class="block text-sm font-medium text-gray-700">Date</label>
+            <input type="date" name="date"
+                   value="{{ old('date', $upcomingWorkshop->date) }}"
+                   class="w-full mt-1 border rounded-lg px-4 py-2"
+                   required>
         </div>
 
         {{-- Thumbnail Preview --}}
         <div>
             <label class="block text-sm font-medium text-gray-700 mb-2">Current Thumbnail</label>
-            <img src="{{ asset('storage/'.$workshop->thumbnail) }}"
-                 class="w-48 h-28 object-cover rounded-lg border mb-3">
+            @if($upcomingWorkshop->image)
+                <img src="{{ asset('storage/'.$upcomingWorkshop->image) }}"
+                     class="w-48 h-28 object-cover rounded-lg border mb-3">
+            @endif
         </div>
 
         {{-- Upload New Thumbnail --}}
         <div>
             <label class="block text-sm font-medium text-gray-700">Change Thumbnail</label>
-            <input type="file" name="thumbnail"
+            <input type="file" name="image"
+                   class="w-full mt-1 border rounded-lg px-4 py-2"
+                   accept="image/*">
+        </div>
+
+        {{-- Instructor Image Preview --}}
+        <div>
+            <label class="block text-sm font-medium text-gray-700 mb-2">Current Instructor Image</label>
+            @if($upcomingWorkshop->instructor_image)
+                <img src="{{ asset('storage/'.$upcomingWorkshop->instructor_image) }}"
+                     class="w-28 h-28 object-cover rounded-full border mb-3">
+            @endif
+        </div>
+
+        {{-- Upload New Instructor Image --}}
+        <div>
+            <label class="block text-sm font-medium text-gray-700">Change Instructor Image</label>
+            <input type="file" name="instructor_image"
                    class="w-full mt-1 border rounded-lg px-4 py-2"
                    accept="image/*">
         </div>
@@ -97,13 +95,13 @@
         {{-- Status --}}
         <div class="flex items-center gap-3">
             <input type="checkbox" name="status" value="1"
-                   {{ old('status', $workshop->status) ? 'checked' : '' }}>
+                   {{ old('status', $upcomingWorkshop->status) ? 'checked' : '' }}>
             <label class="text-sm text-gray-700">Active</label>
         </div>
 
         {{-- Buttons --}}
         <div class="flex justify-end gap-3">
-            <a href="{{ route('admin.workshops.index') }}"
+            <a href="{{ route('admin.upcoming_workshops.index') }}"
                class="px-4 py-2 border rounded-lg text-gray-700">
                 Cancel
             </a>
@@ -115,7 +113,5 @@
         </div>
 
     </form>
-
 </div>
-
 @endsection

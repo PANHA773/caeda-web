@@ -56,6 +56,7 @@
                 ['label' => 'Donation', 'href' => route('donation.show')],
 
                 ['label' => 'Achieve', 'href' => route('achieve')],
+                 ['label' => 'Coffee', 'href' => route('coffee')],
             
             ]
         ],

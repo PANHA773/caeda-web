@@ -11,24 +11,16 @@ use Illuminate\Support\Str;
 class WorkshopCeadaController extends Controller
 {
     /**
-     * Display a listing of the workshops.
+     * Display a listing of workshops
      */
     public function index()
     {
-        $workshops = Workshop::latest()->paginate(10);
-        
-        $stats = [
-            'total' => Workshop::count(),
-            'active' => Workshop::where('status', 'active')->count(),
-            'featured' => Workshop::where('is_featured', true)->count(),
-            'videoCount' => Workshop::whereNotNull('video')->count(),
-        ];
-        
-        return view('admin.workshops.index', compact('workshops', 'stats'));
+        $workshops = Workshop::orderBy('created_at', 'desc')->paginate(10);
+        return view('admin.workshops.index', compact('workshops'));
     }
 
     /**
-     * Show the form for creating a new workshop.
+     * Show the form for creating a new workshop
      */
     public function create()
     {
@@ -36,255 +28,119 @@ class WorkshopCeadaController extends Controller
     }
 
     /**
-     * Store a newly created workshop in storage.
+     * Store a newly created workshop
      */
-    public function store(Request $request)
-    {
-        $data = $this->validateData($request);
-        
-        // Handle image upload
-        if ($request->hasFile('image')) {
-            $data['image'] = $request->file('image')->store('workshops', 'public');
-        }
-        
-        // Generate slug
-        $data['slug'] = $this->generateUniqueSlug($data['title']);
-        
-        // Handle checkbox fields
-        $data['is_featured'] = $request->has('is_featured');
-        $data['registration_open'] = $request->has('registration_open');
-        
-        // Format price (ensure it's a decimal)
-        if (isset($data['price'])) {
-            $data['price'] = number_format((float)$data['price'], 2, '.', '');
-        }
-        
-        Workshop::create($data);
-        
-        return redirect()->route('admin.workshops.index')
-            ->with('success', 'Workshop created successfully!');
+
+public function store(Request $request)
+{
+    $data = $request->validate([
+        'title' => 'required|string|max:255',
+        'category' => 'required|string|max:100',
+        'description' => 'nullable|string',
+        'instructor' => 'required|string|max:255',
+        'level' => 'required|string|max:50',
+        'duration' => 'nullable|string|max:50',
+        'date' => 'nullable|date',
+        'video_url' => 'nullable|url',
+        'image' => 'nullable|image|max:2048',
+        'instructor_image' => 'nullable|image|max:2048',
+        'rating' => 'nullable|numeric|min:0|max:5',
+        'attendees' => 'nullable|integer|min:0',
+        'status' => 'nullable|boolean',
+    ]);
+
+    $data['slug'] = Str::slug($data['title']);
+    $data['date'] = $data['date'] ?? now();
+    $data['status'] = $request->has('status');
+    $data['description'] = $data['description'] ?? ''; // <<< add this line
+
+    // Upload workshop image
+    if ($request->hasFile('image')) {
+        $data['image'] = $request->file('image')->store('workshops', 'public');
     }
 
-    /**
-     * Show the form for editing the specified workshop.
-     */
-    public function edit(Workshop $workshop)
-    {
-        return view('admin.workshops.edit', compact('workshop'));
+    // Upload instructor image
+    if ($request->hasFile('instructor_image')) {
+        $data['instructor_image'] = $request->file('instructor_image')->store('instructors', 'public');
     }
 
+    Workshop::create($data);
+
+    return redirect()
+        ->route('admin.workshops.index')
+        ->with('success', 'Workshop created successfully.');
+}
+
+public function edit(Workshop $workshop)
+{
+    return view('admin.workshops.edit', compact('workshop'));
+}
+
     /**
-     * Update the specified workshop in storage.
+     * Update the specified workshop
      */
     public function update(Request $request, Workshop $workshop)
     {
-        $data = $this->validateData($request, $workshop->id);
-        
-        // Handle image upload
+        $data = $request->validate([
+            'title' => 'required|string|max:255',
+            'category' => 'required|string|max:100',
+            'description' => 'nullable|string',
+            'instructor' => 'required|string|max:255',
+            'level' => 'required|string|max:50',
+            'duration' => 'nullable|string|max:50',
+            'date' => 'nullable|date',
+            'video_url' => 'nullable|url',
+            'image' => 'nullable|image|max:2048',
+            'instructor_image' => 'nullable|image|max:2048',
+            'rating' => 'nullable|numeric|min:0|max:5',
+            'attendees' => 'nullable|integer|min:0',
+            'status' => 'nullable|boolean',
+        ]);
+
+        $data['slug'] = Str::slug($data['title']);
+        $data['date'] = $data['date'] ?? $workshop->date ?? now(); // Keep old date if not changed
+        $data['status'] = $request->has('status');
+
+        // Replace workshop image if uploaded
         if ($request->hasFile('image')) {
-            // Delete old image if exists
             if ($workshop->image) {
                 Storage::disk('public')->delete($workshop->image);
             }
             $data['image'] = $request->file('image')->store('workshops', 'public');
         }
-        
-        // Generate slug if title changed
-        if ($data['title'] !== $workshop->title) {
-            $data['slug'] = $this->generateUniqueSlug($data['title'], $workshop->id);
+
+        // Replace instructor image if uploaded
+        if ($request->hasFile('instructor_image')) {
+            if ($workshop->instructor_image) {
+                Storage::disk('public')->delete($workshop->instructor_image);
+            }
+            $data['instructor_image'] = $request->file('instructor_image')->store('instructors', 'public');
         }
-        
-        // Handle checkbox fields
-        $data['is_featured'] = $request->has('is_featured');
-        $data['registration_open'] = $request->has('registration_open');
-        
-        // Format price
-        if (isset($data['price'])) {
-            $data['price'] = number_format((float)$data['price'], 2, '.', '');
-        }
-        
+
         $workshop->update($data);
-        
-        return redirect()->route('admin.workshops.index')
-            ->with('success', 'Workshop updated successfully!');
+
+        return redirect()
+            ->route('admin.workshops.index')
+            ->with('success', 'Workshop updated successfully.');
     }
 
     /**
-     * Remove the specified workshop from storage.
+     * Remove the specified workshop
      */
     public function destroy(Workshop $workshop)
     {
-        // Delete image if exists
         if ($workshop->image) {
             Storage::disk('public')->delete($workshop->image);
         }
-        
+
+        if ($workshop->instructor_image) {
+            Storage::disk('public')->delete($workshop->instructor_image);
+        }
+
         $workshop->delete();
-        
-        return redirect()->route('admin.workshops.index')
-            ->with('success', 'Workshop deleted successfully!');
-    }
 
-    /**
-     * Validate workshop data.
-     */
-    private function validateData(Request $request, $id = null)
-    {
-        $rules = [
-            'title' => 'required|string|max:255',
-            'category' => 'required|string|in:technology,buddhist,education,research,creative,wellness',
-            'instructor' => 'required|string|max:255',
-            'date' => 'required|date',
-            'duration' => 'required|string|max:100',
-            'level' => 'required|string|in:beginner,intermediate,advanced,all',
-            'image' => 'nullable|image|mimes:jpeg,png,jpg,gif,webp|max:5120', // 5MB
-            'video' => 'nullable|url|max:500',
-            'description' => 'required|string|min:50|max:5000',
-            'short_description' => 'nullable|string|max:500',
-            'price' => 'nullable|numeric|min:0',
-            'seats_available' => 'nullable|integer|min:0',
-            'status' => 'required|string|in:active,completed,cancelled',
-            'is_featured' => 'sometimes|boolean',
-            'registration_open' => 'sometimes|boolean',
-            'location' => 'nullable|string|max:255',
-            'language' => 'nullable|string|max:100',
-        ];
-        
-        // Add unique validation for title if needed
-        if ($id) {
-            $rules['title'] = 'required|string|max:255|unique:workshops,title,' . $id;
-        } else {
-            $rules['title'] = 'required|string|max:255|unique:workshops,title';
-        }
-        
-        return $request->validate($rules);
-    }
-
-    /**
-     * Generate a unique slug for the workshop.
-     */
-    private function generateUniqueSlug($title, $excludeId = null)
-    {
-        $slug = Str::slug($title);
-        $originalSlug = $slug;
-        $counter = 1;
-        
-        while (Workshop::where('slug', $slug)
-                ->when($excludeId, function ($query) use ($excludeId) {
-                    return $query->where('id', '!=', $excludeId);
-                })
-                ->exists()) {
-            $slug = $originalSlug . '-' . $counter++;
-        }
-        
-        return $slug;
-    }
-
-    /**
-     * Toggle workshop featured status (AJAX).
-     */
-    public function toggleFeatured(Workshop $workshop)
-    {
-        $workshop->update([
-            'is_featured' => !$workshop->is_featured
-        ]);
-        
-        $status = $workshop->is_featured ? 'featured' : 'unfeatured';
-        
-        return response()->json([
-            'success' => true,
-            'message' => "Workshop {$status} successfully!",
-            'is_featured' => $workshop->is_featured
-        ]);
-    }
-
-    /**
-     * Toggle workshop registration status (AJAX).
-     */
-    public function toggleRegistration(Workshop $workshop)
-    {
-        $workshop->update([
-            'registration_open' => !$workshop->registration_open
-        ]);
-        
-        $status = $workshop->registration_open ? 'open' : 'closed';
-        
-        return response()->json([
-            'success' => true,
-            'message' => "Registration {$status} successfully!",
-            'registration_open' => $workshop->registration_open
-        ]);
-    }
-
-    /**
-     * Bulk delete workshops.
-     */
-    public function bulkDelete(Request $request)
-    {
-        $request->validate([
-            'ids' => 'required|array',
-            'ids.*' => 'exists:workshops,id'
-        ]);
-        
-        $workshops = Workshop::whereIn('id', $request->ids)->get();
-        
-        foreach ($workshops as $workshop) {
-            if ($workshop->image) {
-                Storage::disk('public')->delete($workshop->image);
-            }
-            $workshop->delete();
-        }
-        
-        return response()->json([
-            'success' => true,
-            'message' => count($request->ids) . ' workshop(s) deleted successfully!'
-        ]);
-    }
-
-    /**
-     * Export workshops to CSV/Excel.
-     */
-    public function export()
-    {
-        $workshops = Workshop::all();
-        
-        $headers = [
-            'Content-Type' => 'text/csv',
-            'Content-Disposition' => 'attachment; filename=workshops_' . date('Y-m-d') . '.csv',
-        ];
-        
-        $callback = function() use ($workshops) {
-            $file = fopen('php://output', 'w');
-            
-            // Add CSV headers
-            fputcsv($file, [
-                'ID', 'Title', 'Category', 'Instructor', 'Date', 'Duration', 'Level',
-                'Price', 'Seats Available', 'Status', 'Featured', 'Registration Open',
-                'Created At'
-            ]);
-            
-            // Add data rows
-            foreach ($workshops as $workshop) {
-                fputcsv($file, [
-                    $workshop->id,
-                    $workshop->title,
-                    $workshop->category,
-                    $workshop->instructor,
-                    $workshop->date->format('Y-m-d'),
-                    $workshop->duration,
-                    $workshop->level,
-                    $workshop->price,
-                    $workshop->seats_available,
-                    $workshop->status,
-                    $workshop->is_featured ? 'Yes' : 'No',
-                    $workshop->registration_open ? 'Yes' : 'No',
-                    $workshop->created_at->format('Y-m-d H:i:s')
-                ]);
-            }
-            
-            fclose($file);
-        };
-        
-        return response()->stream($callback, 200, $headers);
+        return redirect()
+            ->route('admin.workshops.index')
+            ->with('success', 'Workshop deleted successfully.');
     }
 }
