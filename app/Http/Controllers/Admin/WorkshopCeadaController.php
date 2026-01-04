@@ -20,6 +20,35 @@ class WorkshopCeadaController extends Controller
     }
 
     /**
+     * Normalize common video URLs to an embeddable URL.
+     * Supports YouTube (watch/ and youtu.be) and Vimeo.
+     */
+    private function normalizeVideoUrl(?string $url): ?string
+    {
+        if (empty($url)) {
+            return null;
+        }
+
+        // YouTube watch URL -> embed
+        if (preg_match('#(?:https?://)?(?:www\.)?youtube\.com/watch\?v=([A-Za-z0-9_\-]+)#i', $url, $m)) {
+            return 'https://www.youtube.com/embed/' . $m[1];
+        }
+
+        // YouTube short url youtu.be/ID
+        if (preg_match('#(?:https?://)?(?:www\.)?youtu\.be/([A-Za-z0-9_\-]+)#i', $url, $m)) {
+            return 'https://www.youtube.com/embed/' . $m[1];
+        }
+
+        // Vimeo standard URL -> player embed
+        if (preg_match('#(?:https?://)?(?:www\.)?vimeo\.com/(?:channels/[A-Za-z0-9_\-]+/)?(\d+)#i', $url, $m)) {
+            return 'https://player.vimeo.com/video/' . $m[1];
+        }
+
+        // If it's already an embed URL or unknown host, return as-is
+        return $url;
+    }
+
+    /**
      * Show the form for creating a new workshop
      */
     public function create()
@@ -53,6 +82,12 @@ public function store(Request $request)
     $data['date'] = $data['date'] ?? now();
     $data['status'] = $request->has('status');
     $data['description'] = $data['description'] ?? ''; // <<< add this line
+
+    // If admin provided a video_url input, normalize and map it to the `video` attribute used by the model
+    if (!empty($data['video_url'])) {
+        $data['video'] = $this->normalizeVideoUrl($data['video_url']);
+    }
+    unset($data['video_url']);
 
     // Upload workshop image
     if ($request->hasFile('image')) {
@@ -116,6 +151,12 @@ public function edit(Workshop $workshop)
             }
             $data['instructor_image'] = $request->file('instructor_image')->store('instructors', 'public');
         }
+
+        // Map video_url to video when updating (only when provided)
+        if (array_key_exists('video_url', $data)) {
+            $data['video'] = $data['video_url'] ? $this->normalizeVideoUrl($data['video_url']) : $workshop->video;
+        }
+        unset($data['video_url']);
 
         $workshop->update($data);
 

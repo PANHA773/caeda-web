@@ -42,4 +42,15 @@ class NewsController extends Controller
         // Return JSON for AJAX
         return response()->json(['likes' => $news->likes, 'is_liked' => $liked]);
     }
+
+    public function show(News $news)
+    {
+        // eager load comments
+        $news->load('commentsList');
+
+        // set liked flag from session
+        $news->is_liked = session()->get('liked_news_' . $news->id, false);
+
+        return view('news.show', ['post' => $news]);
+    }
 }

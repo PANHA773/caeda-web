@@ -1,6 +1,6 @@
 @extends('admin.layouts.app')
 
-@section('title', 'Create Workshop')
+@section('title', 'Create Good')
 
 @section('content')
 
@@ -8,8 +8,8 @@
 
     {{-- Header --}}
     <div class="mb-6">
-        <h1 class="text-2xl font-bold text-gray-800">Create Workshop</h1>
-        <p class="text-gray-500">Add a new workshop</p>
+        <h1 class="text-2xl font-bold text-gray-800">Create Good</h1>
+        <p class="text-gray-500">Add a new good</p>
     </div>
 
     {{-- Error Messages --}}
@@ -131,7 +131,7 @@
 
             <button type="submit"
                     class="px-6 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700">
-                Save Workshop
+                Save Good
             </button>
         </div>
 

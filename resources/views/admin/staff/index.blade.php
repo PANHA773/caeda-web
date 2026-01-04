@@ -143,8 +143,8 @@
                         <td class="px-6 py-4">
                             <div class="flex items-center gap-4">
                                 <div class="relative">
-                                    @if($member->image_url)
-                                        <img src="{{ $member->image_url }}" 
+                                    @if($member->image && file_exists(public_path('storage/' . $member->image)))
+                                        <img src="{{ asset('storage/' . $member->image) }}" 
                                              alt="{{ $member->name }}" 
                                              class="w-12 h-12 rounded-xl object-cover border-2 border-white shadow">
                                     @else

@@ -40,7 +40,9 @@ class WorkshopSeeder extends Seeder
                 'rating' => 4.9,
                 'instructor_image' => 'https://images.unsplash.com/photo-1545235617-9465d2a55698',
                 'order' => 2,
+                
             ],
         ]);
     }
 }
+

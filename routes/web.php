@@ -21,6 +21,7 @@ use App\Http\Controllers\WorkshopController;
 use App\Http\Controllers\SpeakersController;
 use App\Http\Controllers\MenuController;
 use App\Http\Controllers\AchieveController;
+use App\Http\Controllers\CoffeeController;
 
 // Admin Controllers
 use App\Http\Controllers\Admin\AboutAdminController;
@@ -63,6 +64,13 @@ use App\Http\Controllers\Admin\HeroAchievementController;
 use App\Http\Controllers\Admin\ProgressMetricsController;
 use App\Http\Controllers\Admin\UpcomingWorkshopController;
 use App\Http\Controllers\Admin\WorkshopBenefitController;
+use App\Http\Controllers\Admin\TestimonialController;
+use App\Http\Controllers\Admin\WhyChooseUsController;
+use App\Http\Controllers\Admin\OrderStepController;
+use App\Http\Controllers\Admin\LocationController;
+use App\Http\Controllers\Admin\FeaturedMenuController;
+use App\Http\Controllers\Admin\DashboardController;
+use App\Http\Controllers\Admin\NewsAdminController;
 
 
 // ==============================
@@ -81,7 +89,7 @@ Route::view('/volunteer', 'volunteer')->name('volunteer.signup');
 Route::view('/resources', 'resources')->name('resources.download');
 Route::view('/achieve', 'achieve')->name('achieve');
 Route::view('/contact', 'contact')->name('contact');
-Route::view('/coffee', 'coffee')->name('coffee');
+// Route::view('/coffee', 'coffee')->name('coffee');
 
 // Dynamic Pages
 Route::get('/workshop', [WorkshopController::class, 'index'])->name('workshop');
@@ -92,6 +100,8 @@ Route::get('/our-team', [TeamController::class, 'index'])->name('our-team');
 Route::get('/partners', [PartnersController::class, 'index'])->name('partners');
 Route::get('/events', [EventController::class, 'index'])->name('events');
 Route::get('/events/{event}', [EventController::class, 'show'])->name('events.show');
+Route::get('/coffee', [CoffeeController::class, 'index'])->name('coffee');
+
 
 
 
@@ -104,6 +114,7 @@ Route::get('/speakers', [SpeakersController::class, 'index'])->name('speakers.in
 Route::get('/speakers/{speaker}', [SpeakersController::class, 'show'])->name('speakers.show');
 
 Route::get('/news', [NewsController::class, 'index'])->name('news');
+Route::get('/news/{news:slug}', [NewsController::class, 'show'])->name('news.show');
 
 
 // News interactions
@@ -164,10 +175,15 @@ Route::middleware(['auth'])->group(function () {
 // ==============================
 // PROTECTED ADMIN ROUTES
 // ==============================
-Route::middleware(['auth'])->prefix('admin')->name('admin.')->group(function () {
+Route::middleware(['auth', \App\Http\Middleware\AdminTokenMiddleware::class])->prefix('admin')->name('admin.')->group(function () {
 
     // Dashboard
     Route::get('/', [AboutAdminController::class, 'index'])->name('dashboard');
+    
+    // Activity (Recent Activity listing)
+    Route::get('activities', [\App\Http\Controllers\Admin\ActivityController::class, 'index'])->name('activity.index');
+  
+
 
     //Hero Carousel
     Route::resource('hero_carousels', HeroCarouselController::class);
@@ -204,6 +220,9 @@ Route::middleware(['auth'])->prefix('admin')->name('admin.')->group(function () 
 
     // Workshops
     Route::resource('workshops', WorkshopCeadaController::class);
+
+    // Menu Items (admin CRUD)
+    Route::resource('menu_items', \App\Http\Controllers\Admin\MenuItemController::class);
 
     // Social Links
     Route::resource('social', SocialLinkController::class);
@@ -284,5 +303,17 @@ Route::middleware(['auth'])->prefix('admin')->name('admin.')->group(function () 
     Route::resource('upcoming_workshops', UpcomingWorkshopController::class);
 
     Route::resource('workshop_benefits', WorkshopBenefitController::class);
+
+    Route::resource('testimonials', TestimonialController::class);
+
+    Route::resource('why_choose_us', WhyChooseUsController::class);
+
+    Route::resource('order_steps', OrderStepController::class);
+
+    Route::resource('locations', LocationController ::class);
+
+    Route::resource('featured_menus', FeaturedMenuController::class);
+    // News (Admin CRUD)
+    Route::resource('news', NewsAdminController::class);
 
 });

@@ -1,6 +1,6 @@
 @extends('admin.layouts.app')
 
-@section('title', 'Edit Workshop')
+@section('title', 'Edit Good')
 
 @section('content')
 
@@ -8,8 +8,8 @@
 
     {{-- Header --}}
     <div class="mb-6">
-        <h1 class="text-2xl font-bold text-gray-800">Edit Workshop</h1>
-        <p class="text-gray-500">Update workshop information</p>
+        <h1 class="text-2xl font-bold text-gray-800">Edit Good</h1>
+        <p class="text-gray-500">Update good information</p>
     </div>
 
     {{-- Error Messages --}}
@@ -74,22 +74,33 @@
         {{-- Video URL --}}
         <div>
             <label class="block text-sm font-medium text-gray-700">Video URL</label>
-            <input type="url" name="video"
-                   value="{{ old('video', $workshop->video) }}"
+            <input type="url" name="video_url"
+                   value="{{ old('video_url', $workshop->video) }}"
                    class="w-full mt-1 border rounded-lg px-4 py-2">
         </div>
 
-        {{-- Thumbnail Preview --}}
+        {{-- Current Image Preview --}}
         <div>
-            <label class="block text-sm font-medium text-gray-700 mb-2">Current Thumbnail</label>
-            <img src="{{ asset('storage/'.$workshop->thumbnail) }}"
-                 class="w-48 h-28 object-cover rounded-lg border mb-3">
+            <label class="block text-sm font-medium text-gray-700 mb-2">Current Image</label>
+            @php
+                $img = $workshop->image ?? null;
+                $imgPath = $img ? public_path('storage/' . $img) : null;
+                $hasImg = $imgPath && file_exists($imgPath);
+            @endphp
+            @if($hasImg)
+                <img src="{{ asset('storage/'.$workshop->image) }}"
+                     class="w-48 h-28 object-cover rounded-lg border mb-3">
+            @else
+                <div class="w-48 h-28 rounded-lg border mb-3 bg-gray-100 flex items-center justify-center text-gray-400">
+                    No Image
+                </div>
+            @endif
         </div>
 
-        {{-- Upload New Thumbnail --}}
+        {{-- Upload New Image --}}
         <div>
-            <label class="block text-sm font-medium text-gray-700">Change Thumbnail</label>
-            <input type="file" name="thumbnail"
+            <label class="block text-sm font-medium text-gray-700">Change Image</label>
+            <input type="file" name="image"
                    class="w-full mt-1 border rounded-lg px-4 py-2"
                    accept="image/*">
         </div>
@@ -110,7 +121,7 @@
 
             <button type="submit"
                     class="px-6 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700">
-                Update Workshop
+                Update Good
             </button>
         </div>
 

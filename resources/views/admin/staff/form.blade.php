@@ -276,7 +276,7 @@
         </div>
 
         {{-- Current Photo Display --}}
-        @if(isset($staff) && $staff->image)
+        @if(isset($staff) && $staff->image && file_exists(public_path('storage/' . $staff->image)))
             <div class="mb-6">
                 <label class="block text-sm font-medium text-gray-700 mb-2">Current Photo</label>
                 <div class="relative w-48 h-48 rounded-2xl overflow-hidden border-4 border-white shadow-lg">

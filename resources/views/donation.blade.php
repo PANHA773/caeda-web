@@ -441,7 +441,7 @@
                         </div>
 
                         <!-- Payment Method -->
-                        <div>
+                        <!-- <div>
                             <label class="block text-lg font-semibold text-gray-900 mb-4">
                                 Payment Method
                             </label>
@@ -465,7 +465,7 @@
                                 @endforeach
                             </div>
                             <input type="hidden" id="paymentMethod" name="payment_method" value="card">
-                        </div>
+                        </div> -->
 
                         <!-- Donor Information -->
                         <div>

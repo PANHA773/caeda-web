@@ -11,11 +11,16 @@
     <!-- Statistics Cards -->
     <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
         @php
+            use App\Models\Workshop;
+            use App\Models\FeaturedMenu;
+            use App\Models\Location;
+            use App\Models\User;
+
             $stats = [
-                ['label' => 'Total Pages', 'value' => 12, 'sub' => '+2 this week', 'icon' => 'fas fa-file-alt', 'bg' => 'from-indigo-500 to-purple-600', 'color' => 'indigo'],
-                ['label' => 'Team Members', 'value' => 24, 'sub' => 'Active profiles', 'icon' => 'fas fa-users', 'bg' => 'from-emerald-500 to-teal-600', 'color' => 'emerald'],
-                ['label' => 'Monthly Visits', 'value' => '1.2K', 'sub' => '+15% growth', 'icon' => 'fas fa-chart-line', 'bg' => 'from-amber-500 to-orange-600', 'color' => 'amber'],
-                ['label' => 'Messages', 'value' => 8, 'sub' => 'New today', 'icon' => 'fas fa-envelope', 'bg' => 'from-pink-500 to-rose-600', 'color' => 'pink'],
+                ['label' => 'Goods', 'value' => Workshop::count(), 'sub' => 'Total goods', 'icon' => 'fas fa-coffee', 'bg' => 'from-indigo-500 to-purple-600', 'color' => 'indigo'],
+                ['label' => 'Featured Menus', 'value' => FeaturedMenu::count(), 'sub' => 'Displayed on homepage', 'icon' => 'fas fa-utensils', 'bg' => 'from-emerald-500 to-teal-600', 'color' => 'emerald'],
+                ['label' => 'Locations', 'value' => Location::count(), 'sub' => 'Active locations', 'icon' => 'fas fa-map-marker-alt', 'bg' => 'from-amber-500 to-orange-600', 'color' => 'amber'],
+                ['label' => 'Users', 'value' => User::count(), 'sub' => 'Registered users', 'icon' => 'fas fa-users', 'bg' => 'from-pink-500 to-rose-600', 'color' => 'pink'],
             ];
         @endphp
 
@@ -64,34 +69,78 @@
     </div>
 
     <!-- Recent Activity + System Status -->
+    @php
+        use Illuminate\Support\Facades\DB;
+
+        // Gather recent model changes from key models
+        $activities = collect();
+
+        foreach ([Workshop::class, FeaturedMenu::class, Location::class, User::class] as $m) {
+            if (!class_exists($m)) continue;
+            try {
+                $latest = $m::orderBy('updated_at', 'desc')->take(3)->get();
+                foreach ($latest as $item) {
+                    $label = property_exists($item, 'title') ? $item->title : (property_exists($item, 'name') ? $item->name : ($item->id ?? 'item'));
+                    $activities->push([
+                        'user' => $item->updated_by ?? 'System',
+                        'action' => 'updated',
+                        'item' => $label,
+                        'time' => $item->updated_at,
+                        'color' => 'indigo'
+                    ]);
+                }
+            } catch (\Exception $e) {
+                // ignore if model has no table or column
+            }
+        }
+
+        $recent = $activities->sortByDesc('time')->take(6);
+
+        // System metrics
+        $storageTotal = @disk_total_space(storage_path()) ?: 0;
+        $storageFree = @disk_free_space(storage_path()) ?: 0;
+        $storageUsedPercent = $storageTotal > 0 ? round((($storageTotal - $storageFree) / $storageTotal) * 100) : 0;
+
+        try {
+            DB::connection()->getPdo();
+            $dbStatus = 'Healthy';
+            $dbPercent = 100;
+        } catch (\Exception $e) {
+            $dbStatus = 'Down';
+            $dbPercent = 0;
+        }
+
+        $phpVersion = phpversion();
+        $userCount = User::count();
+        $uptime = round((time() - ($_SERVER['REQUEST_TIME'] ?? time())) / 3600); // hours since PHP process start
+    @endphp
+
     <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
         <!-- Recent Activity -->
         <div class="bg-white border border-gray-200 rounded-xl p-6">
             <div class="flex items-center justify-between mb-6">
                 <h3 class="text-lg font-semibold text-gray-900">Recent Activity</h3>
-                <a href="#" class="text-sm text-indigo-600 hover:text-indigo-800 font-medium">View All</a>
+                <a href="{{ route('admin.activity.index') }}" class="text-sm text-indigo-600 hover:text-indigo-800 font-medium">View All</a>
             </div>
             <div class="space-y-4">
-                @foreach([
-                    ['user' => 'Admin', 'action' => 'updated', 'item' => 'About page content', 'time' => '2 min ago', 'color' => 'indigo'],
-                    ['user' => 'John Doe', 'action' => 'added', 'item' => 'new team member', 'time' => '1 hour ago', 'color' => 'green'],
-                    ['user' => 'Jane Smith', 'action' => 'edited', 'item' => 'faculty information', 'time' => '3 hours ago', 'color' => 'blue'],
-                    ['user' => 'Admin', 'action' => 'published', 'item' => 'new accreditation', 'time' => 'Yesterday', 'color' => 'amber'],
-                ] as $activity)
-                <div class="flex items-center space-x-4 p-3 hover:bg-gray-50 rounded-lg transition-colors">
-                    <div class="w-10 h-10 rounded-full bg-{{ $activity['color'] }}-100 flex items-center justify-center flex-shrink-0">
-                        <i class="fas fa-user text-{{ $activity['color'] }}-600"></i>
+                @forelse($recent as $activity)
+                    <div class="flex items-center space-x-4 p-3 hover:bg-gray-50 rounded-lg transition-colors">
+                        <div class="w-10 h-10 rounded-full bg-indigo-100 flex items-center justify-center flex-shrink-0">
+                            <i class="fas fa-user text-indigo-600"></i>
+                        </div>
+                        <div class="flex-1 min-w-0">
+                            <p class="text-sm text-gray-900">
+                                <span class="font-medium">{{ $activity['user'] }}</span>
+                                <span class="text-indigo-600 font-medium">{{ $activity['action'] }}</span>
+                                {{ $activity['item'] }}
+                            </p>
+                            <p class="text-xs text-gray-500 mt-1">{{ 
+                                \Carbon\Carbon::parse($activity['time'])->diffForHumans() }}</p>
+                        </div>
                     </div>
-                    <div class="flex-1 min-w-0">
-                        <p class="text-sm text-gray-900">
-                            <span class="font-medium">{{ $activity['user'] }}</span>
-                            <span class="text-{{ $activity['color'] }}-600 font-medium">{{ $activity['action'] }}</span>
-                            {{ $activity['item'] }}
-                        </p>
-                        <p class="text-xs text-gray-500 mt-1">{{ $activity['time'] }}</p>
-                    </div>
-                </div>
-                @endforeach
+                @empty
+                    <p class="text-gray-500">No recent activity.</p>
+                @endforelse
             </div>
         </div>
 
@@ -102,38 +151,38 @@
                 <div>
                     <div class="flex justify-between items-center mb-2">
                         <span class="text-gray-700">Storage Usage</span>
-                        <span class="font-medium text-gray-900">78%</span>
+                        <span class="font-medium text-gray-900">{{ $storageUsedPercent }}%</span>
                     </div>
                     <div class="w-full bg-gray-200 rounded-full h-2">
-                        <div class="bg-indigo-600 h-2 rounded-full" style="width: 78%"></div>
+                        <div class="bg-indigo-600 h-2 rounded-full" style="width: {{ $storageUsedPercent }}%"></div>
                     </div>
                 </div>
                 <div>
                     <div class="flex justify-between items-center mb-2">
                         <span class="text-gray-700">Database</span>
-                        <span class="font-medium text-green-600">Healthy</span>
+                        <span class="font-medium {{ $dbStatus === 'Healthy' ? 'text-green-600' : 'text-red-600' }}">{{ $dbStatus }}</span>
                     </div>
                     <div class="w-full bg-gray-200 rounded-full h-2">
-                        <div class="bg-green-600 h-2 rounded-full" style="width: 100%"></div>
+                        <div class="{{ $dbStatus === 'Healthy' ? 'bg-green-600' : 'bg-red-600' }} h-2 rounded-full" style="width: {{ $dbPercent }}%"></div>
                     </div>
                 </div>
                 <div>
                     <div class="flex justify-between items-center mb-2">
-                        <span class="text-gray-700">Security</span>
-                        <span class="font-medium text-green-600">Protected</span>
+                        <span class="text-gray-700">PHP Version</span>
+                        <span class="font-medium text-gray-900">{{ $phpVersion }}</span>
                     </div>
                     <div class="w-full bg-gray-200 rounded-full h-2">
-                        <div class="bg-green-600 h-2 rounded-full" style="width: 100%"></div>
+                        <div class="bg-blue-600 h-2 rounded-full" style="width: 100%"></div>
                     </div>
                 </div>
                 <div class="grid grid-cols-2 gap-4 pt-4 border-t border-gray-200">
                     <div class="text-center p-4 bg-indigo-50 rounded-lg">
-                        <div class="text-2xl font-bold text-indigo-700">98%</div>
-                        <div class="text-sm text-indigo-600">Uptime</div>
+                        <div class="text-2xl font-bold text-indigo-700">{{ $uptime }}h</div>
+                        <div class="text-sm text-indigo-600">App Uptime</div>
                     </div>
                     <div class="text-center p-4 bg-green-50 rounded-lg">
-                        <div class="text-2xl font-bold text-green-700">24</div>
-                        <div class="text-sm text-green-600">Active Users</div>
+                        <div class="text-2xl font-bold text-green-700">{{ $userCount }}</div>
+                        <div class="text-sm text-green-600">Total Users</div>
                     </div>
                 </div>
             </div>

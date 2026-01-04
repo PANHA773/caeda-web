@@ -241,6 +241,18 @@
                 width: 280px;
             }
         }
+        /* Dark mode variable overrides when body has .dark */
+        body.dark {
+            --sidebar-bg: #0b0f14;
+            --sidebar-text: #e6eef8;
+            --sidebar-hover: #111827;
+            background: #000000;
+            color: #e6eef8;
+        }
+
+        body.dark .card { background: #071029; border-color: rgba(255,255,255,0.03); }
+        body.dark .nav-link { color: var(--sidebar-text); }
+        body.dark .dropdown-link { color: #cbd5e1; }
     </style>
 </head>
 
@@ -281,6 +293,8 @@
                     <div class="mt-1 flex items-center">
                         <span class="status-indicator status-online"></span>
                         <span class="text-xs text-gray-400">Online</span>
+                        <!-- Dark mode toggle for admin -->
+                        <button id="darkModeToggle" title="Toggle dark mode" class="ml-3 px-2 py-1 rounded bg-gray-700 text-white text-xs">🌙</button>
                     </div>
                 </div>
             </div>
@@ -299,6 +313,13 @@
                 <div class="mt-6 mb-2 px-4">
                     <p class="text-xs font-semibold text-gray-400 uppercase tracking-wider">Content Management</p>
                 </div>
+
+                <!-- News -->
+                <a href="{{ route('admin.news.index') }}"
+                    class="nav-link flex items-center space-x-3 px-4 py-3 rounded-xl text-gray-300 hover:text-white transition-all duration-200 {{ request()->routeIs('admin.news*') ? 'active' : '' }}">
+                    <i class="fas fa-newspaper w-5 text-center text-lg"></i>
+                    <span class="font-medium">News Page</span>
+                </a>
 
 
                 <!-- home Dropdown -->
@@ -522,7 +543,7 @@
                     </div>
                 </div>
 
-                      <!-- Coffee Page Dropdown -->
+                <!-- Coffee Page Dropdown -->
                 <div class="relative">
                     <button class="dropdown-btn w-full flex items-center justify-between px-4 py-3 rounded-xl text-gray-300 hover:text-white transition-all duration-200 focus:outline-none {{ request()->routeIs('admin.heroes*') || request()->routeIs('admin.recent-donors*') || request()->routeIs('admin.stories*') ? 'active' : '' }}">
                         <span class="flex items-center space-x-3">
@@ -533,19 +554,23 @@
                     </button>
 
                     <div class="dropdown-menu hidden pl-12 mt-1 space-y-1">
-                        <!-- category -->
-                        <a href="{{ route('admin.menu-categories.index') }}" class="dropdown-link flex items-center space-x-3 px-4 py-2 rounded-lg text-gray-400 hover:text-white hover:bg-gray-800 {{ request()->routeIs('admin.heroes*') ? 'active' : '' }}">
-                            <i class="fas fa-image w-5 text-center"></i>
-                            <span>Category</span>
+                        <!-- Categories -->
+                        <a href="{{ route('admin.menu-categories.index') }}" class="dropdown-link flex items-center space-x-3 px-4 py-2 rounded-lg text-gray-400 hover:text-white hover:bg-gray-800 {{ request()->routeIs('admin.menu-categories*') ? 'active' : '' }}">
+                            <i class="fas fa-list-ul w-5 text-center"></i>
+                            <span>Categories</span>
+                        </a>
+
+                        <!-- Menu Items -->
+                        <a href="{{ route('admin.menu_items.index') }}" class="dropdown-link flex items-center space-x-3 px-4 py-2 rounded-lg text-gray-400 hover:text-white hover:bg-gray-800 {{ request()->routeIs('admin.menu_items*') ? 'active' : '' }}">
+                            <i class="fas fa-utensils w-5 text-center"></i>
+                            <span>Menu Items</span>
                         </a>
 
                     </div>
                 </div>
-
-                
-                      <!-- Achieve Page Dropdown -->
+                <!-- Achieve Page Dropdown -->
                 <div class="relative">
-                    <button class="dropdown-btn w-full flex items-center justify-between px-4 py-3 rounded-xl text-gray-300 hover:text-white transition-all duration-200 focus:outline-none {{ request()->routeIs('admin.heroes*') || request()->routeIs('admin.recent-donors*') || request()->routeIs('admin.stories*') ? 'active' : '' }}">
+                    <button class="dropdown-btn w-full flex items-center justify-between px-4 py-3 rounded-xl text-gray-300 hover:text-white transition-all duration-200 focus:outline-none {{ request()->routeIs('admin.heroes*') || request()->routeIs('admin.milestones*') || request()->routeIs('admin.awards*') || request()->routeIs('admin.progress-metrics*') || request()->routeIs('admin.success-stories*') ? 'active' : '' }}">
                         <span class="flex items-center space-x-3">
                             <i class="fas fa-hand-holding-heart w-5 text-center text-lg"></i>
                             <span class="font-medium">Achieve Page</span>
@@ -554,35 +579,38 @@
                     </button>
 
                     <div class="dropdown-menu hidden pl-12 mt-1 space-y-1">
-                            <!-- heroStats -->
-                        <a href="{{ route('admin.hero-achievements.index') }}" class="dropdown-link flex items-center space-x-3 px-4 py-2 rounded-lg text-gray-400 hover:text-white hover:bg-gray-800 {{ request()->routeIs('admin.heroes*') ? 'active' : '' }}">
-                            <i class="fas fa-image w-5 text-center"></i>
-                            <span>Hero-Achieve</span>
+                        <!-- Hero Achievements -->
+                        <a href="{{ route('admin.hero-achievements.index') }}" class="dropdown-link flex items-center space-x-3 px-4 py-2 rounded-lg text-gray-400 hover:text-white hover:bg-gray-800 {{ request()->routeIs('admin.hero-achievements*') ? 'active' : '' }}">
+                            <i class="fas fa-trophy w-5 text-center"></i>
+                            <span>Hero Achievements</span>
                         </a>
+
                         <!-- Milestones -->
-                        <a href="{{ route('admin.milestones.index') }}" class="dropdown-link flex items-center space-x-3 px-4 py-2 rounded-lg text-gray-400 hover:text-white hover:bg-gray-800 {{ request()->routeIs('admin.heroes*') ? 'active' : '' }}">
-                            <i class="fas fa-image w-5 text-center"></i>
+                        <a href="{{ route('admin.milestones.index') }}" class="dropdown-link flex items-center space-x-3 px-4 py-2 rounded-lg text-gray-400 hover:text-white hover:bg-gray-800 {{ request()->routeIs('admin.milestones*') ? 'active' : '' }}">
+                            <i class="fas fa-flag-checkered w-5 text-center"></i>
                             <span>Milestones</span>
                         </a>
-                            <!-- Award -->
-                        <a href="{{ route('admin.awards.index') }}" class="dropdown-link flex items-center space-x-3 px-4 py-2 rounded-lg text-gray-400 hover:text-white hover:bg-gray-800 {{ request()->routeIs('admin.heroes*') ? 'active' : '' }}">
-                            <i class="fas fa-image w-5 text-center"></i>
-                            <span>Award</span>
-                        </a>
-                                <!-- Progress-Metrics -->
-                        <a href="{{ route('admin.progress-metrics.index') }}" class="dropdown-link flex items-center space-x-3 px-4 py-2 rounded-lg text-gray-400 hover:text-white hover:bg-gray-800 {{ request()->routeIs('admin.heroes*') ? 'active' : '' }}">
-                            <i class="fas fa-image w-5 text-center"></i>
-                            <span>Progress-M</span>
+
+                        <!-- Awards -->
+                        <a href="{{ route('admin.awards.index') }}" class="dropdown-link flex items-center space-x-3 px-4 py-2 rounded-lg text-gray-400 hover:text-white hover:bg-gray-800 {{ request()->routeIs('admin.awards*') ? 'active' : '' }}">
+                            <i class="fas fa-medal w-5 text-center"></i>
+                            <span>Awards</span>
                         </a>
 
-                                <!-- successStories -->
-                        <a href="{{ route('admin.success-stories.index') }}" class="dropdown-link flex items-center space-x-3 px-4 py-2 rounded-lg text-gray-400 hover:text-white hover:bg-gray-800 {{ request()->routeIs('admin.heroes*') ? 'active' : '' }}">
-                            <i class="fas fa-image w-5 text-center"></i>
-                            <span>SuccessStories</span>
+                        <!-- Progress Metrics -->
+                        <a href="{{ route('admin.progress-metrics.index') }}" class="dropdown-link flex items-center space-x-3 px-4 py-2 rounded-lg text-gray-400 hover:text-white hover:bg-gray-800 {{ request()->routeIs('admin.progress-metrics*') ? 'active' : '' }}">
+                            <i class="fas fa-chart-line w-5 text-center"></i>
+                            <span>Progress Metrics</span>
                         </a>
 
+                        <!-- Success Stories -->
+                        <a href="{{ route('admin.success-stories.index') }}" class="dropdown-link flex items-center space-x-3 px-4 py-2 rounded-lg text-gray-400 hover:text-white hover:bg-gray-800 {{ request()->routeIs('admin.success-stories*') ? 'active' : '' }}">
+                            <i class="fas fa-users w-5 text-center"></i>
+                            <span>Success Stories</span>
+                        </a>
                     </div>
                 </div>
+
 
                 <!-- Contact Page Dropdown -->
                 <div class="relative">
@@ -628,23 +656,71 @@
                     </button>
 
                     <div class="dropdown-menu hidden pl-12 mt-1 space-y-1">
-                        <a href="{{ route('admin.workshops.index') }}" class="dropdown-link flex items-center space-x-3 px-4 py-2 rounded-lg text-gray-400 hover:text-white hover:bg-gray-800 {{ request()->routeIs('admin.workshops*') ? 'active' : '' }}">
+                        <!-- Workshop Videos -->
+                        <a href="{{ route('admin.workshops.index') }}" class="dropdown-link flex items-center space-x-3 px-4 py-2 rounded-lg text-gray-400 hover:text-white hover:bg-gray-800 {{ request()->routeIs('admin.workshops.index') ? 'active' : '' }}">
                             <i class="fas fa-video w-5 text-center"></i>
                             <span>Workshop Videos</span>
                         </a>
 
-                        <!-- upcoming-->
-                          <a href="{{ route('admin.upcoming_workshops.index') }}" class="dropdown-link flex items-center space-x-3 px-4 py-2 rounded-lg text-gray-400 hover:text-white hover:bg-gray-800 {{ request()->routeIs('admin.workshops*') ? 'active' : '' }}">
-                            <i class="fas fa-video w-5 text-center"></i>
+                        <!-- Upcoming Workshops -->
+                        <a href="{{ route('admin.upcoming_workshops.index') }}" class="dropdown-link flex items-center space-x-3 px-4 py-2 rounded-lg text-gray-400 hover:text-white hover:bg-gray-800 {{ request()->routeIs('admin.upcoming_workshops.index') ? 'active' : '' }}">
+                            <i class="fas fa-calendar-alt w-5 text-center"></i>
                             <span>Upcoming</span>
                         </a>
-                              <!-- upcoming-->
-                          <a href="{{ route('admin.workshop_benefits.index') }}" class="dropdown-link flex items-center space-x-3 px-4 py-2 rounded-lg text-gray-400 hover:text-white hover:bg-gray-800 {{ request()->routeIs('admin.workshops*') ? 'active' : '' }}">
-                            <i class="fas fa-video w-5 text-center"></i>
+
+                        <!-- Benefits -->
+                        <a href="{{ route('admin.workshop_benefits.index') }}" class="dropdown-link flex items-center space-x-3 px-4 py-2 rounded-lg text-gray-400 hover:text-white hover:bg-gray-800 {{ request()->routeIs('admin.workshop_benefits.index') ? 'active' : '' }}">
+                            <i class="fas fa-gift w-5 text-center"></i>
                             <span>Benefits</span>
+                        </a>
+
+                        <!-- Testimonials -->
+                        <a href="{{ route('admin.testimonials.index') }}" class="dropdown-link flex items-center space-x-3 px-4 py-2 rounded-lg text-gray-400 hover:text-white hover:bg-gray-800 {{ request()->routeIs('admin.testimonials.index') ? 'active' : '' }}">
+                            <i class="fas fa-comment-dots w-5 text-center"></i>
+                            <span>Testimonials</span>
                         </a>
                     </div>
                 </div>
+
+
+                <!-- Caffe Page Dropdown -->
+                <div class="relative">
+                    <button class="dropdown-btn w-full flex items-center justify-between px-4 py-3 rounded-xl text-gray-300 hover:text-white transition-all duration-200 focus:outline-none {{ request()->routeIs('admin.workshops*') ? 'active' : '' }}">
+                        <span class="flex items-center space-x-3">
+                            <i class="fas fa-coffee w-5 text-center text-lg"></i>
+                            <span class="font-medium">ទ្រឿង</span>
+                        </span>
+                        <i class="fas fa-chevron-down transition-transform duration-200 text-sm"></i>
+                    </button>
+
+                    <div class="dropdown-menu hidden pl-12 mt-1 space-y-1">
+                        <!-- FeaturedMenu -->
+                        <a href="{{ route('admin.featured_menus.index') }}" class="dropdown-link flex items-center space-x-3 px-4 py-2 rounded-lg text-gray-400 hover:text-white hover:bg-gray-800 {{ request()->routeIs('admin.featured_menus*') ? 'active' : '' }}">
+                            <i class="fas fa-utensils w-5 text-center"></i>
+                            <span>Featured Menu</span>
+                        </a>
+
+                        <!-- Why Choose Us -->
+                        <a href="{{ route('admin.why_choose_us.index') }}" class="dropdown-link flex items-center space-x-3 px-4 py-2 rounded-lg text-gray-400 hover:text-white hover:bg-gray-800 {{ request()->routeIs('admin.why_choose_us*') ? 'active' : '' }}">
+                            <i class="fas fa-check-circle w-5 text-center"></i>
+                            <span>Why Choose Us</span>
+                        </a>
+
+                        <!-- Order Steps -->
+                        <a href="{{ route('admin.order_steps.index') }}" class="dropdown-link flex items-center space-x-3 px-4 py-2 rounded-lg text-gray-400 hover:text-white hover:bg-gray-800 {{ request()->routeIs('admin.order_steps*') ? 'active' : '' }}">
+                            <i class="fas fa-list-ol w-5 text-center"></i>
+                            <span>Order Steps</span>
+                        </a>
+
+                        <!-- Locations -->
+                        <a href="{{ route('admin.locations.index') }}" class="dropdown-link flex items-center space-x-3 px-4 py-2 rounded-lg text-gray-400 hover:text-white hover:bg-gray-800 {{ request()->routeIs('admin.locations*') ? 'active' : '' }}">
+                            <i class="fas fa-map-marker-alt w-5 text-center"></i>
+                            <span>Locations</span>
+                        </a>
+                    </div>
+                </div>
+
+
 
                 <!-- Settings -->
                 <div class="mt-6 mb-2 px-4">
@@ -932,6 +1008,21 @@
                 btn.addEventListener('click', () => {
                     window.location.reload();
                 });
+            });
+
+            // Dark mode initialization and toggle (admin)
+            const dmBtn = document.getElementById('darkModeToggle');
+            function applyTheme(t){
+                if(t === 'dark') document.body.classList.add('dark');
+                else document.body.classList.remove('dark');
+                if(dmBtn) dmBtn.textContent = document.body.classList.contains('dark') ? '☀️' : '🌙';
+            }
+            const savedTheme = localStorage.getItem('site-theme') || (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+            applyTheme(savedTheme);
+            if(dmBtn) dmBtn.addEventListener('click', function(){
+                const next = document.body.classList.contains('dark') ? 'light' : 'dark';
+                localStorage.setItem('site-theme', next);
+                applyTheme(next);
             });
         });
     </script>

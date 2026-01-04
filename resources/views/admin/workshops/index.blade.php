@@ -7,12 +7,12 @@
 <div class="max-w-7xl mx-auto px-6 py-8">
 
     {{-- Header --}}
-    <div class="flex justify-between items-center mb-6">
-        <h1 class="text-2xl font-bold text-gray-800">Workshops</h1>
+        <div class="flex justify-between items-center mb-6">
+        <h1 class="text-2xl font-bold text-gray-800">Goods</h1>
 
         <a href="{{ route('admin.workshops.create') }}"
            class="px-4 py-2 bg-blue-600 text-white rounded-lg shadow hover:bg-blue-700 transition">
-            + Add Workshop
+            + Add Good
         </a>
     </div>
 
@@ -43,9 +43,23 @@
                     {{-- Thumbnail / Video --}}
                     <div class="relative">
                         {{-- Thumbnail --}}
-                        <img id="thumb-{{ $workshop->id }}"
-                             src="{{ asset('storage/'.$workshop->image) }}"
-                             class="w-full h-44 object-cover rounded-t-xl">
+                        @php
+                            $img = $workshop->image ?? null;
+                            $imgPath = $img ? public_path('storage/' . $img) : null;
+                            $hasImg = $imgPath && file_exists($imgPath);
+                        @endphp
+
+                        @if($hasImg)
+                            <img id="thumb-{{ $workshop->id }}"
+                                 src="{{ asset('storage/'.$workshop->image) }}"
+                                 class="w-full h-44 object-cover rounded-t-xl">
+                        @else
+                            <div id="thumb-{{ $workshop->id }}" class="w-full h-44 bg-gray-100 rounded-t-xl flex items-center justify-center text-gray-400">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="w-12 h-12" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M3 10h14v6a3 3 0 0 1-3 3H6a3 3 0 0 1-3-3v-6z"></path>
+                                </svg>
+                            </div>
+                        @endif
 
                         {{-- Video --}}
                         @if($workshop->video_url)

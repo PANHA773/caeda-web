@@ -186,7 +186,7 @@
                                transform transition-all duration-500
                                group-hover:scale-110 group-hover:rotate-3"
                     >
-                        @if($member->image)
+                        @if($member->image && file_exists(public_path('storage/' . $member->image)))
                             <img
                                 src="{{ asset('storage/' . $member->image) }}"
                                 alt="{{ $member->name }}"
@@ -262,18 +262,18 @@
                 <div class="group bg-white/90 backdrop-blur-sm rounded-xl p-4 text-center border border-gray-200/50 hover:shadow-lg transition-all duration-300 hover:-translate-y-2 cursor-pointer"
                     style="animation-delay: {{ $index * 50 }}ms">
                     <div class="w-24 h-24 rounded-[15px] overflow-hidden mx-auto mb-3 relative">
-                        @if($member->image)
-                        <img src="{{ asset('storage/' . $member->image) }}"
-                            alt="{{ $member->name }}"
-                            class="w-full h-full object-cover rounded-[15px]"
-                            onerror="this.style.display='none'; this.nextElementSibling.style.display='flex'">
-                        <div class="absolute inset-0 bg-gradient-to-br from-blue-500 to-indigo-600 flex items-center justify-center text-white font-semibold text-xl hidden rounded-[15px]">
-                            {{ $initials }}
-                        </div>
+                        @if($member->image && file_exists(public_path('storage/' . $member->image)))
+                            <img src="{{ asset('storage/' . $member->image) }}"
+                                alt="{{ $member->name }}"
+                                class="w-full h-full object-cover rounded-[15px]"
+                                onerror="this.style.display='none'; this.nextElementSibling.style.display='flex'">
+                            <div class="absolute inset-0 bg-gradient-to-br from-blue-500 to-indigo-600 flex items-center justify-center text-white font-semibold text-xl hidden rounded-[15px]">
+                                {{ $initials }}
+                            </div>
                         @else
-                        <div class="w-full h-full bg-gradient-to-br from-blue-500 to-indigo-600 flex items-center justify-center text-white font-semibold text-xl rounded-[15px]">
-                            {{ $initials }}
-                        </div>
+                            <div class="w-full h-full bg-gradient-to-br from-blue-500 to-indigo-600 flex items-center justify-center text-white font-semibold text-xl rounded-[15px]">
+                                {{ $initials }}
+                            </div>
                         @endif
                     </div>
                     <p class="text-gray-800 text-sm font-medium group-hover:text-gray-900 transition-colors duration-300 leading-tight font-english">

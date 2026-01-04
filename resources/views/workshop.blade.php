@@ -462,12 +462,11 @@
     </div>
 </section>
 
-
-
-
 {{-- ================= TESTIMONIALS ================= --}}
 <section class="py-20 bg-gradient-to-br from-gray-50 via-blue-50/30 to-purple-50/30 px-4 md:px-8">
     <div class="max-w-7xl mx-auto">
+
+        {{-- Section Header --}}
         <div class="text-center mb-16 animate-fade-in-up">
             <h2 class="text-3xl md:text-4xl lg:text-5xl font-bold text-gray-900 mb-4 font-cinzel">
                 What Participants <span class="text-gradient">Say</span>
@@ -476,74 +475,79 @@
                 Hear from professionals who have transformed their skills through our workshops
             </p>
         </div>
-        
+
+        {{-- Testimonials Grid --}}
         <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
-            @php
-                $testimonials = [
-                    [
-                        'name' => 'Sokha Rin',
-                        'role' => 'Software Developer',
-                        'company' => 'Tech Solutions Inc.',
-                        'avatar' => 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?ixlib=rb-4.0.3&auto=format&fit=crop&w=200&q=80',
-                        'quote' => 'The web development workshop completely transformed my career. I went from beginner to landing my dream job in just 6 months!',
-                        'workshop' => 'Web Development Fundamentals',
-                        'rating' => 5
-                    ],
-                    [
-                        'name' => 'Bopha Chen',
-                        'role' => 'Teacher',
-                        'company' => 'International School',
-                        'avatar' => 'https://images.unsplash.com/photo-1494790108377-be9c29b29330?ixlib=rb-4.0.3&auto=format&fit=crop&w=200&q=80',
-                        'quote' => 'The Data Science for Educators workshop gave me practical skills I use every day in my classroom. Highly recommended!',
-                        'workshop' => 'Data Science for Educators',
-                        'rating' => 5
-                    ],
-                    [
-                        'name' => 'Dara Wilson',
-                        'role' => 'Researcher',
-                        'company' => 'University of Phnom Penh',
-                        'avatar' => 'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-4.0.3&auto=format&fit=crop&w=200&q=80',
-                        'quote' => 'The research methods workshop helped me publish my first academic paper. The instructors are true experts in their field.',
-                        'workshop' => 'Academic Research Methods',
-                        'rating' => 4
-                    ]
-                ];
-            @endphp
-            
-            @foreach($testimonials as $index => $testimonial)
-                <div class="group glass-effect rounded-3xl p-6 hover:shadow-xl transition-all duration-500 hover:-translate-y-2 animate-fade-in-up" style="animation-delay: {{ $index * 150 }}ms">
+            @forelse($testimonials as $index => $testimonial)
+
+                <div
+                    class="group glass-effect rounded-3xl p-6 hover:shadow-xl transition-all duration-500 hover:-translate-y-2 animate-fade-in-up"
+                    style="animation-delay: {{ $index * 150 }}ms"
+                >
+                    {{-- User Info --}}
                     <div class="flex items-center mb-6">
-                        <div class="relative w-14 h-14 rounded-full overflow-hidden border-4 border-white shadow-lg mr-4 transform transition-all duration-500 group-hover:scale-110 instructor-image">
+                        <div class="relative w-14 h-14 rounded-full overflow-hidden border-4 border-white shadow-lg mr-4 transform transition-all duration-500 group-hover:scale-110">
                             <img
-                                src="{{ $testimonial['avatar'] }}"
-                                alt="{{ $testimonial['name'] }}"
+                                src="{{ $testimonial->avatar ?: asset('images/avatar-placeholder.png') }}"
+                                alt="{{ $testimonial->name }}"
                                 class="w-full h-full object-cover"
                             />
                         </div>
+
                         <div>
-                            <h4 class="font-bold text-gray-900">{{ $testimonial['name'] }}</h4>
-                            <p class="text-sm text-gray-600">{{ $testimonial['role'] }} at {{ $testimonial['company'] }}</p>
+                            <h4 class="font-bold text-gray-900">
+                                {{ $testimonial->name }}
+                            </h4>
+                            <p class="text-sm text-gray-600">
+                                {{ $testimonial->role }}
+                                @if($testimonial->company)
+                                    at {{ $testimonial->company }}
+                                @endif
+                            </p>
                         </div>
                     </div>
-                    
+
+                    {{-- Rating --}}
                     <div class="mb-4">
-                        @for($i = 0; $i < 5; $i++)
-                            <span class="text-xl transform transition-all duration-300 {{ $i < $testimonial['rating'] ? 'text-yellow-400 group-hover:scale-125' : 'text-gray-300' }}">
+                        @for($i = 1; $i <= 5; $i++)
+                            <span
+                                class="text-xl transition-all duration-300
+                                {{ $i <= $testimonial->rating
+                                    ? 'text-yellow-400 group-hover:scale-125'
+                                    : 'text-gray-300' }}">
                                 ★
                             </span>
                         @endfor
                     </div>
-                    
-                    <p class="text-gray-600 italic mb-4 leading-relaxed group-hover:text-gray-700 transition-colors duration-300">"{{ $testimonial['quote'] }}"</p>
-                    
-                    <div class="border-t border-gray-200 pt-4">
-                        <p class="text-sm text-blue-600 font-semibold">Workshop: {{ $testimonial['workshop'] }}</p>
-                    </div>
+
+                    {{-- Quote --}}
+                    <p class="text-gray-600 italic mb-4 leading-relaxed group-hover:text-gray-700 transition-colors duration-300">
+                        “{{ $testimonial->quote }}”
+                    </p>
+
+                    {{-- Workshop --}}
+                    @if($testimonial->workshop)
+                        <div class="border-t border-gray-200 pt-4">
+                            <p class="text-sm text-blue-600 font-semibold">
+                                Workshop: {{ $testimonial->workshop }}
+                            </p>
+                        </div>
+                    @endif
                 </div>
-            @endforeach
+
+            @empty
+                <div class="col-span-3 text-center text-gray-500">
+                    No testimonials available yet.
+                </div>
+            @endforelse
         </div>
+
     </div>
 </section>
+
+
+
+
 
 {{-- ================= FINAL CTA ================= --}}
 <section class="py-20 bg-gradient-to-br from-blue-600 via-purple-600 to-indigo-700 text-white relative overflow-hidden">

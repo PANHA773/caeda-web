@@ -259,20 +259,29 @@
     </div>
 </section>
 
-
 {{-- ================= MILESTONES TIMELINE ================= --}}
-<section id="milestones" class="py-24 px-4 md:px-8 bg-gradient-to-b from-slate-50 to-white">
+<section id="milestones" class="py-28 px-4 md:px-8 bg-gradient-to-br from-slate-50 via-white to-slate-100">
     <div class="max-w-6xl mx-auto">
-        <div class="text-center mb-16 animate-fade-up">
-            <h2 class="text-4xl md:text-5xl font-display font-black text-gray-900 mb-4">
+
+        {{-- Header --}}
+        <div class="text-center mb-20 animate-fade-up">
+            <h2 class="text-4xl md:text-5xl font-extrabold tracking-tight text-gray-900 mb-5">
                 Our <span class="text-gradient">Journey</span>
             </h2>
-            <p class="text-xl text-gray-600 max-w-2xl mx-auto">
-                Key moments that shaped our legacy of excellence and innovation
+            <p class="text-lg md:text-xl text-gray-600 max-w-2xl mx-auto leading-relaxed">
+                Key moments that shaped our legacy of growth, impact, and innovation
             </p>
         </div>
 
-        <div class="relative timeline-container">
+        {{-- Timeline --}}
+        <div class="relative">
+
+            {{-- Vertical line --}}
+            <div class="hidden md:block absolute left-1/2 top-0 h-full w-[2px]
+                        bg-gradient-to-b from-blue-200 via-purple-200 to-pink-200
+                        transform -translate-x-1/2">
+            </div>
+
             @php
                 use App\Models\Milestone;
                 $milestones = Milestone::orderBy('order')->get();
@@ -280,56 +289,87 @@
 
             @foreach($milestones as $index => $milestone)
                 <div
-                    class="relative mb-16 md:mb-24 {{ $index % 2 == 0 ? 'md:ml-auto md:w-1/2 md:pl-16' : 'md:mr-auto md:w-1/2 md:pr-16' }} animate-fade-up"
-                    style="animation-delay: {{ $index * 0.1 }}s;"
+                    class="relative mb-20 md:mb-28 flex flex-col md:flex-row
+                           {{ $index % 2 == 0 ? 'md:flex-row-reverse' : '' }}
+                           animate-fade-up"
+                    style="animation-delay: {{ $index * 0.12 }}s;"
                 >
-                    <!-- Timeline dot -->
-                    <div
-                        class="absolute {{ $index % 2 == 0 ? 'md:-left-8' : 'md:-right-8' }} top-6 w-6 h-6 {{ $milestone->color }} rounded-full border-4 border-white shadow-lg z-10">
+
+                    {{-- Timeline dot --}}
+                    <div class="hidden md:flex absolute left-1/2 top-10 transform -translate-x-1/2 z-10">
+                        <span
+                            class="w-5 h-5 rounded-full border-4 border-white shadow-lg
+                                   {{ $milestone->color }}">
+                        </span>
                     </div>
 
-                    <!-- Content card -->
-                    <div class="bg-white rounded-2xl shadow-xl overflow-hidden card-hover">
-                        <div class="p-8">
-                            <div class="flex items-start justify-between mb-6">
-                                <div class="flex items-center gap-4">
-                                    <div class="{{ $milestone->color }} w-14 h-14 rounded-xl flex items-center justify-center text-2xl text-white">
+                    {{-- Card --}}
+                    <div class="w-full md:w-1/2 px-0 md:px-10">
+                        <div
+                            class="relative bg-white/80 backdrop-blur-xl rounded-3xl
+                                   shadow-lg hover:shadow-2xl transition-all duration-500
+                                   hover:-translate-y-2 overflow-hidden group"
+                        >
+
+                            <div class="p-8 md:p-10">
+
+                                {{-- Header --}}
+                                <div class="flex items-start gap-5 mb-6">
+                                    <div
+                                        class="w-14 h-14 rounded-2xl flex items-center justify-center
+                                               text-2xl text-white shadow-md {{ $milestone->color }}">
                                         {{ $milestone->icon }}
                                     </div>
+
                                     <div>
-                                        <div class="px-3 py-1 {{ $milestone->color }} bg-opacity-10 text-gray-900 rounded-full text-sm font-semibold inline-block">
+                                        <span
+                                            class="inline-block px-3 py-1 rounded-full text-sm font-semibold
+                                                   {{ $milestone->color }} bg-opacity-15 text-gray-900">
                                             {{ $milestone->year }}
-                                        </div>
-                                        <h3 class="text-2xl font-bold text-gray-900 mt-2">
+                                        </span>
+
+                                        <h3 class="text-2xl font-bold text-gray-900 mt-3">
                                             {{ $milestone->title }}
                                         </h3>
                                     </div>
                                 </div>
+
+                                {{-- Description --}}
+                                <p class="text-gray-600 leading-relaxed mb-6">
+                                    {{ $milestone->description }}
+                                </p>
+
+                                {{-- Achievements --}}
+                                @if($milestone->achievements)
+                                    <div class="flex flex-wrap gap-2">
+                                        @foreach($milestone->achievements as $achievement)
+                                            <span
+                                                class="px-4 py-1.5 rounded-full text-sm
+                                                       bg-gray-100 text-gray-700
+                                                       group-hover:bg-gray-200 transition">
+                                                {{ $achievement }}
+                                            </span>
+                                        @endforeach
+                                    </div>
+                                @endif
                             </div>
 
-                            <p class="text-gray-600 mb-6 leading-relaxed">
-                                {{ $milestone->description }}
-                            </p>
-
-                            @if($milestone->achievements)
-                                <div class="flex flex-wrap gap-2">
-                                    @foreach($milestone->achievements as $achievement)
-                                        <span class="px-3 py-1 bg-gray-100 text-gray-700 rounded-full text-sm">
-                                            {{ $achievement }}
-                                        </span>
-                                    @endforeach
-                                </div>
-                            @endif
+                            {{-- Gradient Accent --}}
+                            <div
+                                class="absolute bottom-0 left-0 h-1 w-full
+                                       {{ str_replace('bg-gradient-to-br', 'bg-gradient-to-r', $milestone->color) }}
+                                       scale-x-0 group-hover:scale-x-100 transition-transform origin-left duration-500">
+                            </div>
                         </div>
-
-                        <!-- Accent bottom border -->
-                        <div class="{{ str_replace('bg-gradient-to-br', 'bg-gradient-to-r', $milestone->color) }} h-2 w-full"></div>
                     </div>
                 </div>
             @endforeach
+
         </div>
     </div>
 </section>
+
+
 
 {{-- ================= AWARDS SHOWCASE ================= --}}
 <section class="py-24 px-4 md:px-8 bg-gradient-to-b from-gray-900 to-slate-900 text-white">
@@ -491,16 +531,16 @@
 </section>
 
 {{-- ================= SUCCESS STORIES CAROUSEL ================= --}}
-<section class="py-24 px-4 md:px-8 bg-gradient-to-b from-gray-50 to-white">
+<section class="py-28 px-4 md:px-8 bg-gradient-to-br from-slate-50 via-white to-slate-100">
     <div class="max-w-7xl mx-auto">
 
         {{-- Header --}}
-        <div class="text-center mb-16 animate-fade-up">
-            <h2 class="text-4xl md:text-5xl font-display font-black text-gray-900 mb-4">
+        <div class="text-center mb-20 animate-fade-up">
+            <h2 class="text-4xl md:text-5xl font-extrabold tracking-tight text-gray-900 mb-5">
                 Success <span class="text-gradient">Stories</span>
             </h2>
-            <p class="text-xl text-gray-600 max-w-2xl mx-auto">
-                Hear from our alumni who are making a global impact
+            <p class="text-lg md:text-xl text-gray-600 max-w-2xl mx-auto leading-relaxed">
+                Hear from our alumni who turned skills into real-world success
             </p>
         </div>
 
@@ -510,48 +550,70 @@
                 <div class="splide__list">
 
                     @foreach($successStories as $story)
-                        <div class="splide__slide">
-                            <div class="bg-white rounded-3xl shadow-2xl overflow-hidden card-hover">
+                        <div class="splide__slide px-2">
+                            <div
+                                class="relative bg-white/80 backdrop-blur-xl rounded-3xl shadow-xl
+                                       hover:shadow-2xl transition-all duration-500 hover:-translate-y-2
+                                       overflow-hidden group"
+                            >
 
-                                <div class="p-8">
+                                {{-- Content --}}
+                                <div class="p-8 md:p-10">
+
                                     {{-- Profile --}}
-                                    <div class="flex items-start gap-6 mb-8">
-                                        <img
-                                            src="{{ $story->image }}"
-                                            alt="{{ $story->name }}"
-                                            class="w-20 h-20 rounded-2xl object-cover border-4 border-white shadow-lg"
-                                        >
+                                    <div class="flex items-center gap-5 mb-8">
+                                        <div class="relative">
+                                            <img
+                                                src="{{ $story->image }}"
+                                                alt="{{ $story->name }}"
+                                                class="w-20 h-20 rounded-2xl object-cover border-4 border-white shadow-md"
+                                            >
+                                            <span class="absolute -bottom-2 -right-2 w-6 h-6 rounded-full
+                                                         bg-gradient-to-r from-blue-500 to-purple-500 border-2 border-white">
+                                            </span>
+                                        </div>
 
                                         <div>
-                                            <h3 class="text-2xl font-bold text-gray-900">
+                                            <h3 class="text-xl font-bold text-gray-900">
                                                 {{ $story->name }}
                                             </h3>
-                                            <p class="text-blue-600 font-semibold">
+                                            <p class="text-sm font-semibold text-blue-600">
                                                 {{ $story->role }}
                                             </p>
-                                            <p class="text-gray-500 text-sm">
+                                            <p class="text-xs text-gray-500">
                                                 {{ $story->year }}
                                             </p>
                                         </div>
                                     </div>
 
                                     {{-- Quote --}}
-                                    <div class="relative mb-8">
-                                        <div class="text-6xl text-gray-100 absolute -top-4 -left-2">"</div>
-                                        <p class="text-lg text-gray-700 italic relative z-10 pl-6">
+                                    <div class="relative mb-10">
+                                        <svg class="absolute -top-4 -left-2 w-12 h-12 text-gray-200"
+                                             fill="currentColor" viewBox="0 0 24 24">
+                                            <path d="M7.17 6A5.001 5.001 0 0 0 3 11v7h7v-7H7.17zM21 11v7h-7v-7h3.17A5.001 5.001 0 0 0 21 6z"/>
+                                        </svg>
+
+                                        <p class="text-gray-700 italic leading-relaxed pl-8 relative z-10">
                                             {{ $story->quote }}
                                         </p>
                                     </div>
 
                                     {{-- Achievement --}}
-                                    <div class="flex items-center gap-3 text-emerald-600 font-semibold">
-                                        <i class="fas fa-trophy"></i>
+                                    <div class="flex items-center gap-3 text-sm font-semibold
+                                                text-emerald-600 bg-emerald-50 px-4 py-2 rounded-xl w-fit">
+                                        <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
+                                            <path d="M9 2a1 1 0 00-1 1v1H5a1 1 0 00-1 1v3a5 5 0 004 4.9V15H6a1 1 0 000 2h8a1 1 0 000-2h-2v-2.1A5 5 0 0016 8V5a1 1 0 00-1-1h-3V3a1 1 0 00-1-1z"/>
+                                        </svg>
                                         <span>{{ $story->achievement }}</span>
                                     </div>
                                 </div>
 
-                                {{-- Gradient Accent --}}
-                                <div class="h-2 bg-gradient-to-r from-blue-500 via-purple-500 to-pink-500"></div>
+                                {{-- Bottom Accent --}}
+                                <div
+                                    class="absolute bottom-0 left-0 h-1 w-full
+                                           bg-gradient-to-r from-blue-500 via-purple-500 to-pink-500
+                                           scale-x-0 group-hover:scale-x-100 transition-transform origin-left duration-500">
+                                </div>
                             </div>
                         </div>
                     @endforeach
@@ -562,6 +624,7 @@
 
     </div>
 </section>
+
 
 
 

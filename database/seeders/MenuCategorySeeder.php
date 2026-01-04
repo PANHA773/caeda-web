@@ -55,7 +55,10 @@ class MenuCategorySeeder extends Seeder
         ];
 
         foreach ($data as $item) {
-            MenuCategory::create($item);
+            MenuCategory::updateOrCreate(
+                ['slug' => $item['slug']],
+                $item
+            );
         }
     }
 }

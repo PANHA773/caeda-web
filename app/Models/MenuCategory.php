@@ -21,4 +21,9 @@ class MenuCategory extends Model
     protected $casts = [
         'is_active' => 'boolean',
     ];
+
+    public function items()
+    {
+        return $this->hasMany(MenuItem::class, 'menu_category_id')->orderBy('order');
+    }
 }

@@ -287,7 +287,7 @@
                     
                         @if($post->title)
                             <h2 class="text-2xl font-bold text-gray-900 mb-3 leading-tight">
-                                <a href="#" class="hover:text-indigo-600 transition-colors duration-200">
+                                <a href="{{ route('news.show', $post->slug) }}" class="hover:text-indigo-600 transition-colors duration-200">
                                     {{ $post->title }}
                                 </a>
                             </h2>
@@ -301,7 +301,7 @@
                         @if($post->image)
                             <div class="news-image-container mb-6">
                                 <img 
-                                    src="{{ $post->image }}" 
+                                    src="{{ $post->image ? (\Illuminate\Support\Str::startsWith($post->image, ['http://','https://']) ? $post->image : asset($post->image)) : '' }}" 
                                     alt="{{ $post->title ?? 'News image' }}" 
                                     class="news-image w-full h-64 md:h-80 object-cover"
                                 >
@@ -312,7 +312,7 @@
                         <div class="text-gray-800 mb-6 leading-relaxed">
                             {!! Str::limit(strip_tags($post->content), 400) !!}
                             @if(strlen(strip_tags($post->content)) > 400)
-                                <a href="#" class="text-indigo-600 hover:text-indigo-800 font-medium ml-2">
+                                <a href="{{ route('news.show', $post->slug) }}" class="text-indigo-600 hover:text-indigo-800 font-medium ml-2">
                                     Read more <i class="fas fa-arrow-right ml-1"></i>
                                 </a>
                             @endif
@@ -394,7 +394,7 @@
                                             <a 
                                                 target="_blank" 
                                                 rel="noopener" 
-                                                href="https://www.facebook.com/sharer/sharer.php?u={{ urlencode(request()->fullUrl()) }}"
+                                                href="https://www.facebook.com/sharer/sharer.php?u={{ urlencode(route('news.show', $post->slug)) }}"
                                                 class="flex items-center px-4 py-3 text-sm text-gray-700 hover:bg-gray-50 transition-colors duration-150"
                                             >
                                                 <i class="fab fa-facebook-square text-blue-600 mr-3 text-lg"></i>
@@ -403,7 +403,7 @@
                                             <a 
                                                 target="_blank" 
                                                 rel="noopener" 
-                                                href="https://twitter.com/intent/tweet?url={{ urlencode(request()->fullUrl()) }}&text={{ urlencode($post->title) }}"
+                                                href="https://twitter.com/intent/tweet?url={{ urlencode(route('news.show', $post->slug)) }}&text={{ urlencode($post->title) }}"
                                                 class="flex items-center px-4 py-3 text-sm text-gray-700 hover:bg-gray-50 transition-colors duration-150"
                                             >
                                                 <i class="fab fa-twitter text-blue-400 mr-3 text-lg"></i>
@@ -412,7 +412,7 @@
                                             <a 
                                                 target="_blank" 
                                                 rel="noopener" 
-                                                href="https://api.whatsapp.com/send?text={{ urlencode($post->title . ' ' . request()->fullUrl()) }}"
+                                                href="https://api.whatsapp.com/send?text={{ urlencode($post->title . ' ' . route('news.show', $post->slug)) }}"
                                                 class="flex items-center px-4 py-3 text-sm text-gray-700 hover:bg-gray-50 transition-colors duration-150"
                                             >
                                                 <i class="fab fa-whatsapp text-green-500 mr-3 text-lg"></i>
@@ -420,7 +420,7 @@
                                             </a>
                                             <div class="border-t border-gray-200 mt-2 pt-2">
                                                 <button 
-                                                    onclick="copyLink('{{ request()->fullUrl() }}')"
+                                                    onclick="copyLink('{{ route('news.show', $post->slug) }}')"
                                                     class="flex items-center w-full px-4 py-3 text-sm text-gray-700 hover:bg-gray-50 transition-colors duration-150"
                                                 >
                                                     <i class="fas fa-link text-gray-600 mr-3"></i>
@@ -768,6 +768,7 @@
             success: 'bg-green-500',
             error: 'bg-red-500',
             info: 'bg-blue-500'
+            
         };
         
         toast.className = `fixed top-6 right-6 px-6 py-3 rounded-lg text-white shadow-lg transform transition-all duration-300 translate-x-full ${colors[type]} z-50`;

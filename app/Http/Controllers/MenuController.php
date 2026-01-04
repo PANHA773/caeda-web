@@ -12,8 +12,10 @@ class MenuController extends Controller
 
      $menuCategories = MenuCategory::where('is_active', true)
     ->orderBy('order')
-    ->get();
+    ->with(['items' => function($q) {
+        $q->where('is_active', true)->orderBy('order');
+    }])->get();
 
-return view('menu', compact('menuCategories'));
+    return view('menu', compact('menuCategories'));
     }
 }

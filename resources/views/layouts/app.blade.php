@@ -19,6 +19,30 @@
         }
         .animate-fade-in { animation: fade-in .25s ease-out forwards; }
     </style>
+    <style>
+        /* Dark mode variables */
+        :root {
+            --site-bg: #f8fafc;
+            --text-color: #0f172a;
+            --nav-bg: linear-gradient(90deg, #1e3a8a, #7c3aed);
+        }
+
+        body.dark {
+            --site-bg: #000000;
+            --text-color: #ffffff;
+            --nav-bg: linear-gradient(90deg, #000000, #000000);
+            background-color: var(--site-bg) !important;
+            color: var(--text-color) !important;
+        }
+
+        body.dark nav { background: var(--nav-bg) !important; }
+        body.dark footer { background: #000000 !important; color: #cbd5e1 !important; }
+        body.dark .card { background: #050505 !important; color: #ffffff !important; }
+        body.dark .text-gray-700 { color: #e5e7eb !important; }
+        body.dark a.text-white, body.dark a { color: #ffffff !important; }
+        body.dark #mobileMenu { background: #050505 !important; color: #e5e7eb !important; }
+        body.dark .absolute.bg-white { background: #050505 !important; color: #e5e7eb !important; }
+    </style>
 </head>
 <body class="font-sans bg-gray-50">
 
@@ -26,10 +50,20 @@
     $user = Auth::user();
     $currentLang = session('lang', 'en');
 
+    // Ensure footer data exists so footer renders on all pages
+    $footer = $footer ?? (object) [
+        'logo' => config('app.name'),
+        'tagline' => null,
+        'description' => null,
+        'social_links' => [],
+        'quick_links' => [],
+        'contact_info' => [],
+    ];
+
     $languages = [
         ['code' => 'en', 'label' => 'English', 'flag' => '🇬🇧'],
         ['code' => 'kh', 'label' => 'ខ្មែរ', 'flag' => '🇰🇭'],
-        ['code' => 'zh', 'label' => '中文', 'flag' => '🇨🇳'],
+        // ['code' => 'zh', 'label' => '中文', 'flag' => '🇨🇳'],
     ];
 
     $menuItems = [
@@ -56,7 +90,9 @@
                 ['label' => 'Donation', 'href' => route('donation.show')],
 
                 ['label' => 'Achieve', 'href' => route('achieve')],
+            
                  ['label' => 'Coffee', 'href' => route('coffee')],
+
             
             ]
         ],
@@ -79,6 +115,13 @@
 
         <!-- Desktop Menu -->
         <div class="hidden lg:flex items-center gap-1">
+
+            <!-- Dark mode toggle -->
+            <button id="darkModeToggle" title="Toggle dark mode"
+                    class="bg-white/20 text-white px-3 py-2 rounded-lg font-semibold hover:bg-white/30">
+                <i class="fa fa-moon"></i>
+            </button>
+
             @foreach($menuItems as $item)
                 @if(isset($item['dropdown']))
                     <div class="relative group">
@@ -273,6 +316,25 @@
 <script>
 document.getElementById("mobileMenuButton").onclick = () =>
     document.getElementById("mobileMenu").classList.toggle("hidden");
+</script>
+
+<script>
+// Dark mode toggle (persists in localStorage)
+(function(){
+    const btn = document.getElementById('darkModeToggle');
+    function applyTheme(t){
+        if(t === 'dark') document.body.classList.add('dark');
+        else document.body.classList.remove('dark');
+        if(btn) btn.innerHTML = document.body.classList.contains('dark') ? '<i class="fa fa-sun"></i>' : '<i class="fa fa-moon"></i>';
+    }
+    const saved = localStorage.getItem('site-theme') || (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+    applyTheme(saved);
+    if(btn) btn.addEventListener('click', function(){
+        const next = document.body.classList.contains('dark') ? 'light' : 'dark';
+        localStorage.setItem('site-theme', next);
+        applyTheme(next);
+    });
+})();
 </script>
 
 </body>
