@@ -31,46 +31,46 @@ use App\Http\Controllers\Admin\CoreValueAdminController;
 use App\Http\Controllers\Admin\OfficeManagerController;
 use App\Http\Controllers\Admin\ProgramCaedaController;
 use App\Http\Controllers\Admin\StaffController;
-use App\Http\Controllers\Admin\PartnerController;
-use App\Http\Controllers\Admin\EventCeadaController;
-use App\Http\Controllers\Admin\WorkshopCeadaController;
-use App\Http\Controllers\Admin\SocialLinkController;
-use App\Http\Controllers\Admin\ContactMethodController;
-use App\Http\Controllers\Admin\FaqController;
-use App\Http\Controllers\Admin\PricingPlanController;
-use App\Http\Controllers\Admin\FeatureController;
-use App\Http\Controllers\Admin\FooterController;
-use App\Http\Controllers\Admin\SpeakerController;
-use App\Http\Controllers\Admin\HeroCarouselController;
-use App\Http\Controllers\Admin\WelcomeSectionController;
-use App\Http\Controllers\Admin\TimelineEventController;
-use App\Http\Controllers\Admin\FeaturedEventController;
-use App\Http\Controllers\Admin\ContactCeadaController;
-use App\Http\Controllers\Admin\LeaderTeamController;
-use App\Http\Controllers\Admin\ValueBenefitController;
-use App\Http\Controllers\Admin\GoalController;
-use App\Http\Controllers\Admin\StrategyController;
-use App\Http\Controllers\Admin\ProjectOverviewController;
-use App\Http\Controllers\Admin\VisionMissionController;
-use App\Http\Controllers\Admin\AccreditationController;
-use App\Http\Controllers\Admin\HeroController;
-use App\Http\Controllers\Admin\ImpactStoryController;
-use App\Http\Controllers\Admin\DonorController;
-use App\Http\Controllers\Admin\MenuCategoryController;
-use App\Http\Controllers\Admin\MilestoneController;
-use App\Http\Controllers\Admin\AwardController;
-use App\Http\Controllers\Admin\SuccessStoryController;
-use App\Http\Controllers\Admin\HeroAchievementController;
-use App\Http\Controllers\Admin\ProgressMetricsController;
-use App\Http\Controllers\Admin\UpcomingWorkshopController;
-use App\Http\Controllers\Admin\WorkshopBenefitController;
-use App\Http\Controllers\Admin\TestimonialController;
-use App\Http\Controllers\Admin\WhyChooseUsController;
-use App\Http\Controllers\Admin\OrderStepController;
-use App\Http\Controllers\Admin\LocationController;
-use App\Http\Controllers\Admin\FeaturedMenuController;
-use App\Http\Controllers\Admin\DashboardController;
-use App\Http\Controllers\Admin\NewsAdminController;
+
+// ==============================
+// ADMIN ROUTES
+// ==============================
+// Faculties (Admin)
+Route::middleware('auth')->prefix('admin')->name('admin.')->group(function () {
+    // Admin Dashboard
+    Route::get('/', [AboutAdminController::class, 'index'])->name('dashboard');
+
+    // About Page
+    Route::get('/about', [AboutAdminController::class, 'index'])->name('about.index');
+
+    // Faculties
+    Route::get('/faculties', [FacultyAdminController::class, 'index'])->name('faculties.index');
+    Route::get('/faculties/create', [FacultyAdminController::class, 'create'])->name('faculties.create');
+    Route::post('/faculties', [FacultyAdminController::class, 'store'])->name('faculties.store');
+    Route::get('/faculties/{faculty}/edit', [FacultyAdminController::class, 'edit'])->name('faculties.edit');
+    Route::put('/faculties/{faculty}', [FacultyAdminController::class, 'update'])->name('faculties.update');
+    Route::delete('/faculties/{faculty}', [FacultyAdminController::class, 'destroy'])->name('faculties.destroy');
+    Route::get('/faculties/{faculty}', [FacultyAdminController::class, 'show'])->name('faculties.show');
+
+
+    // Team Members
+    Route::resource('/team-members', TeamMemberAdminController::class);
+
+    // Core Values
+    Route::resource('core-values', CoreValueAdminController::class);
+
+    // Accreditations
+    Route::get('/accreditations', [AccreditationAdminController::class, 'index'])->name('accreditations.index');
+
+    Route::resource('office-managers', OfficeManagerController::class);
+    Route::resource('staff', StaffController::class);
+    // Note: admin programs are handled by ProgramCaedaController below.
+    // Removed duplicate registration of the non-admin ProgramController here
+    // to avoid route/name conflicts with the admin resource controller.
+    Route::resource('programs', ProgramCaedaController::class);
+});
+
+
 
 
 // ==============================
@@ -173,147 +173,35 @@ Route::middleware(['auth'])->group(function () {
 });
 
 // ==============================
-// PROTECTED ADMIN ROUTES
+// COURSES
 // ==============================
-Route::middleware(['auth', \App\Http\Middleware\AdminTokenMiddleware::class])->prefix('admin')->name('admin.')->group(function () {
+Route::get('/courses', [CourseController::class, 'index'])->name('courses');
 
-    // Dashboard
-    Route::get('/', [AboutAdminController::class, 'index'])->name('dashboard');
-    
-    // Activity (Recent Activity listing)
-    Route::get('activities', [\App\Http\Controllers\Admin\ActivityController::class, 'index'])->name('activity.index');
-  
+// ==============================
+// LANGUAGE SWITCHER
+// ==============================
+Route::post('/switch-language', [LanguageController::class, 'switch'])->name('language.switch');
 
+// ==============================
+// CONTACT FORM
+// ==============================
+Route::post('/contact', [ContactController::class, 'store'])->name('contact.submit');
 
-    //Hero Carousel
-    Route::resource('hero_carousels', HeroCarouselController::class);
+// ==============================
+// NEWSLETTER
+// ==============================
+Route::post('/newsletter', [NewsletterController::class, 'subscribe'])->name('newsletter.subscribe');
+Route::middleware('auth')->group(function () {
 
-    // About
-    Route::get('/about', [AboutAdminController::class, 'index'])->name('about.index');
-
-    // Faculties
-    Route::resource('faculties', FacultyAdminController::class);
-
-    // Team Members
-    Route::resource('team-members', TeamMemberAdminController::class);
-
-    // Core Values
-    Route::resource('core-values', CoreValueAdminController::class);
-
-    // Accreditations
-    // Route::get('/accreditations', [AccreditationAdminController::class, 'index'])->name('accreditations.index');
-
-    // Office Managers
-    Route::resource('office-managers', OfficeManagerController::class);
-
-    // Staff
-    Route::resource('staff', StaffController::class);
-
-    // Programs
-    Route::resource('programs', ProgramCaedaController::class);
-
-    // Events
-    Route::resource('events', EventCeadaController::class);
-
-    // Partners
-    Route::resource('partners', PartnerController::class);
-
-    // Workshops
-    Route::resource('workshops', WorkshopCeadaController::class);
-
-    // Menu Items (admin CRUD)
-    Route::resource('menu_items', \App\Http\Controllers\Admin\MenuItemController::class);
-
-    // Social Links
-    Route::resource('social', SocialLinkController::class);
-
-    // Contact Methods
-    Route::resource('contact-information', ContactMethodController::class);
-
-    // FAQs
-    Route::resource('faqs', FaqController::class);
-
-    // Pricing Plans
-    Route::resource('pricing', PricingPlanController::class);
-
-    //FeatureController 
-    Route::resource('features', FeatureController::class);
-
-    //FooterController
-    Route::resource('footer', FooterController::class);
-
-    // Speakers
-    Route::resource('speakers', SpeakerController::class);
-
-    // Welcome Section
-    Route::resource('welcome_sections', WelcomeSectionController::class);
-
-    // Timeline Events
-    Route::resource('timeline_events', TimelineEventController::class);
-
-    // Featured Events
-    Route::resource('featured_events', FeaturedEventController::class);
-
-    // Contacts from users
-    Route::resource('contacts', ContactCeadaController::class);
-
-    // Leader Teams
-    Route::resource('leader-teams', LeaderTeamController::class);
-
-    // Value Benefits
-    Route::resource('value-benefits', ValueBenefitController::class);
-
-    // Goals
-    Route::resource('goals', GoalController::class);
-
-    // Strategies
-    Route::resource('strategies', StrategyController::class);
-
-    // Project-Based
-    Route::resource('project-overviews', ProjectOverviewController::class);
-
-    // Vision & Mission
-    Route::resource('vision-missions', VisionMissionController::class);
-
-    // accreditations
-    Route::resource('accreditations', AccreditationController::class);
-
-    // heroes
-    Route::resource('heroes', HeroController::class);
-
-    // stories
-    Route::resource('stories', ImpactStoryController::class);
-
-    // recent-donors
-    Route::resource('recent-donors', DonorController::class);
-
-    Route::resource('menu-categories', MenuCategoryController::class);
-
-    Route::resource('milestones', MilestoneController::class);
-
-    Route::resource('awards', AwardController::class);
-
-    Route::resource('success-stories', SuccessStoryController::class);
-
-    Route::resource('hero-achievements', HeroAchievementController::class);
-
-    Route::resource('progress-metrics', ProgressMetricsController::class);
-    
-
-    Route::resource('upcoming_workshops', UpcomingWorkshopController::class);
-
-    Route::resource('workshop_benefits', WorkshopBenefitController::class);
-
-    Route::resource('testimonials', TestimonialController::class);
-
-    Route::resource('why_choose_us', WhyChooseUsController::class);
-
-    Route::resource('order_steps', OrderStepController::class);
-
-    Route::resource('locations', LocationController ::class);
-
-    Route::resource('featured_menus', FeaturedMenuController::class);
-    // News (Admin CRUD)
-    Route::resource('news', NewsAdminController::class);
-
+    Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
+    Route::get('/profile', [ProfileController::class, 'index'])->name('profile');
+    Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
+    Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 });
+
+// load admin.php
+require __DIR__ . '/admin.php';
+
+require __DIR__.'/auth.php';
+
+require __DIR__.'/auth.php';
