@@ -1,37 +1,41 @@
-FROM php:8.2-apache
+# Start from PHP-FPM base image
+FROM php:8.2-fpm
 
-# Enable Apache rewrite
-RUN a2enmod rewrite
+# Set working directory
+WORKDIR /var/www
 
-# Install system dependencies
+# Install system dependencies + Nginx + Supervisor
 RUN apt-get update && apt-get install -y \
     git \
     unzip \
     libzip-dev \
-    && docker-php-ext-install pdo pdo_mysql zip
+    zip \
+    curl \
+    libpq-dev \
+    nginx \
+    supervisor \
+    && docker-php-ext-install pdo pdo_pgsql zip
 
-# Install Composer
+# Install Composer globally
 COPY --from=composer:2 /usr/bin/composer /usr/bin/composer
 
-# Set Apache document root to Laravel public folder
-ENV APACHE_DOCUMENT_ROOT=/var/www/html/public
+# Copy project files
+COPY . .
 
-RUN sed -ri -e 's!/var/www/html!${APACHE_DOCUMENT_ROOT}!g' \
-    /etc/apache2/sites-available/*.conf \
-    /etc/apache2/apache2.conf \
-    /etc/apache2/conf-available/*.conf
-
-# Copy Laravel project
-COPY . /var/www/html
-
-WORKDIR /var/www/html
-
-# Install Laravel dependencies
+# Install PHP dependencies
 RUN composer install --no-dev --optimize-autoloader
 
-# Permissions
-RUN chown -R www-data:www-data /var/www/html \
-    && chmod -R 775 storage bootstrap/cache
+# Set permissions for Laravel
+RUN chown -R www-data:www-data /var/www/storage /var/www/bootstrap/cache
 
-# Laravel optimizations
-RUN php artisan storage:link || true
+# Copy Nginx config (create this file: docker/nginx.conf)
+COPY ./docker/nginx.conf /etc/nginx/sites-available/default
+
+# Copy Supervisor config (create this file: docker/supervisord.conf)
+COPY ./docker/supervisord.conf /etc/supervisor/supervisord.conf
+
+# Expose port 80
+EXPOSE 80
+
+# Start Supervisord to run both Nginx + PHP-FPM
+CMD ["/usr/bin/supervisord", "-n", "-c", "/etc/supervisor/supervisord.conf"]
