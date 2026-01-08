@@ -11,6 +11,7 @@ use App\Models\Strategy;
 use App\Models\ProjectOverview;
 use App\Models\VisionMission;
 use App\Models\Accreditation;
+use App\Models\Footer;
 
 class ProjectController extends Controller
 {
@@ -40,6 +41,8 @@ class ProjectController extends Controller
             // ->get();
 $accreditations = Accreditation::where('is_active', true)->get();
 
+ $footer = Footer::first();
+
 
         // Fetch active leader team members
         // If 'order' column does not exist, remove orderBy
@@ -47,6 +50,6 @@ $accreditations = Accreditation::where('is_active', true)->get();
         // OR if you have added 'order' column, you can use:
         // $leaderTeams = LeaderTeam::where('is_active', true)->orderBy('order', 'asc')->get();
 
-        return view('project', compact('managers', 'committeeMembers', 'leaderTeams', 'valuesBenefits', 'goals', 'strategies','projectOverviews','visionMissions','accreditations'));
+        return view('project', compact('managers', 'committeeMembers', 'leaderTeams', 'valuesBenefits', 'goals', 'strategies','projectOverviews','visionMissions','accreditations','footer'));
     }
 }

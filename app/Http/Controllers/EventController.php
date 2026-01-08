@@ -7,6 +7,7 @@ use App\Models\Event;
 use App\Models\Speaker;
 use App\Models\TimelineEvent;
 use App\Models\FeaturedEvent;
+use App\Models\Footer;
 
 class EventController extends Controller
 {
@@ -57,6 +58,8 @@ class EventController extends Controller
         // Fetch active speakers for homepage
         $speakers = Speaker::where('is_active', true)->orderBy('name')->take(4)->get();
 
+        $footer = Footer::first();
+
         // Fetch timeline events
         $timelineEvents = TimelineEvent::where('is_active', true)
             ->orderBy('sort_order')
@@ -71,6 +74,7 @@ class EventController extends Controller
             'speakers',
             'timelineEvents',
             'featuredEventFromEventTable'
+            ,'footer'
         ));
     }
 
@@ -90,7 +94,8 @@ class EventController extends Controller
         return view('events.show', compact(
             'event',
             'relatedEvents',
-            'timelineEvents'
+            'timelineEvents',
+            'footer'
         ));
     }
 }

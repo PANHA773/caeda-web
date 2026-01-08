@@ -30,7 +30,6 @@ class AdminSeeder extends Seeder
 
         foreach ($admins as $admin) {
             User::create($admin);
-            
         }
     }
 }

@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\MenuCategory;
+use App\Models\Footer;
 
 class MenuController extends Controller
 {
@@ -16,6 +17,8 @@ class MenuController extends Controller
         $q->where('is_active', true)->orderBy('order');
     }])->get();
 
-    return view('menu', compact('menuCategories'));
+    $footer = Footer::first();
+
+    return view('menu', compact('menuCategories', 'footer'));
     }
 }

@@ -17,6 +17,7 @@
         <table class="w-full border-collapse">
             <thead class="bg-gray-50">
                 <tr class="text-left text-sm text-gray-600">
+                
                     <th class="px-4 py-3">Title</th>
                     <th class="px-4 py-3">Published</th>
                     <th class="px-4 py-3">Likes</th>

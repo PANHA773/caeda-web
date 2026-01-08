@@ -19,18 +19,29 @@ class HeroCarouselController extends Controller
         return view('admin.hero_carousels.create');
     }
 
-    public function store(Request $request)
-    {
-        $data = $request->validate([
-            'title' => 'nullable|string|max:255',
-            'image' => 'required|url',
-            'order' => 'integer|nullable',
-            'is_active' => 'boolean',
-        ]);
+public function store(Request $request)
+{
+    $data = $request->validate([
+        'title'     => 'nullable|string|max:255',
+        'image'     => 'required|image|mimes:jpg,jpeg,png,webp|max:2048',
+        'order'     => 'nullable|integer',
+        'is_active' => 'nullable|boolean',
+    ]);
 
-        HeroCarousel::create($data);
-        return redirect()->route('admin.hero_carousels.index')->with('success', 'Slide added successfully.');
+    // Upload image to storage/app/public/hero_slides
+    if ($request->hasFile('image')) {
+        $data['image'] = $request->file('image')->store('hero_slides', 'public');
     }
+
+    // Fix checkbox value
+    $data['is_active'] = $request->has('is_active');
+
+    HeroCarousel::create($data);
+
+    return redirect()
+        ->route('admin.hero_carousels.index')
+        ->with('success', 'Slide added successfully.');
+}
 
     public function edit(HeroCarousel $hero_carousel)
     {

@@ -162,6 +162,7 @@
 {{-- ================= MEMBER COMPANIES SECTION ================= --}}
 <section class="py-20 px-4 md:px-8">
     <div class="max-w-7xl mx-auto">
+        {{-- Header --}}
         <div class="text-center mb-16 animate-fade-in-up">
             <h2 class="text-3xl md:text-4xl font-bold text-gray-900 mb-4">
                 Join Our <span class="bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">Community</span> of Innovators
@@ -170,86 +171,37 @@
                 Teams from top companies are already transforming their skills with our platform
             </p>
         </div>
-        
+
+        {{-- Companies Grid --}}
         <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-16">
-            @php
-                $memberCompanies = [
-                    [
-                        'name' => 'TechCorp',
-                        'logo' => '💻',
-                        'members' => 45,
-                        'industry' => 'Technology',
-                        'color' => 'from-blue-500 to-cyan-500',
-                        'animation' => 'bounce'
-                    ],
-                    [
-                        'name' => 'DesignStudio',
-                        'logo' => '🎨',
-                        'members' => 28,
-                        'industry' => 'Design',
-                        'color' => 'from-purple-500 to-pink-500',
-                        'animation' => 'pulse'
-                    ],
-                    [
-                        'name' => 'DataInsights',
-                        'logo' => '📊',
-                        'members' => 67,
-                        'industry' => 'Analytics',
-                        'color' => 'from-green-500 to-teal-500',
-                        'animation' => 'float'
-                    ],
-                    [
-                        'name' => 'StartupXYZ',
-                        'logo' => '🚀',
-                        'members' => 15,
-                        'industry' => 'Startup',
-                        'color' => 'from-orange-500 to-red-500',
-                        'animation' => 'shake'
-                    ],
-                    [
-                        'name' => 'EduTech Pro',
-                        'logo' => '📚',
-                        'members' => 52,
-                        'industry' => 'Education',
-                        'color' => 'from-indigo-500 to-purple-500',
-                        'animation' => 'spin-slow'
-                    ],
-                    [
-                        'name' => 'FinancePlus',
-                        'logo' => '💰',
-                        'members' => 38,
-                        'industry' => 'Finance',
-                        'color' => 'from-emerald-500 to-green-500',
-                        'animation' => 'tilt'
-                    ]
-                ];
-            @endphp
-            
             @foreach($memberCompanies as $index => $company)
                 <div 
                     class="group bg-white/80 backdrop-blur-sm p-6 rounded-2xl shadow-lg hover:shadow-2xl border border-gray-100 hover:border-blue-200 transition-all duration-500 transform hover:-translate-y-2 cursor-pointer overflow-hidden animate-fade-in-up"
                     style="animation-delay: {{ $index * 150 }}ms"
                 >
-                    <div class="absolute inset-0 bg-gradient-to-br {{ $company['color'] }} opacity-0 group-hover:opacity-5 transition-opacity duration-500"></div>
-                    
+                    {{-- Hover Gradient --}}
+                    <div class="absolute inset-0 bg-gradient-to-br {{ $company->color }} opacity-0 group-hover:opacity-5 transition-opacity duration-500"></div>
+
+                    {{-- Content --}}
                     <div class="relative z-10">
                         <div class="flex items-center justify-between mb-4">
                             <div class="flex items-center">
-                                <div class="text-4xl mr-4 transition-all duration-500 transform group-hover:scale-110 group-hover:animate-{{ $company['animation'] }}">
-                                    {{ $company['logo'] }}
+                                <div class="text-4xl mr-4 transition-all duration-500 transform group-hover:scale-110 group-hover:animate-{{ $company->animation }}">
+                                    {!! $company->logo !!}
                                 </div>
                                 <div>
                                     <h3 class="font-bold text-gray-900 group-hover:text-gray-800 transition-colors duration-300">
-                                        {{ $company['name'] }}
+                                        {{ $company->name }}
                                     </h3>
-                                    <p class="text-sm text-gray-600">{{ $company['industry'] }}</p>
+                                    <p class="text-sm text-gray-600">{{ $company->industry }}</p>
                                 </div>
                             </div>
                             <span class="bg-blue-100 text-blue-600 group-hover:bg-blue-600 group-hover:text-white text-xs font-bold px-3 py-1 rounded-full transition-all duration-300 transform group-hover:scale-105">
-                                {{ $company['members'] }} members
+                                {{ $company->members }} members
                             </span>
                         </div>
-                        
+
+                        {{-- Member Circles --}}
                         <div class="flex space-x-2">
                             @for($i = 0; $i < 5; $i++)
                                 <div 
@@ -266,66 +218,10 @@
                 </div>
             @endforeach
         </div>
-
-        {{-- PREMIUM MEMBERS FROM DATABASE --}}
-        <div class="bg-gradient-to-br from-white to-blue-50/30 rounded-3xl shadow-2xl p-8 border border-gray-200/50 backdrop-blur-sm animate-fade-in-up">
-            <div class="text-center mb-8">
-                <h3 class="text-3xl font-bold text-gray-900 mb-2">
-                    Our <span class="bg-gradient-to-r from-green-500 to-teal-500 bg-clip-text text-transparent">Team</span>
-                </h3>
-                <p class="text-gray-600">Meet our talented team members</p>
-            </div>
-            
-            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-                @forelse($teamMembers as $index => $member)
-                    <div class="group text-center p-6 rounded-2xl bg-white/50 backdrop-blur-sm border border-gray-200/50 hover:border-transparent transition-all duration-500 transform hover:-translate-y-2 hover:shadow-xl animate-fade-in-up" style="animation-delay: {{ $index * 200 }}ms">
-                        <div class="relative inline-block mb-4">
-                            <div class="absolute inset-0 bg-gradient-to-br from-blue-500 to-purple-600 rounded-full blur-md opacity-0 group-hover:opacity-70 transition-opacity duration-500"></div>
-                            <img
-                                src="{{ $member->photo ?: 'https://via.placeholder.com/80?text=No+Photo' }}"
-                                alt="{{ $member->name }}"
-                                class="relative w-20 h-20 rounded-full mx-auto border-4 border-white shadow-lg group-hover:scale-110 transition-transform duration-500 z-10 object-cover"
-                            />
-                        </div>
-                        
-                        <h4 class="font-bold text-gray-900 text-lg mb-1">{{ $member->name }}</h4>
-                        <p class="text-sm text-gray-600 mb-2">{{ $member->position }}</p>
-                        <p class="text-xs text-blue-600 font-semibold mb-3">{{ $member->department }}</p>
-                        
-                        @if($member->bio)
-                            <p class="text-sm text-gray-500 mb-3 line-clamp-2">{{ $member->bio }}</p>
-                        @endif
-                        
-                        @if($member->social_links && count($member->social_links) > 0)
-                            <div class="flex justify-center gap-2 mt-3">
-                                @foreach($member->social_links as $platform => $link)
-                                    @if($link)
-                                        <a href="{{ $link }}" target="_blank" rel="noopener noreferrer" 
-                                           class="inline-flex items-center justify-center w-8 h-8 rounded-full bg-gray-100 text-gray-600 hover:bg-blue-500 hover:text-white transition-all duration-300">
-                                            @if($platform === 'linkedin')
-                                                <i class="fab fa-linkedin text-xs"></i>
-                                            @elseif($platform === 'twitter')
-                                                <i class="fab fa-twitter text-xs"></i>
-                                            @elseif($platform === 'github')
-                                                <i class="fab fa-github text-xs"></i>
-                                            @elseif($platform === 'email')
-                                                <i class="fas fa-envelope text-xs"></i>
-                                            @endif
-                                        </a>
-                                    @endif
-                                @endforeach
-                            </div>
-                        @endif
-                    </div>
-                @empty
-                    <div class="col-span-full text-center py-12">
-                        <p class="text-gray-500 text-lg">No team members found.</p>
-                    </div>
-                @endforelse
-            </div>
-        </div>
     </div>
 </section>
+
+
 
 {{-- ================= PRICING TOGGLE ================= --}}
 <section class="py-16 bg-white/80 backdrop-blur-sm">
@@ -478,7 +374,7 @@
 
 
 
-{{-- ================= BENEFITS SECTION ================= --}}
+{{-- ================= BENEFITS Membership ================= --}}
 <section class="py-20 bg-gradient-to-br from-gray-50 via-blue-50/30 to-purple-50/30 px-4 md:px-8">
     <div class="max-w-7xl mx-auto">
         <div class="text-center mb-16 animate-fade-in-up">

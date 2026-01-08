@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\News;
+use App\Models\Footer;
 use Illuminate\Http\Request;
 
 
@@ -14,12 +15,14 @@ class NewsController extends Controller
             ->paginate(6);
         // eager load recent comments to avoid N+1 (use commentsList relationship)
         $news->load('commentsList');
+
+        $footer = Footer::first();
         // mark is_liked from session for each item
         foreach ($news as $item) {
             $item->is_liked = session()->get('liked_news_' . $item->id, false);
         }
 
-        return view('news', compact('news'));
+        return view('news', compact('news', 'footer'));
     }
 
     public function toggleLike(Request $request, News $news)

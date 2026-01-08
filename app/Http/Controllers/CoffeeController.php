@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\Models\WhyChooseUs;
 use App\Models\OrderStep;
 use App\Models\Location;
+use App\Models\Footer;
 use App\Models\FeaturedMenu;
 
 class CoffeeController extends Controller
@@ -22,6 +23,8 @@ class CoffeeController extends Controller
                                ->orderBy('order')
                                ->get();
 
+        $footer = Footer::first();
+
             $locations = Location::where('status', 1)
                          ->orderBy('order')
                          ->get();
@@ -35,6 +38,6 @@ class CoffeeController extends Controller
 
 
         // Return the Blade view 'coffee' and pass both variables
-        return view('coffee', compact('items', 'orderSteps','locations','menus'));
+        return view('coffee', compact('items', 'orderSteps','locations','menus', 'footer'));
     }
 }

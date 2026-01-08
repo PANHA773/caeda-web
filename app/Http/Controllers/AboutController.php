@@ -7,6 +7,8 @@ use App\Models\Faculty;
 use App\Models\TeamMember;
 use App\Models\CoreValue;
 use App\Models\Accreditation;
+use App\Models\Footer;
+
 use Illuminate\Http\Request;
 
 class AboutController extends Controller
@@ -25,6 +27,8 @@ class AboutController extends Controller
             }
         }
 
+
+
         // Faculties list
         $faculties = Faculty::query()
             ->where('is_active', true)
@@ -36,6 +40,8 @@ class AboutController extends Controller
             ->where('is_active', true)
             ->orderBy('order')
             ->get();
+
+            $footer = Footer::first();
 
         // Core Values
         $coreValues = CoreValue::query()
@@ -51,6 +57,7 @@ class AboutController extends Controller
             'teamMembers',
             'coreValues',
             'accreditations',
+            'footer'
         ));
     }
 }

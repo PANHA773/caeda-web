@@ -41,6 +41,7 @@ class DatabaseSeeder extends Seeder
             // FeatureSeeder::class,
             // FooterSeeder::class,
             // CalendarSeeder::class,
+            // GoalStrategySeeder::class,
             
             // SpeakerSeeder::class,
             // HeroCarouselSeeder::class,
@@ -67,11 +68,12 @@ class DatabaseSeeder extends Seeder
             // TestimonialSeeder::class,
             // WhyChooseUsSeeder::class,
             // OrderStepSeeder::class,
-            MenuCategorySeeder::class,
-            MenuItemSeeder::class,
-            LocationSeeder::class,
-            FeaturedMenuSeeder::class,
-            AdminUserSeeder::class,
+            // MenuCategorySeeder::class,
+            // MenuItemSeeder::class,
+            // LocationSeeder::class,
+            // FeaturedMenuSeeder::class,
+            // AdminUserSeeder::class,
+            MemberCompanySeeder::class,
            
           
             

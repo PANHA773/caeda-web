@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\Models\SocialLink;
 use App\Models\ContactMethod;
 use App\Models\Faq;
+use App\Models\Footer;
 use App\Models\Contact;
 
 class ContactController extends Controller
@@ -18,8 +19,9 @@ class ContactController extends Controller
         $socialLinks = SocialLink::where('is_active', true)->get();
         $contacts = ContactMethod::where('is_active', true)->get();
         $faqs = Faq::where('is_active', true)->latest()->get();
+        $footer = Footer::first();
 
-        return view('contact', compact('socialLinks', 'contacts', 'faqs'));
+        return view('contact', compact('socialLinks', 'contacts', 'faqs', 'footer'));
     }
 
     /**

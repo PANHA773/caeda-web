@@ -91,50 +91,57 @@
             </div>
         </div>
 
-{{-- ================= LEADER TEAM SECTION ================= --}}
-<div data-animate class="mb-16">
-    <div class="text-center mb-12">
-        <h2 class="text-3xl md:text-4xl font-bold bg-gradient-to-r from-blue-900 to-purple-900 bg-clip-text text-transparent mb-4">
-            Cambodia-ASEAN Educational Development Association
-        </h2>
-        <div class="w-24 h-1.5 bg-gradient-to-r from-blue-500 to-purple-500 mx-auto rounded-full animate-pulse"></div>
-    </div>
+        {{-- ================= LEADER TEAM SECTION ================= --}}
+        <div data-animate class="mb-16">
+            <div class="text-center mb-12">
+                <h2 class="text-3xl md:text-4xl font-bold bg-gradient-to-r from-blue-900 to-purple-900 bg-clip-text text-transparent mb-4">
+                    Cambodia-ASEAN Educational Development Association
+                </h2>
+                <div class="w-24 h-1.5 bg-gradient-to-r from-blue-500 to-purple-500 mx-auto rounded-full animate-pulse"></div>
+            </div>
 
-    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-        @foreach($leaderTeams as $index => $leader)
-        <div class="group bg-white/80 backdrop-blur-sm border border-gray-200/50 rounded-2xl p-6 hover:shadow-2xl transition-transform duration-500 hover:-translate-y-3"
-            style="animation-delay: {{ $index * 100 }}ms">
-            
-            <div class="flex flex-col items-center text-center gap-4">
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                @foreach($leaderTeams as $index => $leader)
+                <div class="group bg-white/80 backdrop-blur-sm border border-gray-200/50 rounded-2xl p-6 hover:shadow-2xl transition-transform duration-500 hover:-translate-y-3"
+                    style="animation-delay: {{ $index * 100 }}ms">
 
-                {{-- Image / Initials --}}
-                <div class="w-36 h-36 rounded-2xl overflow-hidden relative flex items-center justify-center shadow-lg transform transition-all duration-500 group-hover:scale-105 group-hover:rotate-3">
-                    @if($leader->image)
-                    <img src="{{ $leader->image }}" alt="{{ $leader->name }}" class="w-full h-full object-cover">
-                    @else
-                    @php
-                        $initials = implode('', array_map(fn($n) => strtoupper(substr($n, 0, 1)), explode(' ', $leader->name)));
-                    @endphp
-                    <div class="w-full h-full bg-gradient-to-br {{ $leader->gradient }} flex items-center justify-center text-white text-2xl font-bold">
-                        {{ $initials }}
+                    <div class="flex flex-col items-center text-center gap-4">
+
+                        {{-- Image / Initials --}}
+                        <div class="w-36 h-36 rounded-2xl overflow-hidden relative flex items-center justify-center shadow-lg transform transition-all duration-500 group-hover:scale-105 group-hover:rotate-3">
+                            @php
+                            // Full URL to image if exists
+                            $imagePath = $leader->image && file_exists(public_path('storage/' . $leader->image))
+                            ? asset('storage/' . $leader->image)
+                            : null;
+
+                            // Calculate initials
+                            $initials = implode('', array_map(fn($n) => strtoupper(substr($n, 0, 1)), explode(' ', $leader->name)));
+                            @endphp
+
+                            @if($imagePath)
+                            <img src="{{ $imagePath }}" alt="{{ $leader->name }}" class="w-full h-full object-cover">
+                            @else
+                            <div class="w-full h-full bg-gradient-to-br {{ $leader->gradient ?? 'from-blue-500 to-indigo-600' }} flex items-center justify-center text-white text-2xl font-bold">
+                                {{ $initials }}
+                            </div>
+                            @endif
+                        </div>
+
+                        {{-- Text --}}
+                        <div class="flex flex-col gap-1">
+                            <h3 class="text-lg font-bold text-gray-900">{{ $leader->name }}</h3>
+                            <p class="text-gray-600 text-sm font-medium">{{ $leader->position }}</p>
+                        </div>
                     </div>
-                    @endif
                 </div>
-
-                {{-- Text --}}
-                <div class="flex flex-col gap-1">
-                    <h3 class="text-lg font-bold text-gray-900">{{ $leader->name }}</h3>
-                    <p class="text-gray-600 text-sm font-medium">{{ $leader->position }}</p>
-                </div>
+                @endforeach
             </div>
         </div>
-        @endforeach
-    </div>
-</div>
 
-{{-- ================= ENHANCED PROJECT OVERVIEW ================= --}}
-@if($projectOverviews->count())
-    @foreach($projectOverviews as $overview)
+        {{-- ================= ENHANCED PROJECT OVERVIEW ================= --}}
+        @if($projectOverviews->count())
+        @foreach($projectOverviews as $overview)
         <div data-animate
             class="group bg-gradient-to-br from-blue-50/50 to-purple-50/50 backdrop-blur-sm rounded-3xl p-8 md:p-10 mb-16 border border-blue-200/50 shadow-lg hover:shadow-2xl transition-all duration-500 hover:-translate-y-2">
 
@@ -147,91 +154,96 @@
             {{-- Content --}}
             <div class="prose prose-lg max-w-none text-gray-700 leading-relaxed space-y-6 font-english">
                 @foreach(explode("\n\n", $overview->description) as $paragraph)
-                    <p class="transform transition-all duration-500 hover:translate-x-2 hover:text-gray-900">
-                        {{ $paragraph }}
-                    </p>
+                <p class="transform transition-all duration-500 hover:translate-x-2 hover:text-gray-900">
+                    {{ $paragraph }}
+                </p>
                 @endforeach
             </div>
         </div>
-    @endforeach
-@endif
+        @endforeach
+        @endif
 
 
 
 
-   {{-- ================= ENHANCED INTERNATIONAL ADVISORY BOARD ================= --}}
-<div data-animate class="mb-16">
-    <div class="text-center mb-12">
-        <h2 class="text-3xl md:text-4xl font-bold bg-gradient-to-r from-green-900 to-teal-900 bg-clip-text text-transparent font-english mb-4">
+
+{{-- ================= ENHANCED OFFICE MANAGER TEAM ================= --}}
+
+<div data-animate
+     class="bg-gradient-to-br from-green-50/80 to-teal-50/80 backdrop-blur-sm
+            rounded-3xl p-8 md:p-10 mb-16 border border-green-200/50
+            shadow-lg hover:shadow-2xl transition-all duration-500 hover:-translate-y-1">
+
+    <!-- HEADER -->
+    <div class="text-center mb-10">
+        <h2 class="text-2xl md:text-3xl font-bold mb-4
+                   bg-gradient-to-r from-green-900 to-teal-900
+                   bg-clip-text text-transparent font-english">
             Office Manager
         </h2>
-        <div class="w-20 h-1.5 bg-gradient-to-r from-green-500 to-teal-500 mx-auto rounded-full animate-pulse"></div>
+        <div class="w-20 h-1.5 bg-gradient-to-r from-green-500 to-teal-500
+                    mx-auto rounded-full animate-pulse"></div>
     </div>
 
-    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+    <!-- GRID -->
+    <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-6">
+
         @foreach($managers as $index => $member)
-        <div
-            class="group bg-white/90 backdrop-blur-md border border-gray-200/60 rounded-3xl p-6
-                   hover:shadow-2xl transition-all duration-500 hover:-translate-y-3"
-            style="animation-delay: {{ $index * 100 }}ms"
-        >
-            <div class="flex items-center gap-5">
+            @php
+                // Initials fallback
+                $initials = collect(explode(' ', $member->name))
+                    ->map(fn($n) => strtoupper(substr($n, 0, 1)))
+                    ->implode('');
+            @endphp
 
-                <!-- IMAGE -->
-                <div class="relative flex-shrink-0">
-                    <div
-                        class="w-20 h-24 rounded-2xl overflow-hidden
-                               ring-2 ring-white shadow-lg
-                               bg-gradient-to-br {{ $member->gradient }}
-                               transform transition-all duration-500
-                               group-hover:scale-110 group-hover:rotate-3"
-                    >
-                        @if($member->image && file_exists(public_path('storage/' . $member->image)))
-                            <img
-                                src="{{ asset('storage/' . $member->image) }}"
-                                alt="{{ $member->name }}"
-                                class="w-full h-full object-cover"
-                            >
-                        @else
-                            @php
-                                $initials = collect(explode(' ', $member->name))
-                                    ->map(fn($n) => strtoupper(substr($n, 0, 1)))
-                                    ->implode('');
-                            @endphp
-                            <div class="w-full h-full flex items-center justify-center
-                                        text-white text-lg font-bold tracking-wide">
-                                {{ $initials }}
-                            </div>
-                        @endif
+            <div class="group bg-white/90 backdrop-blur-sm rounded-xl p-4 text-center
+                        border border-gray-200/50 hover:shadow-lg
+                        transition-all duration-300 hover:-translate-y-2 cursor-pointer"
+                 style="animation-delay: {{ $index * 50 }}ms">
+
+                <!-- IMAGE / INITIALS -->
+                <div class="w-24 h-24 rounded-[15px] overflow-hidden mx-auto mb-3 relative">
+                    @php
+                        $hasImage = $member->image_url && file_exists(public_path('storage/' . $member->image ?? ''));
+                    @endphp
+
+                    @if($hasImage)
+                        <img src="{{ $member->image_url }}"
+                             alt="{{ $member->name }}"
+                             class="w-full h-full object-cover rounded-[15px]">
+                    @endif
+
+                    <!-- Always show fallback initials behind image -->
+                    <div class="absolute inset-0 bg-gradient-to-br
+                                {{ $member->gradient ?? 'from-green-500 to-teal-600' }}
+                                flex items-center justify-center
+                                text-white font-semibold text-xl rounded-[15px]
+                                {{ $hasImage ? '' : '' }}">
+                        {{ $initials }}
                     </div>
-
-                    <!-- Glow Effect -->
-                    <div class="absolute inset-0 rounded-2xl blur-lg opacity-30
-                                bg-gradient-to-br {{ $member->gradient }}
-                                -z-10 group-hover:opacity-60 transition"></div>
                 </div>
 
-                <!-- TEXT -->
-                <div class="flex-1 min-w-0">
-                    <h3
-                        class="text-lg font-bold text-gray-900 leading-tight
-                               group-hover:text-green-700 transition font-english"
-                    >
-                        {{ $member->name }}
-                    </h3>
-                    <p
-                        class="text-sm text-gray-600 font-medium mt-1
-                               group-hover:text-gray-700 transition font-english"
-                    >
-                        {{ $member->position }}
-                    </p>
-                </div>
+                <!-- NAME & POSITION -->
+                <p class="text-gray-800 text-sm font-medium
+                          group-hover:text-gray-900 transition-colors
+                          duration-300 leading-tight font-english">
+                    {{ $member->name }}
+                </p>
+                <p class="text-gray-600 text-xs font-medium
+                          group-hover:text-gray-700 transition-colors
+                          duration-300 font-english">
+                    {{ $member->position }}
+                </p>
 
             </div>
-        </div>
         @endforeach
+
     </div>
 </div>
+
+
+
+
 
 
 
@@ -263,17 +275,17 @@
                     style="animation-delay: {{ $index * 50 }}ms">
                     <div class="w-24 h-24 rounded-[15px] overflow-hidden mx-auto mb-3 relative">
                         @if($member->image && file_exists(public_path('storage/' . $member->image)))
-                            <img src="{{ asset('storage/' . $member->image) }}"
-                                alt="{{ $member->name }}"
-                                class="w-full h-full object-cover rounded-[15px]"
-                                onerror="this.style.display='none'; this.nextElementSibling.style.display='flex'">
-                            <div class="absolute inset-0 bg-gradient-to-br from-blue-500 to-indigo-600 flex items-center justify-center text-white font-semibold text-xl hidden rounded-[15px]">
-                                {{ $initials }}
-                            </div>
+                        <img src="{{ asset('storage/' . $member->image) }}"
+                            alt="{{ $member->name }}"
+                            class="w-full h-full object-cover rounded-[15px]"
+                            onerror="this.style.display='none'; this.nextElementSibling.style.display='flex'">
+                        <div class="absolute inset-0 bg-gradient-to-br from-blue-500 to-indigo-600 flex items-center justify-center text-white font-semibold text-xl hidden rounded-[15px]">
+                            {{ $initials }}
+                        </div>
                         @else
-                            <div class="w-full h-full bg-gradient-to-br from-blue-500 to-indigo-600 flex items-center justify-center text-white font-semibold text-xl rounded-[15px]">
-                                {{ $initials }}
-                            </div>
+                        <div class="w-full h-full bg-gradient-to-br from-blue-500 to-indigo-600 flex items-center justify-center text-white font-semibold text-xl rounded-[15px]">
+                            {{ $initials }}
+                        </div>
                         @endif
                     </div>
                     <p class="text-gray-800 text-sm font-medium group-hover:text-gray-900 transition-colors duration-300 leading-tight font-english">
@@ -287,201 +299,201 @@
             </div>
         </div>
 
-{{-- ================= ENHANCED VISION & MISSION SECTION ================= --}}
-<div data-animate class="grid md:grid-cols-2 gap-8 mb-16">
-    @foreach($visionMissions as $vm)
-        <div class="group bg-white/80 backdrop-blur-sm border border-gray-200/50 rounded-3xl p-8 shadow-lg hover:shadow-2xl transition-all duration-500 hover:-translate-y-2">
-            <div class="flex items-center mb-6">
-                <div class="w-14 h-14 
+        {{-- ================= ENHANCED VISION & MISSION SECTION ================= --}}
+        <div data-animate class="grid md:grid-cols-2 gap-8 mb-16">
+            @foreach($visionMissions as $vm)
+            <div class="group bg-white/80 backdrop-blur-sm border border-gray-200/50 rounded-3xl p-8 shadow-lg hover:shadow-2xl transition-all duration-500 hover:-translate-y-2">
+                <div class="flex items-center mb-6">
+                    <div class="w-14 h-14 
                     {{ $vm->type === 'vision' ? 'bg-gradient-to-br from-purple-500 to-pink-600' : 'bg-gradient-to-br from-blue-500 to-cyan-600' }} 
                     rounded-2xl flex items-center justify-center mr-4 transform transition-all duration-500 group-hover:scale-110 group-hover:rotate-12 shadow-lg">
-                    <span class="text-2xl">
-                        {{ $vm->type === 'vision' ? '🌍' : '🎯' }}
-                    </span>
-                </div>
-                <h3 class="text-2xl font-bold text-gray-900 
+                        <span class="text-2xl">
+                            {{ $vm->type === 'vision' ? '🌍' : '🎯' }}
+                        </span>
+                    </div>
+                    <h3 class="text-2xl font-bold text-gray-900 
                     {{ $vm->type === 'vision' ? 'bg-gradient-to-r from-purple-900 to-pink-900' : 'bg-gradient-to-r from-blue-900 to-cyan-900' }} 
                     bg-clip-text text-transparent font-english">
-                    {{ ucfirst($vm->type) }}
-                </h3>
+                        {{ ucfirst($vm->type) }}
+                    </h3>
+                </div>
+                <p class="text-gray-700 leading-relaxed text-lg transform transition-all duration-500 group-hover:translate-x-2 group-hover:text-gray-900 font-english">
+                    {{ $vm->description }}
+                </p>
             </div>
-            <p class="text-gray-700 leading-relaxed text-lg transform transition-all duration-500 group-hover:translate-x-2 group-hover:text-gray-900 font-english">
-                {{ $vm->description }}
-            </p>
+            @endforeach
         </div>
-    @endforeach
-</div>
 
 
 
-  {{-- ================= ENHANCED GOALS & STRATEGIES ================= --}}
-<div data-animate class="mb-16">
-    <div class="text-center mb-12">
-        <h2 class="text-3xl md:text-4xl font-bold text-gray-900 mb-4 bg-gradient-to-r from-blue-900 to-purple-900 bg-clip-text text-transparent font-english">
-            Goals & Strategies
-        </h2>
-        <div class="w-20 h-1.5 bg-gradient-to-r from-blue-500 to-purple-500 mx-auto rounded-full animate-pulse"></div>
-    </div>
+        {{-- ================= ENHANCED GOALS & STRATEGIES ================= --}}
+        <div data-animate class="mb-16">
+            <div class="text-center mb-12">
+                <h2 class="text-3xl md:text-4xl font-bold text-gray-900 mb-4 bg-gradient-to-r from-blue-900 to-purple-900 bg-clip-text text-transparent font-english">
+                    Goals & Strategies
+                </h2>
+                <div class="w-20 h-1.5 bg-gradient-to-r from-blue-500 to-purple-500 mx-auto rounded-full animate-pulse"></div>
+            </div>
 
-    <div class="grid md:grid-cols-2 gap-8">
-        {{-- Goals --}}
-        <div>
-            <h3 class="text-2xl font-bold text-gray-900 mb-8 text-center bg-white/80 backdrop-blur-sm p-4 rounded-2xl border border-gray-200/50 font-english">
-                Our Goals
-            </h3>
-            <div class="space-y-6">
-                @foreach($goals as $index => $goal)
-                <div class="group bg-white/80 backdrop-blur-sm border border-gray-200/50 rounded-2xl p-6 hover:shadow-xl transition-all duration-500 hover:-translate-y-2"
-                    style="animation-delay: {{ $index * 100 }}ms">
-                    <div class="flex items-start space-x-4">
-                        <div class="text-3xl transform transition-all duration-500 group-hover:scale-110 group-hover:rotate-12">
-                            {{ $goal->icon }}
+            <div class="grid md:grid-cols-2 gap-8">
+                {{-- Goals --}}
+                <div>
+                    <h3 class="text-2xl font-bold text-gray-900 mb-8 text-center bg-white/80 backdrop-blur-sm p-4 rounded-2xl border border-gray-200/50 font-english">
+                        Our Goals
+                    </h3>
+                    <div class="space-y-6">
+                        @foreach($goals as $index => $goal)
+                        <div class="group bg-white/80 backdrop-blur-sm border border-gray-200/50 rounded-2xl p-6 hover:shadow-xl transition-all duration-500 hover:-translate-y-2"
+                            style="animation-delay: {{ $index * 100 }}ms">
+                            <div class="flex items-start space-x-4">
+                                <div class="text-3xl transform transition-all duration-500 group-hover:scale-110 group-hover:rotate-12">
+                                    {{ $goal->icon }}
+                                </div>
+                                <div class="flex-1">
+                                    <h4 class="text-2xl font-bold text-gray-900 mb-3 group-hover:text-gray-800 transition-colors duration-300 font-english">
+                                        {{ $goal->title }}
+                                    </h4>
+                                    <p class="text-gray-600 text-lg leading-relaxed group-hover:text-gray-700 transition-colors duration-300 font-english">
+                                        {{ $goal->description }}
+                                    </p>
+                                </div>
+                            </div>
                         </div>
-                        <div class="flex-1">
-                            <h4 class="text-2xl font-bold text-gray-900 mb-3 group-hover:text-gray-800 transition-colors duration-300 font-english">
-                                {{ $goal->title }}
-                            </h4>
-                            <p class="text-gray-600 text-lg leading-relaxed group-hover:text-gray-700 transition-colors duration-300 font-english">
-                                {{ $goal->description }}
-                            </p>
-                        </div>
+                        @endforeach
                     </div>
                 </div>
-                @endforeach
-            </div>
-        </div>
 
-        {{-- Strategies --}}
-        <div>
-            <h3 class="text-2xl font-bold text-gray-900 mb-8 text-center bg-white/80 backdrop-blur-sm p-4 rounded-2xl border border-gray-200/50 font-english">
-                Our Strategies
-            </h3>
-            <div class="space-y-6">
-                @foreach($strategies as $index => $strategy)
-                <div class="group bg-white/80 backdrop-blur-sm border border-gray-200/50 rounded-2xl p-6 hover:shadow-xl transition-all duration-500 hover:-translate-y-2"
-                    style="animation-delay: {{ $index * 100 }}ms">
-                    <div class="flex items-start space-x-4">
-                        <div class="text-3xl transform transition-all duration-500 group-hover:scale-110 group-hover:rotate-12">
-                            {{ $strategy->icon }}
+                {{-- Strategies --}}
+                <div>
+                    <h3 class="text-2xl font-bold text-gray-900 mb-8 text-center bg-white/80 backdrop-blur-sm p-4 rounded-2xl border border-gray-200/50 font-english">
+                        Our Strategies
+                    </h3>
+                    <div class="space-y-6">
+                        @foreach($strategies as $index => $strategy)
+                        <div class="group bg-white/80 backdrop-blur-sm border border-gray-200/50 rounded-2xl p-6 hover:shadow-xl transition-all duration-500 hover:-translate-y-2"
+                            style="animation-delay: {{ $index * 100 }}ms">
+                            <div class="flex items-start space-x-4">
+                                <div class="text-3xl transform transition-all duration-500 group-hover:scale-110 group-hover:rotate-12">
+                                    {{ $strategy->icon }}
+                                </div>
+                                <div class="flex-1">
+                                    <h4 class="text-xl font-bold text-gray-900 mb-3 group-hover:text-gray-800 transition-colors duration-300 font-english">
+                                        {{ $strategy->title }}
+                                    </h4>
+                                    <p class="text-gray-600 leading-relaxed group-hover:text-gray-700 transition-colors duration-300 font-english">
+                                        {{ $strategy->description }}
+                                    </p>
+                                </div>
+                            </div>
                         </div>
-                        <div class="flex-1">
-                            <h4 class="text-xl font-bold text-gray-900 mb-3 group-hover:text-gray-800 transition-colors duration-300 font-english">
-                                {{ $strategy->title }}
-                            </h4>
-                            <p class="text-gray-600 leading-relaxed group-hover:text-gray-700 transition-colors duration-300 font-english">
-                                {{ $strategy->description }}
-                            </p>
-                        </div>
+                        @endforeach
                     </div>
                 </div>
-                @endforeach
             </div>
         </div>
-    </div>
-</div>
 
 
-   {{-- ================= ENHANCED VALUES & BENEFITS ================= --}}
-<div data-animate
-    class="bg-gradient-to-br from-blue-50/80 to-purple-50/80 backdrop-blur-sm rounded-3xl p-8 md:p-10 mb-16 border border-blue-200/50 shadow-lg hover:shadow-2xl transition-all duration-500 hover:-translate-y-2">
+        {{-- ================= ENHANCED VALUES & BENEFITS ================= --}}
+        <div data-animate
+            class="bg-gradient-to-br from-blue-50/80 to-purple-50/80 backdrop-blur-sm rounded-3xl p-8 md:p-10 mb-16 border border-blue-200/50 shadow-lg hover:shadow-2xl transition-all duration-500 hover:-translate-y-2">
 
-    {{-- Header --}}
-    <div class="text-center mb-10">
-        <h2
-            class="text-2xl md:text-3xl font-bold text-gray-900 mb-4 bg-gradient-to-r from-blue-900 to-purple-900 bg-clip-text text-transparent font-english">
-            Values and Benefits of Studying at PSBU
-        </h2>
-        <div class="w-20 h-1.5 bg-gradient-to-r from-blue-500 to-purple-500 mx-auto rounded-full animate-pulse"></div>
-    </div>
+            {{-- Header --}}
+            <div class="text-center mb-10">
+                <h2
+                    class="text-2xl md:text-3xl font-bold text-gray-900 mb-4 bg-gradient-to-r from-blue-900 to-purple-900 bg-clip-text text-transparent font-english">
+                    Values and Benefits of Studying at PSBU
+                </h2>
+                <div class="w-20 h-1.5 bg-gradient-to-r from-blue-500 to-purple-500 mx-auto rounded-full animate-pulse"></div>
+            </div>
 
-    {{-- Content --}}
-    <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-4">
-        @forelse($valuesBenefits as $index => $benefit)
-            <div class="group bg-white/90 backdrop-blur-sm rounded-xl p-4 border border-gray-200/50
+            {{-- Content --}}
+            <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-4">
+                @forelse($valuesBenefits as $index => $benefit)
+                <div class="group bg-white/90 backdrop-blur-sm rounded-xl p-4 border border-gray-200/50
                         hover:shadow-lg transition-all duration-300 hover:-translate-y-2 cursor-pointer"
-                style="animation-delay: {{ $index * 60 }}ms">
+                    style="animation-delay: {{ $index * 60 }}ms">
 
-                <div class="flex items-center space-x-3">
-                    {{-- Number --}}
-                    <div
-                        class="w-8 h-8 bg-gradient-to-br from-blue-500 to-blue-600 rounded-full
+                    <div class="flex items-center space-x-3">
+                        {{-- Number --}}
+                        <div
+                            class="w-8 h-8 bg-gradient-to-br from-blue-500 to-blue-600 rounded-full
                                flex items-center justify-center text-white font-bold text-xs
                                transform transition-all duration-300
                                group-hover:scale-110 group-hover:rotate-12 shadow-md flex-shrink-0">
-                        {{ $index + 1 }}
+                            {{ $index + 1 }}
+                        </div>
+
+                        {{-- Text --}}
+                        <p
+                            class="text-gray-700 text-sm font-medium leading-relaxed
+                               group-hover:text-gray-900 transition-colors duration-300 font-english">
+                            {{ $benefit->title }}
+                        </p>
+                    </div>
+                </div>
+                @empty
+                <p class="col-span-full text-center text-gray-500 text-sm">
+                    No values & benefits available at the moment.
+                </p>
+                @endforelse
+            </div>
+        </div>
+
+        {{-- ================= ENHANCED ACCREDITATION SECTION ================= --}}
+        <div data-animate class="bg-gradient-to-br from-gray-800 via-gray-900 to-blue-900 rounded-3xl p-8 md:p-10 text-white shadow-2xl hover:shadow-3xl transition-all duration-500 hover:-translate-y-2 relative overflow-hidden">
+            {{-- Background Elements --}}
+            <div class="absolute top-0 right-0 w-32 h-32 bg-white/10 rounded-full translate-x-1/2 -translate-y-1/2"></div>
+            <div class="absolute bottom-0 left-0 w-48 h-48 bg-white/10 rounded-full -translate-x-1/3 translate-y-1/3"></div>
+
+            <div class="relative z-10 font-english">
+                <div class="text-center mb-10">
+                    <h2 class="text-2xl md:text-3xl font-bold mb-4 bg-gradient-to-r from-blue-300 to-purple-300 bg-clip-text text-transparent">
+                        Accreditations & Recognition
+                    </h2>
+                    <div class="w-20 h-1.5 bg-gradient-to-r from-blue-400 to-purple-400 mx-auto rounded-full animate-pulse"></div>
+                </div>
+
+                <p class="text-gray-300 text-center mb-10 text-lg max-w-3xl mx-auto font-english">
+                    PSBU's commitment to academic excellence is reflected in our prestigious accreditations and international recognitions.
+                </p>
+
+                <div class="grid md:grid-cols-2 gap-8">
+                    {{-- International Accreditations --}}
+                    <div class="transform transition-all duration-500 hover:-translate-y-1">
+                        <h3 class="text-xl md:text-2xl font-bold mb-6 text-blue-300 bg-blue-900/30 p-4 rounded-2xl text-center font-english">
+                            International Accreditations
+                        </h3>
+                        <ul class="space-y-3 text-gray-300">
+                            @foreach($accreditations->where('type', 'international') as $item)
+                            <li class="flex items-center space-x-3 group">
+                                <div class="w-2 h-2 bg-blue-400 rounded-full group-hover:scale-150 transition-transform duration-300"></div>
+                                <span class="group-hover:text-white transition-colors duration-300 text-sm">
+                                    {{ $item->title }}
+                                </span>
+                            </li>
+                            @endforeach
+                        </ul>
                     </div>
 
-                    {{-- Text --}}
-                    <p
-                        class="text-gray-700 text-sm font-medium leading-relaxed
-                               group-hover:text-gray-900 transition-colors duration-300 font-english">
-                        {{ $benefit->title }}
-                    </p>
+                    {{-- Memberships --}}
+                    <div class="transform transition-all duration-500 hover:-translate-y-1">
+                        <h3 class="text-xl md:text-2xl font-bold mb-6 text-purple-300 bg-purple-900/30 p-4 rounded-2xl text-center font-english">
+                            Memberships
+                        </h3>
+                        <ul class="space-y-3 text-gray-300">
+                            @foreach($accreditations->where('type', 'membership') as $item)
+                            <li class="flex items-center space-x-3 group">
+                                <div class="w-2 h-2 bg-purple-400 rounded-full group-hover:scale-150 transition-transform duration-300"></div>
+                                <span class="group-hover:text-white transition-colors duration-300 text-sm">
+                                    {{ $item->title }}
+                                </span>
+                            </li>
+                            @endforeach
+                        </ul>
+                    </div>
                 </div>
             </div>
-        @empty
-            <p class="col-span-full text-center text-gray-500 text-sm">
-                No values & benefits available at the moment.
-            </p>
-        @endforelse
-    </div>
-</div>
-
-{{-- ================= ENHANCED ACCREDITATION SECTION ================= --}}
-<div data-animate class="bg-gradient-to-br from-gray-800 via-gray-900 to-blue-900 rounded-3xl p-8 md:p-10 text-white shadow-2xl hover:shadow-3xl transition-all duration-500 hover:-translate-y-2 relative overflow-hidden">
-    {{-- Background Elements --}}
-    <div class="absolute top-0 right-0 w-32 h-32 bg-white/10 rounded-full translate-x-1/2 -translate-y-1/2"></div>
-    <div class="absolute bottom-0 left-0 w-48 h-48 bg-white/10 rounded-full -translate-x-1/3 translate-y-1/3"></div>
-
-    <div class="relative z-10 font-english">
-        <div class="text-center mb-10">
-            <h2 class="text-2xl md:text-3xl font-bold mb-4 bg-gradient-to-r from-blue-300 to-purple-300 bg-clip-text text-transparent">
-                Accreditations & Recognition
-            </h2>
-            <div class="w-20 h-1.5 bg-gradient-to-r from-blue-400 to-purple-400 mx-auto rounded-full animate-pulse"></div>
         </div>
-
-        <p class="text-gray-300 text-center mb-10 text-lg max-w-3xl mx-auto font-english">
-            PSBU's commitment to academic excellence is reflected in our prestigious accreditations and international recognitions.
-        </p>
-
-        <div class="grid md:grid-cols-2 gap-8">
-            {{-- International Accreditations --}}
-            <div class="transform transition-all duration-500 hover:-translate-y-1">
-                <h3 class="text-xl md:text-2xl font-bold mb-6 text-blue-300 bg-blue-900/30 p-4 rounded-2xl text-center font-english">
-                    International Accreditations
-                </h3>
-                <ul class="space-y-3 text-gray-300">
-                    @foreach($accreditations->where('type', 'international') as $item)
-                        <li class="flex items-center space-x-3 group">
-                            <div class="w-2 h-2 bg-blue-400 rounded-full group-hover:scale-150 transition-transform duration-300"></div>
-                            <span class="group-hover:text-white transition-colors duration-300 text-sm">
-                                {{ $item->title }}
-                            </span>
-                        </li>
-                    @endforeach
-                </ul>
-            </div>
-
-            {{-- Memberships --}}
-            <div class="transform transition-all duration-500 hover:-translate-y-1">
-                <h3 class="text-xl md:text-2xl font-bold mb-6 text-purple-300 bg-purple-900/30 p-4 rounded-2xl text-center font-english">
-                    Memberships
-                </h3>
-                <ul class="space-y-3 text-gray-300">
-                    @foreach($accreditations->where('type', 'membership') as $item)
-                        <li class="flex items-center space-x-3 group">
-                            <div class="w-2 h-2 bg-purple-400 rounded-full group-hover:scale-150 transition-transform duration-300"></div>
-                            <span class="group-hover:text-white transition-colors duration-300 text-sm">
-                                {{ $item->title }}
-                            </span>
-                        </li>
-                    @endforeach
-                </ul>
-            </div>
-        </div>
-    </div>
-</div>
 
 
 

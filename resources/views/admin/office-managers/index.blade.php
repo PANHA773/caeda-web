@@ -138,37 +138,58 @@
                     @foreach($managers as $manager)
                     <tr class="hover:bg-gray-50 transition-colors duration-150">
                         
-                        {{-- Manager Info --}}
-                        <td class="px-6 py-4">
-                            <div class="flex items-center gap-4">
-                                <div class="relative">
-                                    @if($manager->image_url)
-                                        <img src="{{ $manager->image_url }}" 
-                                             alt="{{ $manager->name }}" 
-                                             class="w-12 h-12 rounded-xl object-cover border-2 border-white shadow">
-                                    @else
-                                        <div class="w-12 h-12 rounded-xl bg-gradient-to-r from-blue-500 to-indigo-600 flex items-center justify-center text-white font-semibold text-lg shadow">
-                                            {{ strtoupper(substr($manager->name, 0, 1)) }}
-                                        </div>
-                                    @endif
-                                    <div class="absolute -bottom-1 -right-1 w-4 h-4 bg-green-500 rounded-full border-2 border-white"></div>
-                                </div>
-                                <div>
-                                    <div class="flex items-center gap-2">
-                                        <h3 class="font-semibold text-gray-900">{{ $manager->name }}</h3>
-                                        <span class="text-xs px-2 py-0.5 bg-gray-100 text-gray-700 rounded-full">ID: {{ $manager->id }}</span>
-                                    </div>
-                                    @if($manager->email)
-                                        <div class="flex items-center gap-2 mt-1">
-                                            <svg class="w-4 h-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 4.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/>
-                                            </svg>
-                                            <p class="text-sm text-gray-500">{{ $manager->email }}</p>
-                                        </div>
-                                    @endif
-                                </div>
-                            </div>
-                        </td>
+{{-- Manager Info --}}
+<td class="px-6 py-4">
+    <div class="flex items-center gap-4">
+        <div class="relative">
+            @php
+                $imagePath = $manager->image && Storage::disk('public')->exists($manager->image)
+                    ? asset('storage/' . $manager->image)
+                    : null;
+            @endphp
+
+            @if($imagePath)
+                <img
+                    src="{{ $imagePath }}"
+                    alt="{{ $manager->name }}"
+                    class="w-12 h-12 rounded-xl object-cover border-2 border-white shadow"
+                >
+            @else
+                <div class="w-12 h-12 rounded-xl bg-gradient-to-r from-blue-500 to-indigo-600
+                            flex items-center justify-center text-white font-semibold text-lg shadow">
+                    {{ Str::upper(Str::substr($manager->name, 0, 1)) }}
+                </div>
+            @endif
+
+            {{-- Status Indicator --}}
+            <div class="absolute -bottom-1 -right-1 w-4 h-4
+                {{ ($manager->is_active ?? true) ? 'bg-green-500' : 'bg-gray-400' }}
+                rounded-full border-2 border-white">
+            </div>
+        </div>
+
+        <div>
+            <div class="flex items-center gap-2">
+                <h3 class="font-semibold text-gray-900">{{ $manager->name }}</h3>
+                <span class="text-xs px-2 py-0.5 bg-gray-100 text-gray-700 rounded-full">
+                    ID: {{ $manager->id }}
+                </span>
+            </div>
+
+            @if(!empty($manager->email))
+                <div class="flex items-center gap-2 mt-1">
+                    <svg class="w-4 h-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                              d="M3 8l7.89 4.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/>
+                    </svg>
+                    <p class="text-sm text-gray-500">{{ $manager->email }}</p>
+                </div>
+            @endif
+        </div>
+    </div>
+</td>
+
+
 
                         {{-- Position --}}
                         <td class="px-6 py-4">

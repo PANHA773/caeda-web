@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Models\Hero;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
 
 
 class HeroController extends Controller
@@ -22,31 +23,42 @@ class HeroController extends Controller
         return view('admin.heroes.create');
     }
 
-    // Store a new hero
-    public function store(Request $request)
-    {
-        $data = $request->validate([
-            'badge_text' => 'nullable|string|max:255',
-            'title' => 'required|string|max:255',
-            'highlight_title' => 'nullable|string|max:255',
-            'subtitle' => 'nullable|string',
-            'image' => 'nullable|image|max:2048',
-            'stats' => 'nullable|array',
-            'is_active' => 'nullable|boolean',
-        ]);
 
-        // Handle image upload
-        if ($request->hasFile('image')) {
-            $data['image'] = $request->file('image')->store('heroes', 'public');
-        }
+// Store a new hero
+public function store(Request $request)
+{
+    $data = $request->validate([
+        'badge_text'      => 'nullable|string|max:255',
+        'title'           => 'required|string|max:255',
+        'highlight_title' => 'nullable|string|max:255',
+        'subtitle'        => 'nullable|string',
+        'image'           => 'nullable|image|max:2048',
+        'stats'           => 'nullable|array',
+        'is_active'       => 'nullable|boolean',
+    ]);
 
-        // Ensure is_active is boolean
-        $data['is_active'] = $request->has('is_active');
+    // Store image manually using Storage::put
+    if ($request->hasFile('image')) {
+        $file = $request->file('image');
 
-        Hero::create($data);
+        $path = 'heroes/' . uniqid() . '.' . $file->getClientOriginalExtension();
 
-        return redirect()->route('admin.heroes.index')->with('success', 'Hero created successfully');
+        Storage::disk('public')->put(
+            $path,
+            file_get_contents($file)
+        );
+
+        $data['image'] = $path;
     }
+
+    $data['is_active'] = $request->boolean('is_active');
+
+    Hero::create($data);
+
+    return redirect()
+        ->route('admin.heroes.index')
+        ->with('success', 'Hero created successfully');
+}
 
     // Show form to edit an existing hero
     public function edit(Hero $hero)

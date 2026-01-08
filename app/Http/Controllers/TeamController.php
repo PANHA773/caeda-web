@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use App\Models\TeamMember;
 use App\Models\Partner;
 use App\Models\Faq;
+use App\Models\MemberCompany;
+use App\Models\Footer;
 use App\Models\PricingPlan;
 use Illuminate\Http\Request;
 
@@ -15,10 +17,9 @@ class TeamController extends Controller
      */
     public function index()
     {
+          $memberCompanies = MemberCompany::orderBy('name')->get(); // pull from DB
         // Team Members (has sort_order)
-        $teamMembers = TeamMember::where('is_active', true)
-            ->orderBy('sort_order')
-            ->get();
+  
 
         // Partners (has sort_order)
         $partners = Partner::where('is_active', true)
@@ -36,12 +37,15 @@ class TeamController extends Controller
             ->orderByDesc('is_popular')
             ->orderBy('id')
             ->get();
+            $footer = Footer::first();
 
         return view('our-team', compact(
-            'teamMembers',
+         
             'partners',
             'faqs',
-            'plans'
+            'plans',
+            'memberCompanies',
+            'footer'
         ));
     }
 }

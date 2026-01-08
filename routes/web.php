@@ -71,6 +71,8 @@ use App\Http\Controllers\Admin\LocationController;
 use App\Http\Controllers\Admin\FeaturedMenuController;
 use App\Http\Controllers\Admin\DashboardController;
 use App\Http\Controllers\Admin\NewsAdminController;
+use App\Http\Controllers\Admin\UserAdminController;
+use App\Http\Controllers\Admin\MemberCompanyController;
 
 
 // ==============================
@@ -315,5 +317,11 @@ Route::middleware(['auth', \App\Http\Middleware\AdminTokenMiddleware::class])->p
     Route::resource('featured_menus', FeaturedMenuController::class);
     // News (Admin CRUD)
     Route::resource('news', NewsAdminController::class);
+
+    // User Management
+    Route::resource('users', UserAdminController::class);
+
+    // member companies
+    Route::resource('member-companies', MemberCompanyController::class);
 
 });

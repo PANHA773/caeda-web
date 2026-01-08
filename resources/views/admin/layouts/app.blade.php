@@ -241,6 +241,7 @@
                 width: 280px;
             }
         }
+
         /* Dark mode variable overrides when body has .dark */
         body.dark {
             --sidebar-bg: #0b0f14;
@@ -250,9 +251,18 @@
             color: #e6eef8;
         }
 
-        body.dark .card { background: #071029; border-color: rgba(255,255,255,0.03); }
-        body.dark .nav-link { color: var(--sidebar-text); }
-        body.dark .dropdown-link { color: #cbd5e1; }
+        body.dark .card {
+            background: #071029;
+            border-color: rgba(255, 255, 255, 0.03);
+        }
+
+        body.dark .nav-link {
+            color: var(--sidebar-text);
+        }
+
+        body.dark .dropdown-link {
+            color: #cbd5e1;
+        }
     </style>
 </head>
 
@@ -319,6 +329,13 @@
                     class="nav-link flex items-center space-x-3 px-4 py-3 rounded-xl text-gray-300 hover:text-white transition-all duration-200 {{ request()->routeIs('admin.news*') ? 'active' : '' }}">
                     <i class="fas fa-newspaper w-5 text-center text-lg"></i>
                     <span class="font-medium">News Page</span>
+                </a>
+
+                        <!-- User -->
+                <a href="{{ route('admin.users.index') }}"
+                    class="nav-link flex items-center space-x-3 px-4 py-3 rounded-xl text-gray-300 hover:text-white transition-all duration-200 {{ request()->routeIs('admin.users*') ? 'active' : '' }}">
+                    <i class="fas fa-users w-5 text-center text-lg"></i>
+                    <span class="font-medium">Users</span>
                 </a>
 
 
@@ -474,10 +491,18 @@
                             <i class="fas fa-handshake-angle w-5 text-center"></i>
                             <span>Partners</span>
                         </a>
+                        <!-- Pricing -->
                         <a href="{{ route('admin.pricing.index') }}" class="dropdown-link flex items-center space-x-3 px-4 py-2 rounded-lg text-gray-400 hover:text-white hover:bg-gray-800 {{ request()->routeIs('admin.pricing*') ? 'active' : '' }}">
                             <i class="fas fa-tags w-5 text-center"></i>
                             <span>Pricing</span>
                         </a>
+                             <!-- Member Companies -->
+                        <a href="{{ route('admin.member-companies.index') }}" class="dropdown-link flex items-center space-x-3 px-4 py-2 rounded-lg text-gray-400 hover:text-white hover:bg-gray-800 {{ request()->routeIs('admin.member-companies*') ? 'active' : '' }}">
+                            <i class="fas fa-building w-5 text-center"></i>
+                            <span>Member Companies</span>
+                        </a>
+
+                        
                     </div>
                 </div>
 
@@ -543,31 +568,6 @@
                     </div>
                 </div>
 
-                <!-- Coffee Page Dropdown -->
-                <div class="relative">
-                    <button class="dropdown-btn w-full flex items-center justify-between px-4 py-3 rounded-xl text-gray-300 hover:text-white transition-all duration-200 focus:outline-none {{ request()->routeIs('admin.heroes*') || request()->routeIs('admin.recent-donors*') || request()->routeIs('admin.stories*') ? 'active' : '' }}">
-                        <span class="flex items-center space-x-3">
-                            <i class="fas fa-hand-holding-heart w-5 text-center text-lg"></i>
-                            <span class="font-medium">Coffe Page</span>
-                        </span>
-                        <i class="fas fa-chevron-down transition-transform duration-200 text-sm"></i>
-                    </button>
-
-                    <div class="dropdown-menu hidden pl-12 mt-1 space-y-1">
-                        <!-- Categories -->
-                        <a href="{{ route('admin.menu-categories.index') }}" class="dropdown-link flex items-center space-x-3 px-4 py-2 rounded-lg text-gray-400 hover:text-white hover:bg-gray-800 {{ request()->routeIs('admin.menu-categories*') ? 'active' : '' }}">
-                            <i class="fas fa-list-ul w-5 text-center"></i>
-                            <span>Categories</span>
-                        </a>
-
-                        <!-- Menu Items -->
-                        <a href="{{ route('admin.menu_items.index') }}" class="dropdown-link flex items-center space-x-3 px-4 py-2 rounded-lg text-gray-400 hover:text-white hover:bg-gray-800 {{ request()->routeIs('admin.menu_items*') ? 'active' : '' }}">
-                            <i class="fas fa-utensils w-5 text-center"></i>
-                            <span>Menu Items</span>
-                        </a>
-
-                    </div>
-                </div>
                 <!-- Achieve Page Dropdown -->
                 <div class="relative">
                     <button class="dropdown-btn w-full flex items-center justify-between px-4 py-3 rounded-xl text-gray-300 hover:text-white transition-all duration-200 focus:outline-none {{ request()->routeIs('admin.heroes*') || request()->routeIs('admin.milestones*') || request()->routeIs('admin.awards*') || request()->routeIs('admin.progress-metrics*') || request()->routeIs('admin.success-stories*') ? 'active' : '' }}">
@@ -694,6 +694,17 @@
                     </button>
 
                     <div class="dropdown-menu hidden pl-12 mt-1 space-y-1">
+                        <!-- Categories -->
+                        <a href="{{ route('admin.menu-categories.index') }}" class="dropdown-link flex items-center space-x-3 px-4 py-2 rounded-lg text-gray-400 hover:text-white hover:bg-gray-800 {{ request()->routeIs('admin.menu-categories*') ? 'active' : '' }}">
+                            <i class="fas fa-list-ul w-5 text-center"></i>
+                            <span>Categories</span>
+                        </a>
+
+                        <!-- Menu Items -->
+                        <a href="{{ route('admin.menu_items.index') }}" class="dropdown-link flex items-center space-x-3 px-4 py-2 rounded-lg text-gray-400 hover:text-white hover:bg-gray-800 {{ request()->routeIs('admin.menu_items*') ? 'active' : '' }}">
+                            <i class="fas fa-utensils w-5 text-center"></i>
+                            <span>Menu Items</span>
+                        </a>
                         <!-- FeaturedMenu -->
                         <a href="{{ route('admin.featured_menus.index') }}" class="dropdown-link flex items-center space-x-3 px-4 py-2 rounded-lg text-gray-400 hover:text-white hover:bg-gray-800 {{ request()->routeIs('admin.featured_menus*') ? 'active' : '' }}">
                             <i class="fas fa-utensils w-5 text-center"></i>
@@ -980,7 +991,7 @@
                 userMenuBtn.addEventListener('click', (e) => {
                     e.stopPropagation();
                     // Implement user menu dropdown here
-                    showToast('User menu clicked', 'info');
+                    showToast('User menu clicked', 'info',);
                 });
             }
 
@@ -1012,14 +1023,15 @@
 
             // Dark mode initialization and toggle (admin)
             const dmBtn = document.getElementById('darkModeToggle');
-            function applyTheme(t){
-                if(t === 'dark') document.body.classList.add('dark');
+
+            function applyTheme(t) {
+                if (t === 'dark') document.body.classList.add('dark');
                 else document.body.classList.remove('dark');
-                if(dmBtn) dmBtn.textContent = document.body.classList.contains('dark') ? '☀️' : '🌙';
+                if (dmBtn) dmBtn.textContent = document.body.classList.contains('dark') ? '☀️' : '🌙';
             }
             const savedTheme = localStorage.getItem('site-theme') || (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
             applyTheme(savedTheme);
-            if(dmBtn) dmBtn.addEventListener('click', function(){
+            if (dmBtn) dmBtn.addEventListener('click', function() {
                 const next = document.body.classList.contains('dark') ? 'light' : 'dark';
                 localStorage.setItem('site-theme', next);
                 applyTheme(next);

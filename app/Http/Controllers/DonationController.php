@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\Models\Hero;
 use App\Models\ImpactStory;
 use App\Models\Donation;
+use App\Models\Footer;
 
 class DonationController extends Controller
 {
@@ -26,7 +27,9 @@ class DonationController extends Controller
             ->take(10)
             ->get();
 
-        return view('donation', compact('hero', 'impactStories', 'recentDonors'));
+            $footer = Footer::first();
+
+        return view('donation', compact('hero', 'impactStories', 'recentDonors', 'footer'));
     }
 
     // Handle donation form submission
