@@ -265,9 +265,9 @@
 
 {{-- ================= FEATURED EVENT COUNTDOWN ================= --}}
 @php
-    $featuredEvent = \App\Models\FeaturedEvent::where('is_active', true)
-        ->orderBy('start_date')
-        ->first();
+$featuredEvent = \App\Models\FeaturedEvent::where('is_active', true)
+->orderBy('start_date')
+->first();
 @endphp
 
 @if($featuredEvent)
@@ -275,7 +275,7 @@
     <div class="max-w-7xl mx-auto px-4 md:px-8">
         <div class="glass-effect rounded-3xl p-8 md:p-12 shadow-2xl">
             <div class="flex flex-col lg:flex-row items-center justify-between gap-10">
-                
+
                 {{-- Event Info --}}
                 <div class="lg:w-1/2">
                     <div class="inline-block bg-gradient-to-r from-blue-500 to-purple-500 text-white text-sm font-bold px-4 py-2 rounded-full mb-6 animate-pulse-glow">
@@ -306,7 +306,7 @@
                             </svg>
                             <span>{{ $featuredEvent->start_date->format('M d, Y') }}
                                 @if($featuredEvent->start_time)
-                                    • {{ \Carbon\Carbon::parse($featuredEvent->start_time)->format('h:i A') }}
+                                • {{ \Carbon\Carbon::parse($featuredEvent->start_time)->format('h:i A') }}
                                 @endif
                             </span>
                         </div>
@@ -694,36 +694,36 @@
 
             <div class="space-y-12">
                 @foreach($timelineEvents as $index => $event)
-                    <div class="relative flex flex-col md:flex-row items-start animate-fade-in-up" style="animation-delay: {{ $index * 150 }}ms">
-                        {{-- Timeline dot --}}
-                        <div class="timeline-dot flex-shrink-0 w-12 h-12 rounded-full {{ 
+                <div class="relative flex flex-col md:flex-row items-start animate-fade-in-up" style="animation-delay: {{ $index * 150 }}ms">
+                    {{-- Timeline dot --}}
+                    <div class="timeline-dot flex-shrink-0 w-12 h-12 rounded-full {{ 
                                 $event->status == 'completed' ? 'bg-green-100 border-4 border-green-300' : 
                                 ($event->status == 'active' ? 'bg-blue-100 border-4 border-blue-300 animate-pulse' : 'bg-gray-100 border-4 border-gray-300') 
                             }} flex items-center justify-center mb-4 md:mb-0">
-                            <i class="{{ $event->icon }} {{ 
+                        <i class="{{ $event->icon }} {{ 
                                     $event->status == 'completed' ? 'text-green-600' : 
                                     ($event->status == 'active' ? 'text-blue-600' : 'text-gray-600') 
                                 }}"></i>
-                        </div>
+                    </div>
 
-                        {{-- Timeline content --}}
-                        <div class="md:ml-8 flex-1 bg-white rounded-2xl p-6 shadow-lg hover:shadow-xl transition-all duration-300 {{ $event->status == 'active' ? 'border-2 border-blue-300' : '' }}">
-                            <div class="flex flex-col md:flex-row md:items-center justify-between mb-3">
-                                <h3 class="text-xl font-bold text-gray-900">{{ $event->title }}</h3>
-                                <span class="text-sm font-semibold px-3 py-1 rounded-full {{ 
+                    {{-- Timeline content --}}
+                    <div class="md:ml-8 flex-1 bg-white rounded-2xl p-6 shadow-lg hover:shadow-xl transition-all duration-300 {{ $event->status == 'active' ? 'border-2 border-blue-300' : '' }}">
+                        <div class="flex flex-col md:flex-row md:items-center justify-between mb-3">
+                            <h3 class="text-xl font-bold text-gray-900">{{ $event->title }}</h3>
+                            <span class="text-sm font-semibold px-3 py-1 rounded-full {{ 
                                         $event->status == 'completed' ? 'bg-green-100 text-green-600' : 
                                         ($event->status == 'active' ? 'bg-blue-100 text-blue-600 animate-bounce-subtle' : 'bg-gray-100 text-gray-600') 
                                     }}">
-                                    {{ ucfirst($event->status) }}
-                                </span>
-                            </div>
-                            <p class="text-gray-600 mb-4">{{ $event->description }}</p>
-                            <div class="text-gray-500 text-sm flex items-center">
-                                <i class="far fa-calendar mr-2"></i>
-                                {{ $event->date }}
-                            </div>
+                                {{ ucfirst($event->status) }}
+                            </span>
+                        </div>
+                        <p class="text-gray-600 mb-4">{{ $event->description }}</p>
+                        <div class="text-gray-500 text-sm flex items-center">
+                            <i class="far fa-calendar mr-2"></i>
+                            {{ $event->date }}
                         </div>
                     </div>
+                </div>
                 @endforeach
             </div>
         </div>

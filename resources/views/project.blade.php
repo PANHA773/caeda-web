@@ -194,33 +194,34 @@
                 $initials = collect(explode(' ', $member->name))
                     ->map(fn($n) => strtoupper(substr($n, 0, 1)))
                     ->implode('');
+
+                // Full image path check
+                $imagePath = $member->image && file_exists(public_path('storage/' . $member->image))
+                    ? asset('storage/' . $member->image)
+                    : null;
             @endphp
 
-            <div class="group bg-white/90 backdrop-blur-sm rounded-xl p-4 text-center
+            <div class="group bg-white/90 backdrop-blur-sm rounded-2xl p-4 text-center
                         border border-gray-200/50 hover:shadow-lg
                         transition-all duration-300 hover:-translate-y-2 cursor-pointer"
                  style="animation-delay: {{ $index * 50 }}ms">
 
                 <!-- IMAGE / INITIALS -->
-                <div class="w-24 h-24 rounded-[15px] overflow-hidden mx-auto mb-3 relative">
-                    @php
-                        $hasImage = $member->image_url && file_exists(public_path('storage/' . $member->image ?? ''));
-                    @endphp
-
-                    @if($hasImage)
-                        <img src="{{ $member->image_url }}"
+                <div class="w-28 h-28 md:w-32 md:h-32 rounded-2xl overflow-hidden mx-auto mb-3 relative shadow-md">
+                    
+                    @if($imagePath)
+                        <img src="{{ $imagePath }}"
                              alt="{{ $member->name }}"
-                             class="w-full h-full object-cover rounded-[15px]">
+                             class="w-full h-full object-cover transition-transform duration-500
+                                    group-hover:scale-105">
+                    @else
+                        <div class="w-full h-full flex items-center justify-center
+                                    bg-gradient-to-br {{ $member->gradient ?? 'from-green-500 to-teal-600' }}
+                                    text-white font-bold text-2xl">
+                            {{ $initials }}
+                        </div>
                     @endif
 
-                    <!-- Always show fallback initials behind image -->
-                    <div class="absolute inset-0 bg-gradient-to-br
-                                {{ $member->gradient ?? 'from-green-500 to-teal-600' }}
-                                flex items-center justify-center
-                                text-white font-semibold text-xl rounded-[15px]
-                                {{ $hasImage ? '' : '' }}">
-                        {{ $initials }}
-                    </div>
                 </div>
 
                 <!-- NAME & POSITION -->
@@ -240,10 +241,6 @@
 
     </div>
 </div>
-
-
-
-
 
 
 
@@ -273,7 +270,9 @@
 
                 <div class="group bg-white/90 backdrop-blur-sm rounded-xl p-4 text-center border border-gray-200/50 hover:shadow-lg transition-all duration-300 hover:-translate-y-2 cursor-pointer"
                     style="animation-delay: {{ $index * 50 }}ms">
-                    <div class="w-24 h-24 rounded-[15px] overflow-hidden mx-auto mb-3 relative">
+                    <!-- <div class="w-24 h-24 rounded-[15px] overflow-hidden mx-auto mb-3 relative"> -->
+                        <div class="w-28 h-28 md:w-32 md:h-32 rounded-xl overflow-hidden mx-auto mb-3 relative">
+
                         @if($member->image && file_exists(public_path('storage/' . $member->image)))
                         <img src="{{ asset('storage/' . $member->image) }}"
                             alt="{{ $member->name }}"

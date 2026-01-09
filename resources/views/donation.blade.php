@@ -598,55 +598,101 @@
 
 
 {{-- ================= IMPACT STORIES ================= --}}
-<section id="impact" class="py-24 px-4 md:px-8 bg-gradient-to-b from-white to-blue-50">
+<section id="impact" class="py-24 px-4 md:px-8 bg-gradient-to-b from-white via-blue-50/50 to-blue-100/30">
     <div class="max-w-7xl mx-auto">
+
+        {{-- Header --}}
         <div class="text-center mb-16 animate-fade-up">
-            <h2 class="text-4xl md:text-5xl font-display font-black text-gray-900 mb-4">
-                Stories of <span class="text-gradient">Hope</span>
+            <span class="inline-block mb-4 px-5 py-2 text-sm font-semibold
+                         text-blue-700 bg-blue-100/80 rounded-full">
+                Impact & Stories
+            </span>
+
+            <h2 class="text-4xl md:text-5xl lg:text-6xl font-black text-gray-900 mb-5">
+                Stories of
+                <span class="bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
+                    Hope
+                </span>
             </h2>
-            <p class="text-xl text-gray-600 max-w-2xl mx-auto">
-                Real children, real stories - made possible by donors like you
+
+            <p class="text-lg md:text-xl text-gray-600 max-w-2xl mx-auto leading-relaxed">
+                Real children, real stories — made possible by the generosity of donors like you.
             </p>
+
+            <div class="w-24 h-1.5 bg-gradient-to-r from-blue-500 to-purple-500 mx-auto mt-6 rounded-full animate-pulse"></div>
         </div>
 
-        <div class="grid md:grid-cols-3 gap-8">
-            @foreach($impactStories as $story)
-                <div class="bg-white rounded-3xl overflow-hidden shadow-2xl card-hover animate-fade-up"
-                     style="animation-delay: {{ $loop->index * 0.2 }}s;">
-                     
-                    <div class="relative h-64">
-                        <img src="{{ $story->image }}"
-                             alt="{{ $story->name }}"
-                             class="w-full h-full object-cover">
+        {{-- Stories Grid --}}
+        <div class="grid gap-10 sm:grid-cols-2 lg:grid-cols-3">
 
-                        <div class="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent"></div>
+            @foreach($impactStories as $index => $story)
+                <article
+                    class="group relative bg-white/95 backdrop-blur-md rounded-3xl overflow-hidden
+                           border border-gray-200/60 shadow-lg hover:shadow-2xl
+                           transition-all duration-500 hover:-translate-y-3 animate-fade-up"
+                    style="animation-delay: {{ $index * 120 }}ms">
 
-                        <div class="absolute bottom-4 left-4">
-                            <div class="px-3 py-1 bg-gradient-to-r {{ $story->color }}
-                                text-white rounded-full text-sm font-bold">
-                                {{ $story->impact }}
+                    {{-- Image Frame --}}
+                    <div class="relative p-4 bg-gradient-to-br from-blue-50 to-purple-50">
+
+                        <div class="relative aspect-[3/4] rounded-2xl overflow-hidden shadow-md">
+
+                            @php
+                                $imagePath = $story->image && file_exists(public_path('storage/' . $story->image))
+                                    ? asset('storage/' . $story->image)
+                                    : asset('images/placeholder.jpg');
+                            @endphp
+
+                            <img src="{{ $imagePath }}"
+                                 alt="{{ $story->name }}"
+                                 loading="lazy"
+                                 class="w-full h-full object-cover object-center
+                                        transition-transform duration-700 ease-out
+                                        group-hover:scale-105">
+
+                            {{-- Soft Overlay --}}
+                            <div class="absolute inset-0 bg-gradient-to-t
+                                        from-black/35 via-black/10 to-transparent"></div>
+
+                            {{-- Impact Badge --}}
+                            <div class="absolute top-4 left-4">
+                                <span class="px-4 py-1.5 rounded-full text-xs font-bold text-white
+                                             shadow-lg backdrop-blur-md
+                                             bg-gradient-to-r {{ $story->color ?? 'from-blue-500 to-purple-600' }}">
+                                    {{ $story->impact }}
+                                </span>
                             </div>
+
                         </div>
                     </div>
 
-                    <div class="p-6">
-                        <h3 class="text-xl font-bold text-gray-900 mb-2">
+                    {{-- Content --}}
+                    <div class="p-7 space-y-4">
+                        <h3 class="text-xl font-bold text-gray-900 leading-snug">
                             {{ $story->name }}
                         </h3>
 
-                        <p class="text-gray-600 italic">
-                            "{{ $story->story }}"
+                        <p class="text-gray-600 italic leading-relaxed">
+                            “{{ $story->story }}”
                         </p>
 
-                        <div class="flex items-center justify-between pt-4 mt-4 border-t border-gray-100">
+                        <div class="flex items-center justify-between pt-4 mt-4 border-t border-gray-200">
                             <span class="text-sm text-gray-500">
                                 Changed by donors like you
                             </span>
-                            <span class="text-2xl">❤️</span>
+                            <span class="text-2xl transition-transform duration-300 group-hover:scale-125">
+                                ❤️
+                            </span>
                         </div>
                     </div>
-                </div>
+
+                    {{-- Subtle Hover Glow --}}
+                    <div class="absolute inset-0 rounded-3xl bg-gradient-to-br
+                                from-blue-500 to-purple-600 opacity-0
+                                group-hover:opacity-[0.06] transition duration-500"></div>
+                </article>
             @endforeach
+
         </div>
     </div>
 </section>

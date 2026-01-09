@@ -288,37 +288,51 @@
 
 
 <!-- Location & Hours -->
-<section class="py-20 bg-gray-50">
+<section class="py-20 bg-gradient-to-br from-gray-50 to-white">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div class="grid grid-cols-1 lg:grid-cols-2 gap-12">
-            
-            <div>
-                <h2 class="text-4xl font-bold text-gray-900 mb-6">Visit Our Campus Cafe</h2>
 
-                <div class="space-y-6">
-                    @foreach($locations as $location)
-                        @if($location->status) {{-- Show only active items --}}
-                        <div class="flex items-start gap-4">
-                            <div class="flex-shrink-0">
-                                <i class="{{ $location->icon }} {{ $location->color }} text-xl"></i>
-                            </div>
-                            <div>
-                                <h3 class="text-lg font-semibold text-gray-900 mb-1">{{ $location->title }}</h3>
-                                <p class="text-gray-600">{!! $location->description !!}</p>
-                            </div>
+        <!-- Section Header -->
+        <div class="text-center mb-14">
+            <h2 class="text-4xl font-extrabold text-gray-900">
+                Visit Our Campus Café
+            </h2>
+            <p class="mt-4 text-gray-600 max-w-2xl mx-auto">
+                Enjoy fresh coffee, comfortable space, and friendly service right on campus.
+            </p>
+        </div>
+
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+
+            <!-- Left: Location Info -->
+            <div class="space-y-6">
+                @foreach($locations as $location)
+                    @if($location->status)
+                    <div class="flex gap-5 p-6 bg-white rounded-2xl shadow-md hover:shadow-xl transition">
+                        <div class="flex items-center justify-center w-12 h-12 rounded-full bg-gray-100">
+                            <i class="{{ $location->icon }} {{ $location->color }} text-xl"></i>
                         </div>
-                        @endif
-                    @endforeach
-                </div>
+                        <div>
+                            <h3 class="text-lg font-semibold text-gray-900 mb-1">
+                                {{ $location->title }}
+                            </h3>
+                            <p class="text-gray-600 leading-relaxed">
+                                {!! $location->description !!}
+                            </p>
+                        </div>
+                    </div>
+                    @endif
+                @endforeach
             </div>
 
-            <div class="bg-white rounded-2xl overflow-hidden shadow-xl">
+            <!-- Right: Google Map -->
+            <div class="relative bg-white rounded-3xl shadow-2xl overflow-hidden">
+                <div class="absolute top-4 left-4 z-10 bg-white/90 backdrop-blur px-4 py-2 rounded-full shadow text-sm font-semibold text-gray-700">
+                    📍 Phnom Penh, Cambodia
+                </div>
+
                 <iframe
                     src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3909.0138882091787!2d104.8924793153644!3d11.55085804758059!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x310951add5e2cd81%3A0x171e0b69c7c6f7ba!2sPhnom%20Penh%2C%20Cambodia!5e0!3m2!1sen!2s!4v1678880000000!5m2!1sen!2s"
-                    width="100%"
-                    height="100%"
-                    style="min-height: 400px; border:0;"
-                    allowfullscreen=""
+                    class="w-full h-[420px] border-0"
                     loading="lazy"
                     referrerpolicy="no-referrer-when-downgrade">
                 </iframe>
@@ -327,6 +341,7 @@
         </div>
     </div>
 </section>
+
 
 
 

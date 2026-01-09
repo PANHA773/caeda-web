@@ -4,7 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\AboutContent;
 use App\Models\Faculty;
-use App\Models\TeamMember;
+use App\Models\LeaderTeam;
 use App\Models\CoreValue;
 use App\Models\Accreditation;
 use App\Models\Footer;
@@ -35,11 +35,11 @@ class AboutController extends Controller
             ->orderBy('order')
             ->get();
 
-        // Team Members
-        $teamMembers = TeamMember::query()
-            ->where('is_active', true)
-            ->orderBy('order')
-            ->get();
+    
+
+
+
+        
 
             $footer = Footer::first();
 
@@ -51,10 +51,15 @@ class AboutController extends Controller
 
             $accreditations = Accreditation::where('is_active', true)->get();
 
+            $leaderTeams = LeaderTeam::query()
+                ->where('is_active', true)
+                ->orderBy('order')
+                ->get();
+
         return view('about', compact(
             'aboutContent',
             'faculties',
-            'teamMembers',
+            'leaderTeams',
             'coreValues',
             'accreditations',
             'footer'

@@ -91,6 +91,8 @@ class EventController extends Controller
             ->orderBy('sort_order')
             ->get();
 
+        $footer = Footer::first();
+
         return view('events.show', compact(
             'event',
             'relatedEvents',
