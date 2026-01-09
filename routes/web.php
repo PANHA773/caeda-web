@@ -73,6 +73,7 @@ use App\Http\Controllers\Admin\DashboardController;
 use App\Http\Controllers\Admin\NewsAdminController;
 use App\Http\Controllers\Admin\UserAdminController;
 use App\Http\Controllers\Admin\MemberCompanyController;
+use App\Http\Controllers\Admin\FinalCtaController;
 
 
 // ==============================
@@ -323,5 +324,12 @@ Route::middleware(['auth', \App\Http\Middleware\AdminTokenMiddleware::class])->p
 
     // member companies
     Route::resource('member-companies', MemberCompanyController::class);
+
+    Route::resource('final-cta', FinalCtaController::class, [
+        'parameters' => ['final-cta' => 'finalCta']
+    ]);
+
+    Route::patch('final-cta/{finalCta}/toggle', [FinalCtaController::class, 'toggle'])
+        ->name('final-cta.toggle');
 
 });

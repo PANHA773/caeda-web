@@ -502,6 +502,12 @@
                             <span>Member Companies</span>
                         </a>
 
+                                 <!-- Final CTA -->
+                        <a href="{{ route('admin.final-cta.index') }}" class="dropdown-link flex items-center space-x-3 px-4 py-2 rounded-lg text-gray-400 hover:text-white hover:bg-gray-800 {{ request()->routeIs('admin.final-cta*') ? 'active' : '' }}">
+                            <i class="fas fa-building w-5 text-center"></i>
+                            <span>Final CTA</span>
+                        </a>
+
                         
                     </div>
                 </div>

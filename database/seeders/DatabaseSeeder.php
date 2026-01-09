@@ -73,7 +73,8 @@ class DatabaseSeeder extends Seeder
             // LocationSeeder::class,
             // FeaturedMenuSeeder::class,
             // AdminUserSeeder::class,
-            MemberCompanySeeder::class,
+            // MemberCompanySeeder::class,
+            FinalCtaSeeder::class,
            
           
             

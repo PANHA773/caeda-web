@@ -451,60 +451,84 @@
 </section>
 
 {{-- ================= FINAL CTA ================= --}}
+@if($cta)
 <section class="py-20 bg-gradient-to-br from-blue-600 via-purple-600 to-indigo-700 text-white relative overflow-hidden">
     <div class="absolute inset-0 bg-black/20"></div>
     <div class="absolute top-0 right-0 w-96 h-96 bg-white/10 rounded-full -translate-y-1/2 translate-x-1/2"></div>
     <div class="absolute bottom-0 left-0 w-72 h-72 bg-purple-400/20 rounded-full translate-y-1/2 -translate-x-1/2"></div>
-    
+
     <div class="max-w-4xl mx-auto text-center relative z-10 px-4 md:px-8">
-        <div class="grid grid-cols-3 gap-8 mb-12">
+
+        {{-- Stats --}}
+        <div class="grid grid-cols-1 sm:grid-cols-3 gap-8 mb-12">
             @php
                 $stats = [
-                    ['number' => '50K+', 'label' => 'Active Members'],
-                    ['number' => '500+', 'label' => 'Companies'],
-                    ['number' => '95%', 'label' => 'Success Rate']
+                    ['number' => $cta->stat_1_number, 'label' => $cta->stat_1_label],
+                    ['number' => $cta->stat_2_number, 'label' => $cta->stat_2_label],
+                    ['number' => $cta->stat_3_number, 'label' => $cta->stat_3_label],
                 ];
             @endphp
-            
+
             @foreach($stats as $index => $stat)
                 <div class="text-center animate-fade-in-up" style="animation-delay: {{ $index * 200 }}ms">
                     <div class="text-4xl font-bold mb-2 bg-gradient-to-r from-white to-blue-100 bg-clip-text text-transparent">
                         {{ $stat['number'] }}
                     </div>
-                    <div class="text-blue-200 font-medium">{{ $stat['label'] }}</div>
+                    <div class="text-blue-200 font-medium">
+                        {{ $stat['label'] }}
+                    </div>
                 </div>
             @endforeach
         </div>
-        
+
+        {{-- Title --}}
         <h2 class="text-3xl md:text-4xl lg:text-5xl font-bold mb-6 animate-fade-in-up" style="animation-delay: 400ms">
-            Ready to Transform Your <span class="bg-gradient-to-r from-cyan-400 to-blue-400 bg-clip-text text-transparent">Career</span>?
+            {!! str_replace(
+                $cta->highlight_text,
+                '<span class="bg-gradient-to-r from-cyan-400 to-blue-400 bg-clip-text text-transparent">'.$cta->highlight_text.'</span>',
+                e($cta->title)
+            ) !!}
         </h2>
+
+        {{-- Description --}}
         <p class="text-xl mb-8 opacity-90 max-w-2xl mx-auto animate-fade-in-up" style="animation-delay: 600ms">
-            Join our community of successful professionals today and start your journey
+            {{ $cta->description }}
         </p>
-        
+
+        {{-- Buttons --}}
         <div class="flex flex-col sm:flex-row gap-4 justify-center mb-6 animate-fade-in-up" style="animation-delay: 800ms">
-            <button onclick="startFreeTrial()" class="group bg-white text-blue-600 hover:bg-gray-50 font-bold py-4 px-8 rounded-2xl transition-all duration-300 transform hover:-translate-y-1 hover:shadow-2xl shadow-lg">
+            <button onclick="startFreeTrial()"
+                class="group bg-white text-blue-600 hover:bg-gray-50 font-bold py-4 px-8 rounded-2xl transition-all duration-300 transform hover:-translate-y-1 hover:shadow-2xl shadow-lg">
                 <span class="flex items-center">
-                    Start 7-Day Free Trial
-                    <svg class="w-5 h-5 ml-2 transform group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7l5 5m0 0l-5 5m5-5H6" />
+                    {{ $cta->primary_button_text }}
+                    <svg class="w-5 h-5 ml-2 transform group-hover:translate-x-1 transition-transform"
+                        fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="M13 7l5 5m0 0l-5 5m5-5H6" />
                     </svg>
                 </span>
             </button>
-            <button onclick="scheduleDemo()" class="group border-2 border-white/60 hover:border-white text-white hover:bg-white/10 font-medium py-4 px-8 rounded-2xl transition-all duration-300 backdrop-blur-sm">
+
+            <button onclick="scheduleDemo()"
+                class="group border-2 border-white/60 hover:border-white text-white hover:bg-white/10 font-medium py-4 px-8 rounded-2xl transition-all duration-300 backdrop-blur-sm">
                 <span class="flex items-center">
-                    Schedule a Demo
-                    <svg class="w-5 h-5 ml-2 transform group-hover:scale-110 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                    {{ $cta->secondary_button_text }}
+                    <svg class="w-5 h-5 ml-2 transform group-hover:scale-110 transition-transform"
+                        fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
                     </svg>
                 </span>
             </button>
         </div>
-        
-        <p class="text-sm opacity-80 animate-fade-in-up" style="animation-delay: 1000ms">No credit card required • Cancel anytime • 24/7 Support</p>
+
+        <p class="text-sm opacity-80 animate-fade-in-up" style="animation-delay: 1000ms">
+            No credit card required • Cancel anytime • 24/7 Support
+        </p>
     </div>
 </section>
+@endif
+
 
 {{-- Loading Spinner Template --}}
 <div id="loading-spinner" class="hidden fixed inset-0 bg-black/50 backdrop-blur-sm z-50 flex items-center justify-center">

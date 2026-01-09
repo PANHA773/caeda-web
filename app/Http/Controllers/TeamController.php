@@ -6,6 +6,7 @@ use App\Models\TeamMember;
 use App\Models\Partner;
 use App\Models\Faq;
 use App\Models\MemberCompany;
+use App\Models\FinalCta;
 use App\Models\Footer;
 use App\Models\PricingPlan;
 use Illuminate\Http\Request;
@@ -17,9 +18,9 @@ class TeamController extends Controller
      */
     public function index()
     {
-          $memberCompanies = MemberCompany::orderBy('name')->get(); // pull from DB
+        $memberCompanies = MemberCompany::orderBy('name')->get(); // pull from DB
         // Team Members (has sort_order)
-  
+
 
         // Partners (has sort_order)
         $partners = Partner::where('is_active', true)
@@ -31,20 +32,23 @@ class TeamController extends Controller
             ->orderBy('id')
             ->get();
 
+        $cta = FinalCta::where('is_active', true)->first();
+
         // Pricing Plans
         $plans = PricingPlan::with('features')
             ->where('is_active', true)
             ->orderByDesc('is_popular')
             ->orderBy('id')
             ->get();
-            $footer = Footer::first();
+        $footer = Footer::first();
 
         return view('our-team', compact(
-         
+
             'partners',
             'faqs',
             'plans',
             'memberCompanies',
+            'cta',
             'footer'
         ));
     }
