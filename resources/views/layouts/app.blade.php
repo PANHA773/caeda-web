@@ -188,10 +188,10 @@
                     </button>
                 </form>
             @else
-                <a href="{{ route('login') }}"
+                <!-- <a href="{{ route('login') }}"
                    class="bg-white text-blue-700 px-5 py-2 rounded-lg font-semibold hover:bg-gray-200 transition">
                     Login
-                </a>
+                </a> -->
             @endif
         </div>
 
@@ -241,7 +241,7 @@
                 <button class="px-4 py-2 text-red-600 w-full text-left">Logout</button>
             </form>
         @else
-            <a href="{{ route('login') }}"
+            <a href="{{ route('admin.login') }}"
                class="block bg-blue-600 text-white text-center py-2 rounded-lg font-semibold">
                 Login
             </a>
