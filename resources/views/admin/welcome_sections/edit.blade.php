@@ -30,6 +30,7 @@
 
     <form action="{{ route('admin.welcome_sections.update', $section->id) }}"
           method="POST"
+          enctype="multipart/form-data"
           class="space-y-6 bg-white p-6 rounded-xl shadow">
 
         @csrf
@@ -74,18 +75,25 @@
             </div>
         </div>
 
-        {{-- Image --}}
+        {{-- Current Image Preview --}}
         <div>
-            <label class="block font-semibold mb-1">Image URL</label>
-            <input type="text"
-                   name="image"
-                   value="{{ old('image', $section->image) }}"
-                   class="w-full border rounded px-3 py-2">
-
+            <label class="block font-semibold mb-2">Current Image</label>
             @if($section->image)
-                <img src="{{ $section->image }}"
-                     class="mt-3 w-40 h-40 object-cover rounded-lg border">
+                <img src="{{ asset('storage/' . $section->image) }}" 
+                     alt="Current Image"
+                     class="w-48 h-48 object-cover rounded-xl border-2 border-gray-300 mb-3">
+            @else
+                <div class="w-48 h-48 rounded-xl border-2 border-gray-300 mb-3 bg-gray-100 flex items-center justify-center text-gray-400">
+                    No Image
+                </div>
             @endif
+        </div>
+
+        {{-- Upload New Image --}}
+        <div>
+            <label class="block font-semibold mb-1">Change Image</label>
+            <input type="file" name="image" accept="image/*" class="w-full border rounded px-3 py-2">
+            <p class="text-xs text-gray-500 mt-1">Leave blank to keep current image. Supported formats: JPG, PNG, GIF (Max 2MB)</p>
         </div>
 
         {{-- Badges --}}

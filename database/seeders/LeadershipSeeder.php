@@ -8,7 +8,7 @@ use Illuminate\Database\Seeder;
 use App\Models\Leadership;
 
 
-public function run()
+public function run()       
 {
     Leadership::insert([
         ['name' => 'Dr. Sarah Johnson', 'role' => 'University President', 'order' => 1],

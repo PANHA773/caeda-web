@@ -16,9 +16,16 @@ class Partner extends Model
         'logo',
         'website_url',
         'description',
-        'sort_order', // updated
+        'sort_order',
         'is_active',
     ];
+
+    /**
+     * The accessors to append to the model's array form.
+     *
+     * @var array
+     */
+    protected $appends = ['logo_url'];
 
     protected $casts = [
         'is_active' => 'boolean',
@@ -39,6 +46,26 @@ class Partner extends Model
      */
     public function scopeOrdered($query)
     {
-        return $query->orderBy('sort_order'); // updated
+        return $query->orderBy('sort_order');
+    }
+
+    /**
+     * Get the partner logo URL.
+     *
+     * @return string
+     */
+    public function getLogoUrlAttribute()
+    {
+        if (!$this->logo) {
+            return asset('assets/default-logo.png');
+        }
+
+        // If it's a full URL (external), return it
+        if (filter_var($this->logo, FILTER_VALIDATE_URL)) {
+            return $this->logo;
+        }
+
+        // Otherwise return stored file URL
+        return asset('storage/' . $this->logo);
     }
 }

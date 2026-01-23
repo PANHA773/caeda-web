@@ -128,7 +128,7 @@
                             <div class="relative bg-white rounded-xl p-4 shadow-lg border border-gray-100 backdrop-blur-sm transition-all duration-500 ease-out group-hover:shadow-2xl group-hover:border-blue-200">
                                 <a href="{{ $partner->website_url ?: '#' }}" target="_blank" rel="noopener noreferrer" class="inline-block">
                                     <img 
-                                        src="{{ $partner->logo }}" 
+                                        src="{{ $partner->logo_url }}" 
                                         alt="{{ $partner->name }}"
                                         class="object-contain transition-all duration-300 group-hover:brightness-110 group-hover:contrast-110"
                                         style="width: 120px; height: 120px"

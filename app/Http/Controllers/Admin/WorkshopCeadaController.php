@@ -60,56 +60,59 @@ class WorkshopCeadaController extends Controller
      * Store a newly created workshop
      */
 
-public function store(Request $request)
-{
-    $data = $request->validate([
-        'title' => 'required|string|max:255',
-        'category' => 'required|string|max:100',
-        'description' => 'nullable|string',
-        'instructor' => 'required|string|max:255',
-        'level' => 'required|string|max:50',
-        'duration' => 'nullable|string|max:50',
-        'date' => 'nullable|date',
-        'video_url' => 'nullable|url',
-        'image' => 'nullable|image|max:2048',
-        'instructor_image' => 'nullable|image|max:2048',
-        'rating' => 'nullable|numeric|min:0|max:5',
-        'attendees' => 'nullable|integer|min:0',
-        'status' => 'nullable|boolean',
-    ]);
+    public function store(Request $request)
+    {
+        $data = $request->validate([
+            'title' => 'required|string|max:255',
+            'category' => 'required|string|max:100',
+            'description' => 'nullable|string',
+            'instructor' => 'required|string|max:255',
+            'level' => 'required|string|max:50',
+            'duration' => 'nullable|string|max:50',
+            'date' => 'nullable|date',
+            'video_url' => 'nullable|url',
+            'video_file' => 'nullable|file|mimes:mp4,mov,ogg,qt|max:20480', // Max 20MB for now
+            'image' => 'nullable|image|max:2048',
+            'instructor_image' => 'nullable|image|max:2048',
+            'rating' => 'nullable|numeric|min:0|max:5',
+            'attendees' => 'nullable|integer|min:0',
+            'status' => 'nullable|boolean',
+        ]);
 
-    $data['slug'] = Str::slug($data['title']);
-    $data['date'] = $data['date'] ?? now();
-    $data['status'] = $request->has('status');
-    $data['description'] = $data['description'] ?? ''; // <<< add this line
+        $data['slug'] = Str::slug($data['title']);
+        $data['date'] = $data['date'] ?? now();
+        $data['status'] = $request->has('status');
+        $data['description'] = $data['description'] ?? ''; // <<< add this line
 
-    // If admin provided a video_url input, normalize and map it to the `video` attribute used by the model
-    if (!empty($data['video_url'])) {
-        $data['video'] = $this->normalizeVideoUrl($data['video_url']);
+        // Handle video: file upload takes precedence over URL
+        if ($request->hasFile('video_file')) {
+            $data['video'] = $request->file('video_file')->store('workshops/videos', 'public');
+        } elseif (!empty($data['video_url'])) {
+            $data['video'] = $this->normalizeVideoUrl($data['video_url']);
+        }
+        unset($data['video_url'], $data['video_file']);
+
+        // Upload workshop image
+        if ($request->hasFile('image')) {
+            $data['image'] = $request->file('image')->store('workshops', 'public');
+        }
+
+        // Upload instructor image
+        if ($request->hasFile('instructor_image')) {
+            $data['instructor_image'] = $request->file('instructor_image')->store('instructors', 'public');
+        }
+
+        Workshop::create($data);
+
+        return redirect()
+            ->route('admin.workshops.index')
+            ->with('success', 'Workshop created successfully.');
     }
-    unset($data['video_url']);
 
-    // Upload workshop image
-    if ($request->hasFile('image')) {
-        $data['image'] = $request->file('image')->store('workshops', 'public');
+    public function edit(Workshop $workshop)
+    {
+        return view('admin.workshops.edit', compact('workshop'));
     }
-
-    // Upload instructor image
-    if ($request->hasFile('instructor_image')) {
-        $data['instructor_image'] = $request->file('instructor_image')->store('instructors', 'public');
-    }
-
-    Workshop::create($data);
-
-    return redirect()
-        ->route('admin.workshops.index')
-        ->with('success', 'Workshop created successfully.');
-}
-
-public function edit(Workshop $workshop)
-{
-    return view('admin.workshops.edit', compact('workshop'));
-}
 
     /**
      * Update the specified workshop
@@ -125,6 +128,7 @@ public function edit(Workshop $workshop)
             'duration' => 'nullable|string|max:50',
             'date' => 'nullable|date',
             'video_url' => 'nullable|url',
+            'video_file' => 'nullable|file|mimes:mp4,mov,ogg,qt|max:20480',
             'image' => 'nullable|image|max:2048',
             'instructor_image' => 'nullable|image|max:2048',
             'rating' => 'nullable|numeric|min:0|max:5',
@@ -152,11 +156,23 @@ public function edit(Workshop $workshop)
             $data['instructor_image'] = $request->file('instructor_image')->store('instructors', 'public');
         }
 
-        // Map video_url to video when updating (only when provided)
-        if (array_key_exists('video_url', $data)) {
-            $data['video'] = $data['video_url'] ? $this->normalizeVideoUrl($data['video_url']) : $workshop->video;
+        // Handle video update: file upload takes precedence
+        if ($request->hasFile('video_file')) {
+            // Delete old file if it was a file (not a URL)
+            if ($workshop->video && !preg_match('/^https?:\/\//i', $workshop->video)) {
+                Storage::disk('public')->delete($workshop->video);
+            }
+            $data['video'] = $request->file('video_file')->store('workshops/videos', 'public');
+        } elseif (array_key_exists('video_url', $data) && $data['video_url']) {
+            // If a new URL is provided, and we had an old file, delete it
+            if ($workshop->video && !preg_match('/^https?:\/\//i', $workshop->video)) {
+                Storage::disk('public')->delete($workshop->video);
+            }
+            $data['video'] = $this->normalizeVideoUrl($data['video_url']);
+        } else {
+            $data['video'] = $workshop->video;
         }
-        unset($data['video_url']);
+        unset($data['video_url'], $data['video_file']);
 
         $workshop->update($data);
 
@@ -176,6 +192,10 @@ public function edit(Workshop $workshop)
 
         if ($workshop->instructor_image) {
             Storage::disk('public')->delete($workshop->instructor_image);
+        }
+
+        if ($workshop->video && !preg_match('/^https?:\/\//i', $workshop->video)) {
+            Storage::disk('public')->delete($workshop->video);
         }
 
         $workshop->delete();

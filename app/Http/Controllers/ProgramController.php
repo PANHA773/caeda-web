@@ -15,4 +15,22 @@ class ProgramController extends Controller
 
         return view('programs', compact('programs', 'footer'));
     }
+
+    public function show(Program $program)
+    {
+        if (!$program->is_active) {
+            abort(404);
+        }
+
+        $footer = Footer::first();
+
+        // Fetch related programs (same category, excluding current)
+        $relatedPrograms = Program::active()
+            ->where('category', $program->category)
+            ->where('id', '!=', $program->id)
+            ->take(3)
+            ->get();
+
+        return view('programs-show', compact('program', 'footer', 'relatedPrograms'));
+    }
 }

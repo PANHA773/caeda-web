@@ -68,8 +68,19 @@ class LoginController extends Controller
         ]);
 
         if (Auth::attempt($credentials, $request->filled('remember'))) {
-            $request->session()->regenerate();
-            return redirect()->intended(route('admin.dashboard'));
+            /** @var \App\Models\User $user */
+            $user = Auth::user();
+
+            if ($user->is_admin || !empty($user->permissions)) {
+                $request->session()->regenerate();
+                return redirect()->intended(route('admin.dashboard'));
+            }
+
+            // Not an admin, logout and error
+            Auth::logout();
+            return back()->withErrors([
+                'email' => 'You do not have administrative access.',
+            ])->onlyInput('email');
         }
 
         return back()->withErrors([
@@ -88,7 +99,7 @@ class LoginController extends Controller
         // $request->session()->regenerateToken();
 
         // return redirect()->route('login');
-         Auth::guard('web')->logout(); // or 'admin' guard if you use a custom guard
+        Auth::guard('web')->logout(); // or 'admin' guard if you use a custom guard
 
         // Invalidate session
         $request->session()->invalidate();

@@ -8,6 +8,9 @@ use App\Models\ContactMethod;
 use App\Models\Faq;
 use App\Models\Footer;
 use App\Models\Contact;
+use App\Models\User;
+use App\Notifications\AdminNotification;
+use Illuminate\Support\Facades\Notification;
 
 class ContactController extends Controller
 {
@@ -32,11 +35,11 @@ class ContactController extends Controller
         // Validate request data
         $validated = $request->validate([
             'first_name' => 'required|string|max:100',
-            'last_name'  => 'required|string|max:100',
-            'email'      => 'required|email|max:150',
-            'phone'      => 'nullable|string|max:20',
-            'subject'    => 'required|string|max:150',
-            'message'    => 'required|string|max:2000',
+            'last_name' => 'required|string|max:100',
+            'email' => 'required|email|max:150',
+            'phone' => 'nullable|string|max:20',
+            'subject' => 'required|string|max:150',
+            'message' => 'required|string|max:2000',
             'newsletter' => 'nullable|boolean',
         ]);
 
@@ -48,13 +51,23 @@ class ContactController extends Controller
 
         $contact = Contact::create([
             'first_name' => $validated['first_name'],
-            'last_name'  => $validated['last_name'],
-            'email'      => $validated['email'],
-            'phone'      => $validated['phone'] ?? null,
-            'subject'    => $validated['subject'],
-            'message'    => $validated['message'],
+            'last_name' => $validated['last_name'],
+            'email' => $validated['email'],
+            'phone' => $validated['phone'] ?? null,
+            'subject' => $validated['subject'],
+            'message' => $validated['message'],
             'newsletter' => $request->has('newsletter'),
         ]);
+
+        // Notify admins
+        $admins = User::where('is_admin', true)->get();
+        Notification::send($admins, new AdminNotification([
+            'title' => 'New Contact Message',
+            'message' => "You received a new message from {$name}: \"{$validated['subject']}\"",
+            'url' => route('admin.contacts.show', $contact->id),
+            'type' => 'info',
+            'icon' => 'fas fa-envelope',
+        ]));
 
 
         // Return JSON response for AJAX

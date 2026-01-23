@@ -3,811 +3,309 @@
 @section('title', 'CAEDA News')
 
 @section('extra-css')
-<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
-<style>
-    .font-poppins { font-family: 'Poppins', sans-serif; }
-    
-
-    .news-card {
-        background: white;
-        border-radius: 16px;
-        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
-        transition: all 0.3s ease;
-        border: 1px solid rgba(229, 231, 235, 0.5);
-        overflow: hidden;
-    }
-    
-    .news-card:hover {
-        box-shadow: 0 8px 30px rgba(0, 0, 0, 0.12);
-        transform: translateY(-4px);
-        border-color: rgba(79, 70, 229, 0.2);
-    }
-    
-    .gradient-text {
-        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-        -webkit-background-clip: text;
-        -webkit-text-fill-color: transparent;
-        background-clip: text;
-    }
-    
-    .tag-badge {
-        background: linear-gradient(135deg, rgba(79, 70, 229, 0.1) 0%, rgba(124, 58, 237, 0.1) 100%);
-        color: #4F46E5;
-        padding: 4px 12px;
-        border-radius: 20px;
-        font-size: 12px;
-        font-weight: 500;
-        display: inline-flex;
-        align-items: center;
-        transition: all 0.2s ease;
-    }
-    
-    .tag-badge:hover {
-        background: linear-gradient(135deg, rgba(79, 70, 229, 0.15) 0%, rgba(124, 58, 237, 0.15) 100%);
-        transform: scale(1.05);
-    } 
-
-    .interaction-btn {
-        background: white;
-        border: 1px solid #e5e7eb;
-        border-radius: 10px;
-        padding: 8px 16px;
-        font-size: 14px;
-        font-weight: 500;
-        color: #4b5563;
-        transition: all 0.2s ease;
-        display: inline-flex;
-        align-items: center;
-        justify-content: center;
-    }
-    
-    .interaction-btn:hover {
-        background: #f9fafb;
-        border-color: #d1d5db;
-        color: #374151;
-        transform: translateY(-1px);
-    }
-    
-    .interaction-btn.active {
-        background: #4F46E5;
-        border-color: #4F46E5;
-        color: white;
-    }
-    
-    .comment-card {
-        background: #f9fafb;
-        border-radius: 12px;
-        padding: 16px;
-        margin-bottom: 12px;
-        border-left: 4px solid #4F46E5;
-        transition: all 0.2s ease;
-    }
-    
-    .comment-card:hover {
-        background: #f3f4f6;
-        transform: translateX(4px);
-    }
-    
-    .news-image-container {
-        position: relative;
-        overflow: hidden;
-        border-radius: 12px;
-    }
-    
-    .news-image-container::before {
-        content: '';
-        position: absolute;
-        top: 0;
-        left: 0;
-        right: 0;
-        bottom: 0;
-        background: linear-gradient(to bottom, transparent 70%, rgba(0,0,0,0.1));
-        z-index: 1;
-    }
-    
-    .news-image {
-        transition: transform 0.5s ease;
-    }
-    
-    .news-card:hover .news-image {
-        transform: scale(1.05);
-    }
-    
-    .avatar-ring {
-        position: relative;
-        border: 3px solid white;
-        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-    }
-    
-    .avatar-ring.online::after {
-        content: '';
-        position: absolute;
-        bottom: 0;
-        right: 0;
-        width: 12px;
-        height: 12px;
-        background: #10b981;
-        border: 2px solid white;
-        border-radius: 50%;
-    }
-    
-
-    @keyframes fadeInUp {
-        from {
-            opacity: 0;
-            transform: translateY(20px);
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Outfit', sans-serif;
         }
-        to {
-            opacity: 1;
-            transform: translateY(0);
-        }
-    }
-    
-    .animate-fadeInUp {
-        animation: fadeInUp 0.6s ease-out forwards;
-    }
 
-    .custom-scrollbar::-webkit-scrollbar {
-        width: 6px;
-    }
-    
-    .custom-scrollbar::-webkit-scrollbar-track {
-        background: #f1f1f1;
-        border-radius: 10px;
-    }
-    
-    .custom-scrollbar::-webkit-scrollbar-thumb {
-        background: #c7d2fe;
-        border-radius: 10px;
-    }
-    
-    .custom-scrollbar::-webkit-scrollbar-thumb:hover {
-        background: #a5b4fc;
-    }
-   
-    @media (max-width: 768px) {
-        .news-card {
-            border-radius: 12px;
+        .glass-morphism {
+            background: rgba(255, 255, 255, 0.7);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.3);
         }
-        
-        .interaction-btn {
-            padding: 6px 12px;
-            font-size: 13px;
-        }
-    }
-</style>
 
+        .news-card-v2 {
+            @apply bg-white rounded-[2rem] overflow-hidden border border-gray-100 transition-all duration-500 hover:shadow-2xl hover:shadow-indigo-100/50 hover:-translate-y-2;
+        }
+
+        .gradient-border-btn {
+            position: relative;
+            background: white;
+            z-index: 1;
+            transition: all 0.3s ease;
+        }
+
+        .gradient-border-btn::before {
+            content: '';
+            position: absolute;
+            inset: -2px;
+            background: linear-gradient(135deg, #6366f1 0%, #a855f7 100%);
+            border-radius: 9999px;
+            z-index: -1;
+            transition: all 0.3s ease;
+        }
+
+        .premium-badge {
+            background: linear-gradient(135deg, #6366f1 0%, #a855f7 100%);
+            box-shadow: 0 4px 15px rgba(99, 102, 241, 0.3);
+        }
+
+        .search-glow:focus-within {
+            box-shadow: 0 0 30px rgba(99, 102, 241, 0.15);
+        }
+
+        @keyframes float {
+
+            0%,
+            100% {
+                transform: translateY(0px);
+            }
+
+            50% {
+                transform: translateY(-10px);
+            }
+        }
+
+        .float-anim {
+            animation: float 6s ease-in-out infinite;
+        }
+    </style>
 @endsection
 
 @section('content')
 
-<div class="min-h-screen bg-gradient-to-b from-gray-50 to-gray-100 font-poppins">
-    
-    <div class="relative overflow-hidden">
-        <div class="absolute inset-0 bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500 opacity-5"></div>
-        <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-12 relative">
-            <div class="text-center">
-                <h1 class="text-4xl md:text-5xl font-bold text-gray-900 mb-4">
-                    <span class="gradient-text">CAEDA News</span>
-                </h1>
-                <p class="text-lg text-gray-600 max-w-3xl mx-auto">
-                    Stay updated with the latest news, events, and announcements from Cambodia Academy of Entrepreneurship, Design, and Art.
-                </p>
-             
-                <div class="mt-8 max-w-md mx-auto">
-                    <div class="relative">
-                        <input 
-                            type="text" 
-                            placeholder="Search news..."
-                            class="w-full pl-12 pr-4 py-3 rounded-xl border border-gray-300 focus:ring-2 focus:ring-indigo-500 focus:border-transparent outline-none transition-all duration-200 shadow-sm"
-                        >
-                        <i class="fas fa-search absolute left-4 top-3.5 text-gray-400"></i>
-                    </div>
+    <div class="min-h-screen bg-[#fcfdff]">
+
+        {{-- Enhanced Hero Section --}}
+        <section class="relative pt-20 pb-16 overflow-hidden">
+            <div class="absolute top-0 left-0 w-full h-full">
+                <div
+                    class="absolute top-[-10%] right-[-5%] w-[500px] h-[500px] bg-indigo-100 rounded-full blur-[120px] opacity-40">
+                </div>
+                <div
+                    class="absolute bottom-[-10%] left-[-5%] w-[500px] h-[500px] bg-purple-100 rounded-full blur-[120px] opacity-40">
                 </div>
             </div>
-        </div>
-    </div>
 
- 
-    <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 pb-16">
-      
-        <div class="flex flex-col sm:flex-row items-center justify-between mb-8 p-4 bg-white rounded-xl shadow-sm">
-            <div class="flex items-center space-x-6 mb-4 sm:mb-0">
-                <div class="text-center">
-                    <div class="text-2xl font-bold gradient-text">{{ $news->total() }}</div>
-                    <div class="text-sm text-gray-500">Total Posts</div>
+            <div class="container mx-auto px-4 relative">
+                <div class="max-w-4xl mx-auto text-center mb-12">
+                    <div
+                        class="inline-flex items-center px-4 py-2 rounded-full bg-indigo-50 border border-indigo-100 text-indigo-600 text-sm font-bold mb-6 animate-fade-in">
+                        <span class="flex h-2 w-2 rounded-full bg-indigo-600 mr-2 animate-pulse"></span>
+                        STAY CONNECTED WITH CAEDA
+                    </div>
+                    <h1 class="text-5xl md:text-7xl font-extrabold text-gray-900 mb-6 leading-tight tracking-tight">
+                        Discovery, News & <span
+                            class="bg-gradient-to-r from-indigo-600 to-purple-600 bg-clip-text text-transparent">Inspiration.</span>
+                    </h1>
+                    <p class="text-xl text-gray-500 leading-relaxed mb-10 max-w-2xl mx-auto">
+                        Explore the latest stories, achievements, and insights from the Cambodia Academy of
+                        Entrepreneurship, Design, and Art.
+                    </p>
+
+                    {{-- Search & Filtering --}}
+                    <div
+                        class="max-w-2xl mx-auto glass-morphism p-2 rounded-[2.5rem] shadow-xl shadow-indigo-100/30 search-glow transition-all duration-300">
+                        <form action="{{ route('news') }}" method="GET" class="flex flex-col md:flex-row gap-2">
+                            <div class="flex-1 relative">
+                                <i class="fas fa-search absolute left-6 top-1/2 -translate-y-1/2 text-indigo-400"></i>
+                                <input type="text" name="search" value="{{ request('search') }}"
+                                    placeholder="Search articles, topics..."
+                                    class="w-full pl-14 pr-6 py-4 bg-transparent outline-none text-gray-700 placeholder:text-gray-400 font-medium text-lg">
+                            </div>
+                            <button type="submit"
+                                class="bg-indigo-600 hover:bg-indigo-700 text-white px-10 py-4 rounded-full font-bold transition-all transform hover:scale-105 active:scale-95 shadow-lg shadow-indigo-200">
+                                Explore
+                            </button>
+                        </form>
+                    </div>
                 </div>
-                <div class="text-center">
-                    <div class="text-2xl font-bold gradient-text">{{ $news->count() }}</div>
-                    <div class="text-sm text-gray-500">Showing</div>
-                </div>
-                <div class="text-center">
-                    <div class="text-2xl font-bold gradient-text">{{ optional($news->first())->likes ?? 0 }}</div>
-                    <div class="text-sm text-gray-500">Most Likes</div>
+
+                {{-- Quick Stats / Filters --}}
+                <div class="flex flex-wrap justify-center gap-4 text-sm font-bold">
+                    <a href="{{ route('news') }}"
+                        class="px-6 py-3 rounded-full {{ !request('category') ? 'bg-indigo-600 text-white' : 'bg-white text-gray-600 border border-gray-100 hover:bg-gray-50' }} transition-all shadow-sm">
+                        All Stories
+                    </a>
+                    <a href="#"
+                        class="px-6 py-3 rounded-full bg-white text-gray-600 border border-gray-100 hover:bg-gray-50 transition-all shadow-sm">
+                        Design
+                    </a>
+                    <a href="#"
+                        class="px-6 py-3 rounded-full bg-white text-gray-600 border border-gray-100 hover:bg-gray-50 transition-all shadow-sm">
+                        Entrepreneurship
+                    </a>
+                    <a href="#"
+                        class="px-6 py-3 rounded-full bg-white text-gray-600 border border-gray-100 hover:bg-gray-50 transition-all shadow-sm">
+                        Art
+                    </a>
                 </div>
             </div>
-            
-           
-            <div class="flex items-center space-x-4">
-                <span class="text-sm text-gray-600">Sort by:</span>
-                <select class="px-4 py-2 rounded-lg border border-gray-300 focus:ring-2 focus:ring-indigo-500 focus:border-transparent outline-none transition-all duration-200">
-                    <option>Latest</option>
-                    <option>Most Popular</option>
-                    <option>Most Commented</option>
-                </select>
-                <button class="px-4 py-2 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 transition-colors duration-200">
-                    <i class="fas fa-rss mr-2"></i>Subscribe
-                </button>
-            </div>
-        </div>
+        </section>
 
-     
-        <div class="space-y-8">
-            @forelse($news as $index => $post)
-                <article class="news-card animate-fadeInUp" style="animation-delay: {{ $index * 0.1 }}s;">
-                    <div class="p-6 md:p-8">
-                     
-                        <div class="flex items-start justify-between mb-6">
-                            <div class="flex items-center space-x-4">
-                                <div class="relative avatar-ring online">
-                                    <img 
-                                        src="{{ data_get($post, 'user.avatar', 'https://ui-avatars.com/api/?name=' . urlencode(data_get($post, 'user.name', 'CAEDA')) . '&background=4F46E5&color=fff&bold=true') }}" 
-                                        alt="{{ data_get($post,'user.name','CAEDA') }}" 
-                                        class="w-14 h-14 rounded-full object-cover"
-                                    >
-                                </div>
-                                <div>
-                                    <div class="flex items-center space-x-2">
-                                        <h3 class="font-bold text-gray-900">{{ data_get($post, 'user.name', 'CAEDA') }}</h3>
-                                        @if(data_get($post,'user.verified'))
-                                            <span class="text-blue-500" title="Verified">
-                                                <i class="fas fa-check-circle"></i>
-                                            </span>
-                                        @endif
-                                    </div>
-                                    <div class="flex items-center space-x-3 text-sm text-gray-500 mt-1">
-                                        <span>
-                                            <i class="far fa-clock mr-1"></i>
-                                            {{ optional($post->published_at)->diffForHumans() }}
-                                        </span>
-                                        <span>•</span>
-                                        <span class="text-indigo-600 font-medium">
-                                            {{ data_get($post,'user.role','Admin') }}
-                                        </span>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="relative">
-                                <button class="text-gray-400 hover:text-gray-600 transition-colors duration-200">
-                                    <i class="fas fa-ellipsis-h text-lg"></i>
-                                </button>
-                            </div>
-                        </div>
-
-                    
-                        @if($post->title)
-                            <h2 class="text-2xl font-bold text-gray-900 mb-3 leading-tight">
-                                <a href="{{ route('news.show', $post->slug) }}" class="hover:text-indigo-600 transition-colors duration-200">
-                                    {{ $post->title }}
-                                </a>
-                            </h2>
-                        @endif
-                        
-                        @if($post->excerpt)
-                            <p class="text-gray-700 text-lg mb-6">{{ $post->excerpt }}</p>
-                        @endif
-
-                
-                        @if($post->image)
-                            <div class="news-image-container mb-6">
-                                <img 
-                                    src="{{ $post->image ? (\Illuminate\Support\Str::startsWith($post->image, ['http://','https://']) ? $post->image : asset($post->image)) : '' }}" 
-                                    alt="{{ $post->title ?? 'News image' }}" 
-                                    class="news-image w-full h-64 md:h-80 object-cover"
-                                >
-                            </div>
-                        @endif
-
-                   
-                        <div class="text-gray-800 mb-6 leading-relaxed">
-                            {!! Str::limit(strip_tags($post->content), 400) !!}
-                            @if(strlen(strip_tags($post->content)) > 400)
-                                <a href="{{ route('news.show', $post->slug) }}" class="text-indigo-600 hover:text-indigo-800 font-medium ml-2">
-                                    Read more <i class="fas fa-arrow-right ml-1"></i>
-                                </a>
-                            @endif
-                        </div>
-
-                        @if(!empty($post->tags))
-                            <div class="mb-6 flex flex-wrap gap-2">
-                                @foreach($post->tags as $tag)
-                                    <a href="#" class="tag-badge">
-                                        <i class="fas fa-hashtag mr-1 text-xs"></i>
-                                        {{ $tag }}
-                                    </a>
-                                @endforeach
-                            </div>
-                        @endif
-
-                        <div class="pt-6 border-t border-gray-200">
-                            <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
-                            
-                                <div class="flex items-center space-x-6 text-sm text-gray-600">
-                                    <div class="flex items-center space-x-2">
-                                        <span class="w-8 h-8 bg-blue-50 rounded-full flex items-center justify-center text-blue-600">
-                                            <i class="fas fa-thumbs-up text-sm"></i>
-                                        </span>
-                                        <span id="likes-number-{{ $post->id }}" class="font-medium">{{ $post->likes }}</span>
-                                        <span>Likes</span>
-                                    </div>
-                                    
-                                    <div class="flex items-center space-x-2">
-                                        <span class="w-8 h-8 bg-green-50 rounded-full flex items-center justify-center text-green-600">
-                                            <i class="fas fa-comment text-sm"></i>
-                                        </span>
-                                        <span id="comments-number-{{ $post->id }}" class="font-medium">{{ $post->comments }}</span>
-                                        <span>Comments</span>
-                                    </div>
-                                    
-                                    <div class="flex items-center space-x-2">
-                                        <span class="w-8 h-8 bg-purple-50 rounded-full flex items-center justify-center text-purple-600">
-                                            <i class="fas fa-share text-sm"></i>
-                                        </span>
-                                        <span class="font-medium">{{ $post->shares }}</span>
-                                        <span>Shares</span>
-                                    </div>
-                                </div>
-
-                        
-                                <div class="flex items-center space-x-2">
-                                    <button 
-                                        onclick="likePost({{ $post->id }}, this)" 
-                                        data-liked="{{ $post->is_liked ? 'true' : 'false' }}" 
-                                        class="interaction-btn {{ $post->is_liked ? 'active' : '' }}"
-                                    >
-                                        <i class="fas fa-thumbs-up mr-2"></i>
-                                        <span id="like-button-text-{{ $post->id }}">
-                                            {{ $post->is_liked ? 'Liked' : 'Like' }}
-                                        </span>
-                                    </button>
-                                    
-                                    <button 
-                                        onclick="toggleCommentForm({{ $post->id }})" 
-                                        class="interaction-btn"
-                                    >
-                                        <i class="fas fa-comment mr-2"></i>
-                                        Comment
-                                    </button>
-                                    
-                                    <div class="relative">
-                                        <button 
-                                            onclick="toggleShareMenu({{ $post->id }})" 
-                                            class="interaction-btn"
-                                        >
-                                            <i class="fas fa-share mr-2"></i>
-                                            Share
-                                        </button>
-                                        <div 
-                                            id="share-menu-{{ $post->id }}" 
-                                            class="hidden absolute right-0 mt-2 bg-white border border-gray-200 rounded-lg shadow-lg py-2 z-10 min-w-48"
-                                        >
-                                            <a 
-                                                target="_blank" 
-                                                rel="noopener" 
-                                                href="https://www.facebook.com/sharer/sharer.php?u={{ urlencode(route('news.show', $post->slug)) }}"
-                                                class="flex items-center px-4 py-3 text-sm text-gray-700 hover:bg-gray-50 transition-colors duration-150"
-                                            >
-                                                <i class="fab fa-facebook-square text-blue-600 mr-3 text-lg"></i>
-                                                Share on Facebook
-                                            </a>
-                                            <a 
-                                                target="_blank" 
-                                                rel="noopener" 
-                                                href="https://twitter.com/intent/tweet?url={{ urlencode(route('news.show', $post->slug)) }}&text={{ urlencode($post->title) }}"
-                                                class="flex items-center px-4 py-3 text-sm text-gray-700 hover:bg-gray-50 transition-colors duration-150"
-                                            >
-                                                <i class="fab fa-twitter text-blue-400 mr-3 text-lg"></i>
-                                                Share on Twitter
-                                            </a>
-                                            <a 
-                                                target="_blank" 
-                                                rel="noopener" 
-                                                href="https://api.whatsapp.com/send?text={{ urlencode($post->title . ' ' . route('news.show', $post->slug)) }}"
-                                                class="flex items-center px-4 py-3 text-sm text-gray-700 hover:bg-gray-50 transition-colors duration-150"
-                                            >
-                                                <i class="fab fa-whatsapp text-green-500 mr-3 text-lg"></i>
-                                                Share on WhatsApp
-                                            </a>
-                                            <div class="border-t border-gray-200 mt-2 pt-2">
-                                                <button 
-                                                    onclick="copyLink('{{ route('news.show', $post->slug) }}')"
-                                                    class="flex items-center w-full px-4 py-3 text-sm text-gray-700 hover:bg-gray-50 transition-colors duration-150"
-                                                >
-                                                    <i class="fas fa-link text-gray-600 mr-3"></i>
-                                                    Copy Link
-                                                </button>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-
-                    
-                            <div 
-                                id="comments-section-{{ $post->id }}" 
-                                class="mt-6 space-y-4 max-h-80 overflow-y-auto custom-scrollbar p-2 hidden"
-                            >
-                                @foreach($post->commentsList->take(10) as $comment)
-                                    <div class="comment-card">
-                                        <div class="flex items-start space-x-3">
-                                            <div class="w-8 h-8 bg-gradient-to-br from-indigo-500 to-purple-600 rounded-full flex items-center justify-center text-white text-xs font-bold">
-                                                {{ substr($comment->name ?? 'G', 0, 1) }}
-                                            </div>
-                                            <div class="flex-1">
-                                                <div class="text-sm text-gray-700 leading-relaxed">{{ $comment->content }}</div>
-                                                <div class="flex items-center justify-between mt-2">
-                                                    <span class="text-xs text-gray-500 font-medium">
-                                                        {{ $comment->name ?? 'Guest' }}
-                                                    </span>
-                                                    <span class="text-xs text-gray-400">
-                                                        {{ $comment->created_at->diffForHumans() }}
-                                                    </span>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                @endforeach
-                                @if($post->commentsList->isEmpty())
-                                    <div class="text-center py-8 text-gray-500">
-                                        <i class="far fa-comment-dots text-4xl mb-3 opacity-50"></i>
-                                        <p>No comments yet. Be the first to comment!</p>
-                                    </div>
-                                @endif
-                            </div>
-
-                       
-                            <form 
-                                id="comment-form-{{ $post->id }}" 
-                                onsubmit="submitComment(event, {{ $post->id }})" 
-                                class="mt-6 space-y-4 hidden"
-                            >
-                                @csrf
-                                <div class="bg-gray-50 rounded-xl p-4 border border-gray-200">
-                                    <h4 class="font-medium text-gray-900 mb-3">
-                                        <i class="fas fa-edit mr-2 text-indigo-600"></i>
-                                        Post a Comment
-                                    </h4>
-                                    
-                                    @guest
-                                        <div class="grid grid-cols-1 md:grid-cols-2 gap-3 mb-4">
-                                            <div>
-                                                <label class="block text-sm font-medium text-gray-700 mb-1">
-                                                    Your Name *
-                                                </label>
-                                                <input 
-                                                    type="text" 
-                                                    name="name" 
-                                                    required
-                                                    placeholder="John Doe"
-                                                    class="w-full px-4 py-2 rounded-lg border border-gray-300 focus:ring-2 focus:ring-indigo-500 focus:border-transparent outline-none transition-all duration-200"
-                                                >
-                                            </div>
-                                            <div>
-                                                <label class="block text-sm font-medium text-gray-700 mb-1">
-                                                    Email (optional)
-                                                </label>
-                                                <input 
-                                                    type="email" 
-                                                    name="email" 
-                                                    placeholder="john@example.com"
-                                                    class="w-full px-4 py-2 rounded-lg border border-gray-300 focus:ring-2 focus:ring-indigo-500 focus:border-transparent outline-none transition-all duration-200"
-                                                >
-                                            </div>
-                                        </div>
-                                    @endguest
-                                    
-                                    <div>
-                                        <label class="block text-sm font-medium text-gray-700 mb-1">
-                                            Comment *
-                                        </label>
-                                        <textarea 
-                                            name="content" 
-                                            rows="3" 
-                                            required
-                                            placeholder="Share your thoughts..."
-                                            class="w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-indigo-500 focus:border-transparent outline-none transition-all duration-200 resize-none"
-                                        ></textarea>
-                                    </div>
-                                    
-                                    <div class="flex items-center justify-between pt-2">
-                                        <div class="text-sm text-gray-500">
-                                            <i class="fas fa-info-circle mr-1"></i>
-                                            Your email will not be published.
-                                        </div>
-                                        <button 
-                                            type="submit" 
-                                            class="px-6 py-2 bg-gradient-to-r from-indigo-600 to-purple-600 text-white rounded-lg hover:from-indigo-700 hover:to-purple-700 transition-all duration-200 font-medium"
-                                        >
-                                            <i class="fas fa-paper-plane mr-2"></i>
-                                            Post Comment
-                                        </button>
-                                    </div>
-                                </div>
-                            </form>
-                        </div>
-                    </div>
-                </article>
-            @empty
-                <div class="news-card p-12 text-center">
-                    <div class="text-gray-400 mb-4">
-                        <i class="fas fa-newspaper text-6xl opacity-50"></i>
-                    </div>
-                    <h3 class="text-xl font-bold text-gray-900 mb-2">No News Yet</h3>
-                    <p class="text-gray-600 mb-6">Check back later for updates and announcements.</p>
-                    <button class="px-6 py-3 bg-gradient-to-r from-indigo-600 to-purple-600 text-white rounded-lg hover:from-indigo-700 hover:to-purple-700 transition-all duration-200 font-medium">
-                        <i class="fas fa-bell mr-2"></i>
-                        Get Notified
+        {{-- Main Content: Card Grid --}}
+        <section class="container mx-auto px-4 pb-24">
+            <div class="flex items-center justify-between mb-12 border-b border-gray-100 pb-6">
+                <div>
+                    <h2 class="text-3xl font-bold text-gray-900">Featured Articles</h2>
+                    <p class="text-gray-500 mt-1">Showing {{ $news->count() }} of {{ $news->total() }} results</p>
+                </div>
+                <div class="hidden md:flex items-center space-x-2">
+                    <button
+                        class="w-10 h-10 rounded-full border border-gray-200 flex items-center justify-center text-gray-400 hover:bg-gray-50 hover:text-indigo-600 transition-all">
+                        <i class="fas fa-th-large"></i>
+                    </button>
+                    <button
+                        class="w-10 h-10 rounded-full border border-gray-200 flex items-center justify-center text-gray-400 hover:bg-gray-50 hover:text-indigo-600 transition-all">
+                        <i class="fas fa-list"></i>
                     </button>
                 </div>
-            @endforelse
-        </div>
+            </div>
 
-        @if($news->hasPages())
-            <div class="mt-12 bg-white rounded-xl shadow-sm p-6">
-                <div class="flex flex-col sm:flex-row items-center justify-between gap-4">
-                    <div class="text-sm text-gray-600">
-                        Showing {{ $news->firstItem() }} to {{ $news->lastItem() }} of {{ $news->total() }} results
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10">
+                @forelse($news as $index => $post)
+                    <article class="news-card-v2 group animate-fade-in-up" style="animation-delay: {{ $index * 100 }}ms">
+                        {{-- Media --}}
+                        <a href="{{ route('news.show', $post->slug) }}" class="block relative aspect-[16/10] overflow-hidden">
+                            @if($post->image)
+                                <img src="{{ Str::startsWith($post->image, ['http://', 'https://']) ? $post->image : asset($post->image) }}"
+                                    alt="{{ $post->title }}"
+                                    class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110">
+                            @else
+                                <div class="w-full h-full bg-indigo-50 flex items-center justify-center">
+                                    <i class="fas fa-image text-5xl text-indigo-200"></i>
+                                </div>
+                            @endif
+
+                            {{-- Tag Badge --}}
+                            <div class="absolute top-6 left-6">
+                                <span
+                                    class="premium-badge text-white px-4 py-1.5 rounded-full text-xs font-bold uppercase tracking-wider">
+                                    {{ $post->tags[0] ?? 'News' }}
+                                </span>
+                            </div>
+                        </a>
+
+                        {{-- Content --}}
+                        <div class="p-8">
+                            <div
+                                class="flex items-center text-xs font-bold text-gray-400 uppercase tracking-widest mb-4 space-x-3">
+                                <span class="flex items-center">
+                                    <i class="far fa-calendar-alt mr-2 text-indigo-500"></i>
+                                    {{ optional($post->published_at)->format('M d, Y') }}
+                                </span>
+                                <span>•</span>
+                                <span class="flex items-center">
+                                    <i class="far fa-user mr-2 text-purple-500"></i>
+                                    {{ data_get($post, 'user.name', 'CAEDA') }}
+                                </span>
+                            </div>
+
+                            <h3
+                                class="text-2xl font-bold text-gray-900 mb-4 group-hover:text-indigo-600 transition-colors line-clamp-2 leading-snug">
+                                <a href="{{ route('news.show', $post->slug) }}">{{ $post->title }}</a>
+                            </h3>
+
+                            <p class="text-gray-500 leading-relaxed mb-8 line-clamp-3">
+                                {{ $post->excerpt ?? Str::limit(strip_tags($post->content), 120) }}
+                            </p>
+
+                            {{-- Footer Interaction --}}
+                            <div class="flex items-center justify-between pt-6 border-t border-gray-50">
+                                <div class="flex items-center space-x-6">
+                                    <button class="flex items-center text-gray-400 font-bold group/btn">
+                                        <span
+                                            class="w-8 h-8 rounded-full bg-gray-50 flex items-center justify-center mr-2 transition-all">
+                                            <i class="far fa-heart"></i>
+                                        </span>
+                                        <span>{{ $post->likes }}</span>
+                                    </button>
+                                    <button class="flex items-center text-gray-400 font-bold group/btn">
+                                        <span
+                                            class="w-8 h-8 rounded-full bg-gray-50 flex items-center justify-center mr-2 transition-all">
+                                            <i class="far fa-comment"></i>
+                                        </span>
+                                        <span>{{ $post->comments }}</span>
+                                    </button>
+                                </div>
+
+                                <a href="{{ route('news.show', $post->slug) }}"
+                                    class="text-indigo-600 font-bold flex items-center group/more">
+                                    Read
+                                    <span
+                                        class="ml-2 w-8 h-8 rounded-full bg-indigo-50 flex items-center justify-center group-hover/more:bg-indigo-600 group-hover/more:text-white transition-all">
+                                        <i class="fas fa-arrow-right text-xs"></i>
+                                    </span>
+                                </a>
+                            </div>
+                        </div>
+                    </article>
+                @empty
+                    <div
+                        class="col-span-full py-20 bg-white rounded-[2rem] border border-gray-100 text-center shadow-xl shadow-gray-100/50">
+                        <div
+                            class="mb-6 inline-flex w-24 h-24 bg-indigo-50 rounded-full items-center justify-center text-indigo-200">
+                            <i class="fas fa-newspaper text-5xl"></i>
+                        </div>
+                        <h3 class="text-3xl font-bold text-gray-900 mb-2">No Stories Found</h3>
+                        <p class="text-gray-500 mb-8 max-w-sm mx-auto">We couldn't find any articles matching your search. Try
+                            different keywords or browse all stories.</p>
+                        <a href="{{ route('news') }}"
+                            class="bg-indigo-600 text-white px-8 py-3 rounded-full font-bold shadow-lg shadow-indigo-100 hover:scale-105 transition-all inline-block">
+                            Browse All News
+                        </a>
                     </div>
-                    <div class="flex items-center space-x-2">
+                @endforelse
+            </div>
+
+            {{-- Pagination --}}
+            @if($news->hasPages())
+                <div class="mt-20 flex justify-center">
+                    <div class="bg-white p-2 rounded-full shadow-lg border border-gray-100 inline-flex">
                         {{ $news->links('vendor.pagination.tailwind-custom') }}
                     </div>
                 </div>
+            @endif
+        </section>
+
+        {{-- Newsletter Section --}}
+        <section class="container mx-auto px-4 pb-20 mt-10">
+            <div
+                class="relative rounded-[3rem] overflow-hidden bg-gradient-to-r from-blue-700 via-indigo-700 to-purple-800 p-12 md:p-20 shadow-2xl">
+                <div class="absolute inset-0 opacity-10">
+                    <div class="absolute top-0 left-0 w-full h-full"
+                        style="background-image: radial-gradient(circle at 2px 2px, white 1px, transparent 0); background-size: 40px 40px;">
+                    </div>
+                </div>
+
+                <div class="max-w-4xl mx-auto text-center relative z-10">
+                    <h2 class="text-4xl md:text-5xl font-extrabold text-white mb-6 leading-tight">Join our creative <span
+                            class="text-amber-400">community.</span></h2>
+                    <p class="text-indigo-100 text-lg mb-10 opacity-80">Subscribe to get the latest updates on design,
+                        entrepreneurship, and art projects delivered directly to your inbox.</p>
+
+                    <form action="#" class="flex flex-col md:flex-row gap-4 max-w-xl mx-auto">
+                        <input type="email" placeholder="Enter your email address..."
+                            class="flex-1 px-8 py-4 rounded-full bg-white/10 border border-white/20 text-white placeholder:text-white/50 outline-none focus:bg-white/20 transition-all font-medium">
+                        <button
+                            class="bg-amber-400 hover:bg-amber-500 text-indigo-900 px-10 py-4 rounded-full font-bold transition-all transform hover:scale-105 active:scale-95 shadow-xl shadow-amber-400/20">
+                            Join Now
+                        </button>
+                    </form>
+                </div>
             </div>
-        @endif
+        </section>
     </div>
-</div>
-
-
-<button 
-    id="back-to-top" 
-    class="fixed bottom-6 right-6 w-12 h-12 bg-gradient-to-r from-indigo-600 to-purple-600 text-white rounded-full shadow-lg hover:shadow-xl transition-all duration-300 hidden z-50"
-    onclick="scrollToTop()"
->
-    <i class="fas fa-arrow-up"></i>
-</button>
-
 @endsection
 
 @section('extra-js')
-<script>
-    const csrfToken = '{{ csrf_token() }}';
-    
-  
-    window.addEventListener('scroll', () => {
-        const backToTopBtn = document.getElementById('back-to-top');
-        if (window.scrollY > 300) {
-            backToTopBtn.classList.remove('hidden');
-        } else {
-            backToTopBtn.classList.add('hidden');
-        }
-    });
-    
-    function scrollToTop() {
-        window.scrollTo({ top: 0, behavior: 'smooth' });
-    }
-    
-  
-    async function likePost(id, btn) {
-        try {
-            btn.disabled = true;
-            const wasLiked = btn.dataset.liked === 'true';
-            const icon = btn.querySelector('i');
-            
-            btn.classList.add('active');
-            icon.classList.remove('fa-thumbs-up');
-            icon.classList.add('fa-heart', 'animate-pulse');
-            
-            const res = await fetch(`/news/${id}/like`, {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'X-CSRF-TOKEN': csrfToken,
-                    'Accept': 'application/json'
-                },
-                body: JSON.stringify({})
-            });
-            
-            if (!res.ok) throw new Error('Network error');
-            
-            const data = await res.json();
-            document.getElementById('likes-number-' + id).textContent = data.likes;
-            document.getElementById('like-button-text-' + id).textContent = data.is_liked ? 'Liked' : 'Like';
-            btn.dataset.liked = data.is_liked ? 'true' : 'false';
-          
-            setTimeout(() => {
-                icon.classList.remove('fa-heart', 'animate-pulse');
-                icon.classList.add('fa-thumbs-up');
-                if (!data.is_liked) {
-                    btn.classList.remove('active');
+    <script>
+        // Smooth scroll for anchors
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({ behavior: 'smooth' });
                 }
-            }, 300);
-            
-        } catch (err) {
-            console.error(err);
-            showToast('Could not like the post.', 'error');
-        } finally {
-            btn.disabled = false;
-        }
-    }
-    
-  
-    function toggleShareMenu(id) {
-        const menu = document.getElementById('share-menu-' + id);
-        const allMenus = document.querySelectorAll('[id^="share-menu-"]');
-      
-        allMenus.forEach(otherMenu => {
-            if (otherMenu !== menu) {
-                otherMenu.classList.add('hidden');
-            }
-        });
-        
-       
-        menu.classList.toggle('hidden');
-    }
-    
-   
-    function copyLink(url) {
-        navigator.clipboard.writeText(url).then(() => {
-            showToast('Link copied to clipboard!', 'success');
-            
-            document.querySelectorAll('[id^="share-menu-"]').forEach(menu => {
-                menu.classList.add('hidden');
             });
         });
-    }
-    
-  
-    function toggleCommentForm(id) {
-        const form = document.getElementById('comment-form-' + id);
-        const commentsSection = document.getElementById('comments-section-' + id);
-        
-        form.classList.toggle('hidden');
-        if (!form.classList.contains('hidden')) {
-            commentsSection.classList.remove('hidden');
-            form.querySelector('textarea').focus();
-        } else {
-            commentsSection.classList.add('hidden');
-        }
-    }
-    
-   
-    async function submitComment(event, id) {
-        event.preventDefault();
-        const form = event.target;
-        const formData = new FormData(form);
-        const submitBtn = form.querySelector('button[type="submit"]');
-        const originalBtnText = submitBtn.innerHTML;
-        
-        try {
-           
-            submitBtn.disabled = true;
-            submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin mr-2"></i>Posting...';
-            
-            const res = await fetch(`/news/${id}/comments`, {
-                method: 'POST',
-                headers: {
-                    'X-CSRF-TOKEN': csrfToken,
-                    'Accept': 'application/json'
-                },
-                body: formData
-            });
-            
-            if (!res.ok) {
-                const err = await res.json().catch(() => null);
-                throw new Error(err?.message || 'Could not post comment');
-            }
-            
-            const data = await res.json();
-            
-          
-            const commentsSection = document.getElementById('comments-section-' + id);
-            const newComment = document.createElement('div');
-            newComment.className = 'comment-card';
-            newComment.innerHTML = `
-                <div class="flex items-start space-x-3">
-                    <div class="w-8 h-8 bg-gradient-to-br from-indigo-500 to-purple-600 rounded-full flex items-center justify-center text-white text-xs font-bold">
-                        ${escapeHtml(data.comment.name ? data.comment.name.charAt(0) : 'G')}
-                    </div>
-                    <div class="flex-1">
-                        <div class="text-sm text-gray-700 leading-relaxed">${escapeHtml(data.comment.content)}</div>
-                        <div class="flex items-center justify-between mt-2">
-                            <span class="text-xs text-gray-500 font-medium">
-                                ${escapeHtml(data.comment.name || 'Guest')}
-                            </span>
-                            <span class="text-xs text-gray-400">
-                                just now
-                            </span>
-                        </div>
-                    </div>
-                </div>
-            `;
-            
-            
-            commentsSection.prepend(newComment);
-            
-           
-            const commentsNumber = document.getElementById('comments-number-' + id);
-            if (commentsNumber) {
-                const current = parseInt(commentsNumber.textContent) || 0;
-                commentsNumber.textContent = current + 1;
-            }
-            
-          
-            form.reset();
-            
-           
-            showToast('Comment posted successfully!', 'success');
-            
-         
-            newComment.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
-            
-        } catch (err) {
-            console.error(err);
-            showToast(err.message || 'Could not submit comment', 'error');
-        } finally {
-          
-            submitBtn.disabled = false;
-            submitBtn.innerHTML = originalBtnText;
-        }
-    }
-    
 
-    function showToast(message, type = 'info') {
-        const toast = document.createElement('div');
-        const colors = {
-            success: 'bg-green-500',
-            error: 'bg-red-500',
-            info: 'bg-blue-500'
-            
-        };
-        
-        toast.className = `fixed top-6 right-6 px-6 py-3 rounded-lg text-white shadow-lg transform transition-all duration-300 translate-x-full ${colors[type]} z-50`;
-        toast.innerHTML = `
-            <div class="flex items-center">
-                <i class="fas fa-${type === 'success' ? 'check-circle' : 'exclamation-circle'} mr-3"></i>
-                <span>${message}</span>
-            </div>
-        `;
-        
-        document.body.appendChild(toast);
-        
-        setTimeout(() => {
-            toast.classList.remove('translate-x-full');
-        }, 10);
-        
-        setTimeout(() => {
-            toast.classList.add('translate-x-full');
-            setTimeout(() => {
-                document.body.removeChild(toast);
-            }, 300);
-        }, 4000);
-    }
-    
-    
-    function escapeHtml(unsafe) {
-        if (!unsafe) return '';
-        return unsafe.replace(/[&<"'>]/g, function(m) { 
-            return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m]; 
-        });
-    }
-    
-
-    document.addEventListener('click', (e) => {
-        if (!e.target.closest('[id^="share-menu-"]') && !e.target.closest('.interaction-btn .fa-share')) {
-            document.querySelectorAll('[id^="share-menu-"]').forEach(menu => {
-                menu.classList.add('hidden');
-            });
+        // Simple interaction feedback (like system)
+        function showToast(message) {
+            console.log(message);
         }
-    });
-</script>
+    </script>
 @endsection

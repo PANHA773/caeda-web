@@ -193,7 +193,9 @@
                             </span>
                         </div>
 
-                        <h3 class="text-xl font-bold text-gray-900 mb-2">{{ $program->title ?? 'Untitled Program' }}</h3>
+                        <a href="{{ route('programs.show', $program->slug) }}" class="hover:text-blue-600 transition-colors">
+                            <h3 class="text-xl font-bold text-gray-900 mb-2">{{ $program->title ?? 'Untitled Program' }}</h3>
+                        </a>
 
                         <p class="text-gray-600 mb-4 line-clamp-2 flex-grow">
                             {{ $program->short_description ?? Str::limit($program->description ?? 'No description available.', 120) }}
@@ -231,9 +233,9 @@
                                 </div>
                             </div>
 
-                            <button class="px-5 py-2.5 bg-blue-600 text-white rounded-xl hover:bg-blue-700 transition-all hover:shadow-lg font-semibold group">
-                                Apply Now <i class="fas fa-arrow-right ml-2 group-hover:translate-x-1 transition-transform"></i>
-                            </button>
+                            <a href="{{ route('programs.show', $program->slug) }}" class="px-5 py-2.5 bg-blue-600 text-white rounded-xl hover:bg-blue-700 transition-all hover:shadow-lg font-semibold group flex items-center">
+                                Learn More <i class="fas fa-arrow-right ml-2 group-hover:translate-x-1 transition-transform"></i>
+                            </a>
                         </div>
 
                         {{-- Application Deadline --}}
@@ -293,7 +295,9 @@
                             @endif
                         </div>
                         
-                        <h3 class="text-2xl font-bold text-gray-900 mb-2">{{ $program->title ?? 'Untitled Program' }}</h3>
+                        <a href="{{ route('programs.show', $program->slug) }}" class="hover:text-blue-600 transition-colors">
+                            <h3 class="text-2xl font-bold text-gray-900 mb-2">{{ $program->title ?? 'Untitled Program' }}</h3>
+                        </a>
                         
                         <p class="text-gray-600 mb-4 line-clamp-2">
                             {{ $program->short_description ?? Str::limit($program->description ?? 'No description available.', 200) }}
@@ -342,9 +346,9 @@
                             </div>
                             
                             <div class="flex gap-3">
-                                <button class="px-5 py-2.5 border border-blue-600 text-blue-600 rounded-xl hover:bg-blue-50 transition font-semibold">
+                                <a href="{{ route('programs.show', $program->slug) }}" class="px-5 py-2.5 border border-blue-600 text-blue-600 rounded-xl hover:bg-blue-50 transition font-semibold">
                                     Learn More
-                                </button>
+                                </a>
                                 <button class="px-5 py-2.5 bg-blue-600 text-white rounded-xl hover:bg-blue-700 transition font-semibold">
                                     Apply Now
                                 </button>

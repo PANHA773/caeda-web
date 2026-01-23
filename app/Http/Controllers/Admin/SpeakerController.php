@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\Speaker;
+use Illuminate\Support\Facades\Storage;
 
 class SpeakerController extends Controller
 {
@@ -24,11 +25,15 @@ class SpeakerController extends Controller
         $data = $request->validate([
             'name' => 'required|string|max:255',
             'title' => 'nullable|string|max:255',
-            'image' => 'nullable|url',
+            'image' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
             'topic' => 'nullable|string|max:255',
             'social' => 'nullable|string', // accept string from form
             'is_active' => 'boolean',
         ]);
+
+        if ($request->hasFile('image')) {
+            $data['image'] = $request->file('image')->store('speakers', 'public');
+        }
 
         // Convert comma-separated string to array
         $data['social'] = isset($data['social']) ? array_map('trim', explode(',', $data['social'])) : [];
@@ -50,11 +55,19 @@ class SpeakerController extends Controller
         $data = $request->validate([
             'name' => 'required|string|max:255',
             'title' => 'nullable|string|max:255',
-            'image' => 'nullable|url',
+            'image' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
             'topic' => 'nullable|string|max:255',
             'social' => 'nullable|string', // accept string
             'is_active' => 'boolean',
         ]);
+
+        if ($request->hasFile('image')) {
+            // Delete old image if it exists
+            if ($speaker->image) {
+                Storage::disk('public')->delete($speaker->image);
+            }
+            $data['image'] = $request->file('image')->store('speakers', 'public');
+        }
 
         // Convert comma-separated string to array
         $data['social'] = isset($data['social']) ? array_map('trim', explode(',', $data['social'])) : [];
@@ -67,6 +80,9 @@ class SpeakerController extends Controller
 
     public function destroy(Speaker $speaker)
     {
+        if ($speaker->image) {
+            Storage::disk('public')->delete($speaker->image);
+        }
         $speaker->delete();
         return redirect()->route('admin.speakers.index')->with('success', 'Speaker deleted.');
     }

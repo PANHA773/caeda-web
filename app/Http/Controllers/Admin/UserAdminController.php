@@ -15,7 +15,7 @@ class UserAdminController extends Controller
      */
     public function index()
     {
-         $users = User::latest()->paginate(10);
+        $users = User::latest()->paginate(10);
         return view('admin.users.index', compact('users'));
     }
 
@@ -36,10 +36,22 @@ class UserAdminController extends Controller
             'name' => 'required|string|max:255',
             'email' => 'required|string|email|max:255|unique:users',
             'password' => 'required|string|min:8|confirmed',
-            'role' => 'nullable|string|in:admin,user', // optional role
+            'permissions' => 'nullable|array',
+            'is_admin' => 'boolean',
+            'avatar' => 'nullable|image|max:2048',
         ]);
 
         $data['password'] = Hash::make($data['password']);
+
+        if ($request->hasFile('avatar')) {
+            $data['avatar'] = $request->file('avatar')->store('avatars', 'public');
+        }
+
+        // Ensure permissions is an array if not provided
+        $data['permissions'] = $request->input('permissions', []);
+
+        // Ensure is_admin is boolean logic
+        $data['is_admin'] = $request->has('is_admin');
 
         User::create($data);
 
@@ -63,7 +75,9 @@ class UserAdminController extends Controller
             'name' => 'required|string|max:255',
             'email' => 'required|string|email|max:255|unique:users,email,' . $user->id,
             'password' => 'nullable|string|min:8|confirmed',
-            'role' => 'nullable|string|in:admin,user',
+            'permissions' => 'nullable|array',
+            'is_admin' => 'boolean',
+            'avatar' => 'nullable|image|max:2048',
         ]);
 
         // Only update password if provided
@@ -71,6 +85,17 @@ class UserAdminController extends Controller
             $data['password'] = Hash::make($data['password']);
         } else {
             unset($data['password']);
+        }
+
+        $data['permissions'] = $request->input('permissions', []);
+        $data['is_admin'] = $request->has('is_admin');
+
+        if ($request->hasFile('avatar')) {
+            // Optional: delete old avatar if exists
+            // if ($user->avatar) {
+            //     Storage::disk('public')->delete($user->avatar);
+            // }
+            $data['avatar'] = $request->file('avatar')->store('avatars', 'public');
         }
 
         $user->update($data);

@@ -18,12 +18,14 @@ class AdminSeeder extends Seeder
                 'name' => 'Admin User',
                 'email' => 'admin@caeda.com',
                 'password' => Hash::make('admin123'),
+                'is_admin' => true,
                 'email_verified_at' => now(),
             ],
             [
                 'name' => 'Super Admin',
                 'email' => 'superadmin@caeda.com',
                 'password' => Hash::make('superadmin123'),
+                'is_admin' => true,
                 'email_verified_at' => now(),
             ],
         ];

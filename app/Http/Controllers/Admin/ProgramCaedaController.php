@@ -125,7 +125,7 @@ class ProgramCaedaController extends Controller
         Program::create($data);
 
         return redirect()->route('admin.programs.index')
-                         ->with('success', 'Program created successfully.');
+            ->with('success', 'Program created successfully.');
     }
 
     /**
@@ -162,31 +162,37 @@ class ProgramCaedaController extends Controller
             'final_price' => 'required|numeric|min:0',
             'rating' => 'nullable|numeric|min:0|max:5',
             'students' => 'nullable|integer|min:0',
-            'image' => 'nullable|image|mimes:jpg,jpeg,png,gif|max:5120',
+            'image' => 'nullable|image|mimes:jpg,jpeg,png,gif|max:2048', // 2MB is usually enough
             'short_description' => 'nullable|string|max:500',
             'description' => 'nullable|string',
             'is_featured' => 'nullable|boolean',
-            'is_active' => 'nullable|boolean', // 添加了 is_active
+            'is_active' => 'nullable|boolean',
             'badge' => 'nullable|string|max:50',
             'badge_color' => 'nullable|string|max:50',
-            'discount' => 'nullable|numeric|min:0', // 添加了 discount
+            'discount' => 'nullable|numeric|min:0',
             'application_deadline' => 'nullable|date',
+            'remove_image' => 'nullable|boolean', // Added remove_image validation
         ]);
 
         // Update slug
         $data['slug'] = Str::slug($data['title']);
 
-        // Handle image upload
-        if ($request->hasFile('image')) {
+        // Handle image upload and removal
+        if ($request->boolean('remove_image')) {
+            if ($program->image) {
+                Storage::disk('public')->delete($program->image);
+            }
+            $data['image'] = null;
+        } elseif ($request->hasFile('image')) {
             // Delete old image if exists
             if ($program->image) {
                 Storage::disk('public')->delete($program->image);
             }
-            
+
             $imagePath = $request->file('image')->store('programs', 'public');
             $data['image'] = $imagePath;
         } else {
-            // Keep existing image if not uploading new one
+            // Keep existing image if not uploading new one and not removing
             $data['image'] = $program->image;
         }
 
@@ -203,7 +209,7 @@ class ProgramCaedaController extends Controller
         $program->update($data);
 
         return redirect()->route('admin.programs.index')
-                         ->with('success', 'Program updated successfully.');
+            ->with('success', 'Program updated successfully.');
     }
 
     /**
@@ -219,6 +225,6 @@ class ProgramCaedaController extends Controller
         $program->delete();
 
         return redirect()->route('admin.programs.index')
-                         ->with('success', 'Program deleted successfully.');
+            ->with('success', 'Program deleted successfully.');
     }
 }

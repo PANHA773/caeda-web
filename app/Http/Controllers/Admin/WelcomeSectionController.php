@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\WelcomeSection;
+use Illuminate\Support\Facades\Storage;
 
 class WelcomeSectionController extends Controller
 {
@@ -31,15 +32,19 @@ class WelcomeSectionController extends Controller
     public function store(Request $request)
     {
         $data = $request->validate([
-            'title'            => 'nullable|string|max:255',
-            'description'      => 'nullable|array',
-            'signature_name'   => 'nullable|string|max:255',
-            'signature_title'  => 'nullable|string|max:255',
-            'image'            => 'nullable|string|max:255',
-            'badges'           => 'nullable|array',
-            'stats'            => 'nullable|array',
-            'is_active'        => 'nullable|boolean',
+            'title' => 'nullable|string|max:255',
+            'description' => 'nullable|array',
+            'signature_name' => 'nullable|string|max:255',
+            'signature_title' => 'nullable|string|max:255',
+            'image' => 'nullable|image|max:2048', // Validate as image
+            'badges' => 'nullable|array',
+            'stats' => 'nullable|array',
+            'is_active' => 'nullable|boolean',
         ]);
+
+        if ($request->hasFile('image')) {
+            $data['image'] = $request->file('image')->store('welcome-sections', 'public');
+        }
 
         WelcomeSection::create($data);
 
@@ -65,15 +70,23 @@ class WelcomeSectionController extends Controller
     public function update(Request $request, WelcomeSection $welcomeSection)
     {
         $data = $request->validate([
-            'title'            => 'nullable|string|max:255',
-            'description'      => 'nullable|array',
-            'signature_name'   => 'nullable|string|max:255',
-            'signature_title'  => 'nullable|string|max:255',
-            'image'            => 'nullable|string|max:255',
-            'badges'           => 'nullable|array',
-            'stats'            => 'nullable|array',
-            'is_active'        => 'nullable|boolean',
+            'title' => 'nullable|string|max:255',
+            'description' => 'nullable|array',
+            'signature_name' => 'nullable|string|max:255',
+            'signature_title' => 'nullable|string|max:255',
+            'image' => 'nullable|image|max:2048', // Validate as image
+            'badges' => 'nullable|array',
+            'stats' => 'nullable|array',
+            'is_active' => 'nullable|boolean',
         ]);
+
+        if ($request->hasFile('image')) {
+            // Delete old image if it exists and is a local file
+            if ($welcomeSection->image && !preg_match('/^https?:\\/\\//i', $welcomeSection->image)) {
+                Storage::disk('public')->delete($welcomeSection->image);
+            }
+            $data['image'] = $request->file('image')->store('welcome-sections', 'public');
+        }
 
         $welcomeSection->update($data);
 
@@ -87,6 +100,11 @@ class WelcomeSectionController extends Controller
      */
     public function destroy(WelcomeSection $welcomeSection)
     {
+        // Delete image if it exists and is a local file
+        if ($welcomeSection->image && !preg_match('/^https?:\\/\\//i', $welcomeSection->image)) {
+            Storage::disk('public')->delete($welcomeSection->image);
+        }
+
         $welcomeSection->delete();
 
         return redirect()
