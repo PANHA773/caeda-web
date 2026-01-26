@@ -232,7 +232,6 @@
     <!-- ======================== NAVBAR ======================== -->
     <nav class="fixed w-full z-50 py-3 bg-gradient-to-r from-indigo-600 via-purple-600 to-blue-600 shadow-xl">
         <div class="max-w-7xl mx-auto px-4 flex justify-between items-center">
-
             <!-- Logo -->
             <a href="{{ route('home') }}" class="flex items-center gap-3 group">
                 <div class="relative">
