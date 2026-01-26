@@ -7,6 +7,8 @@ use App\Models\Faculty;
 use App\Models\LeaderTeam;
 use App\Models\CoreValue;
 use App\Models\Accreditation;
+
+use App\Models\VisionMission;
 use App\Models\Footer;
 
 use Illuminate\Http\Request;
@@ -56,12 +58,17 @@ class AboutController extends Controller
                 ->orderBy('order')
                 ->get();
 
+
+        $visionMissions = VisionMission::where('is_active', true)->orderBy('type')->get();
+
         return view('about', compact(
             'aboutContent',
             'faculties',
             'leaderTeams',
             'coreValues',
             'accreditations',
+            'visionMissions',
+            
             'footer'
         ));
     }

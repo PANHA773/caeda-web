@@ -128,30 +128,82 @@
             </div>
         </div>
 
-        {{-- Mission & Vision --}}
-        <div data-animate class="grid md:grid-cols-2 gap-8 mb-16">
-            @php
-            $sections = [
-            ['title'=>'Our Mission','content'=>$aboutContent->mission ?? '','icon'=>'<svg xmlns="http://www.w3.org/2000/svg" class="h-7 w-7 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor"></svg>','color_from'=>'blue-500','color_to'=>'blue-600'],
-            ['title'=>'Our Vision','content'=>$aboutContent->vision ?? '','icon'=>'<svg xmlns="http://www.w3.org/2000/svg" class="h-7 w-7 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor"></svg>','color_from'=>'purple-500','color_to'=>'pink-600'],
-            ];
-            @endphp
-            @foreach($sections as $section)
-            <div class="group bg-white/80 backdrop-blur-sm border border-gray-200/50 rounded-3xl p-8 shadow-lg hover:shadow-2xl transition-all duration-500 hover:-translate-y-2">
-                <div class="flex items-center mb-6">
-                    <div class="w-14 h-14 bg-gradient-to-br from-{{ $section['color_from'] }} to-{{ $section['color_to'] }} rounded-2xl flex items-center justify-center mr-4 transform transition-all duration-500 group-hover:scale-110 group-hover:rotate-12 shadow-lg">
-                        {!! $section['icon'] !!}
-                    </div>
-                    <h3 class="text-2xl md:text-3xl font-bold text-gray-900 bg-gradient-to-r from-blue-900 to-purple-900 bg-clip-text text-transparent font-cinzel">
-                        {{ $section['title'] }}
-                    </h3>
-                </div>
-                <p class="text-gray-700 leading-relaxed text-lg transform transition-all duration-500 group-hover:translate-x-2 group-hover:text-gray-900">
-                    {{ $section['content'] }}
-                </p>
-            </div>
-            @endforeach
+{{-- ================= ENHANCED VISION & MISSION SECTION ================= --}}
+<div data-animate class="grid md:grid-cols-2 gap-10 mb-20">
+    @foreach($visionMissions as $vm)
+
+    <div
+        class="group relative overflow-hidden
+        bg-white/70 backdrop-blur-xl
+        border border-white/50
+        rounded-3xl p-10
+        shadow-[0_20px_50px_rgba(0,0,0,0.08)]
+        transition-all duration-500 ease-out
+        hover:-translate-y-3 hover:shadow-[0_30px_80px_rgba(0,0,0,0.15)]">
+
+        {{-- Gradient Glow --}}
+        <div class="absolute -inset-0.5 rounded-3xl
+            {{ $vm->type === 'vision'
+                ? 'bg-gradient-to-br from-purple-500 via-pink-500 to-rose-500'
+                : 'bg-gradient-to-br from-blue-500 via-cyan-500 to-sky-500' }}
+            opacity-0 group-hover:opacity-20 blur-xl transition duration-500">
         </div>
+
+        <div class="relative">
+
+            {{-- Header --}}
+            <div class="flex items-center gap-5 mb-6">
+
+                {{-- Icon --}}
+                <div
+                    class="w-16 h-16 rounded-2xl flex items-center justify-center
+                    shadow-lg ring-1 ring-black/5
+                    transform transition-all duration-500
+                    group-hover:scale-110 group-hover:rotate-6
+                    {{ $vm->type === 'vision'
+                        ? 'bg-gradient-to-br from-purple-500 to-pink-600'
+                        : 'bg-gradient-to-br from-blue-500 to-cyan-600' }}">
+
+                    <span class="text-2xl text-white">
+                        {{ $vm->type === 'vision' ? '🌍' : '🎯' }}
+                    </span>
+                </div>
+
+                {{-- Title --}}
+                <h3
+                    class="text-3xl font-extrabold tracking-tight
+                    {{ $vm->type === 'vision'
+                        ? 'bg-gradient-to-r from-purple-900 to-pink-900'
+                        : 'bg-gradient-to-r from-blue-900 to-cyan-900' }}
+                    bg-clip-text text-transparent font-english">
+                    {{ ucfirst($vm->type) }}
+                </h3>
+
+            </div>
+
+            {{-- Description --}}
+            <p
+                class="text-gray-700 text-lg leading-relaxed
+                transition-all duration-500
+                group-hover:text-gray-900 font-english">
+                {{ $vm->description }}
+            </p>
+
+            {{-- Accent Line --}}
+            <div
+                class="mt-6 h-[3px] w-24 rounded-full
+                {{ $vm->type === 'vision'
+                    ? 'bg-gradient-to-r from-purple-500 to-pink-500'
+                    : 'bg-gradient-to-r from-blue-500 to-cyan-500' }}
+                opacity-70">
+            </div>
+
+        </div>
+    </div>
+
+    @endforeach
+</div>
+
 
         {{-- University Faculties --}}
         <div data-animate class="bg-gradient-to-br from-blue-50/80 to-indigo-50/80 backdrop-blur-sm rounded-3xl p-8 md:p-10 mb-16 border border-blue-200/50 shadow-lg hover:shadow-2xl transition-all duration-500 hover:-translate-y-1">
@@ -178,7 +230,7 @@
         </div>
 
         {{-- ================= ENHANCED ACCREDITATION SECTION ================= --}}
-        <div data-animate class="bg-gradient-to-br from-gray-800 via-gray-900 to-blue-900 rounded-3xl p-8 md:p-10 text-white shadow-2xl hover:shadow-3xl transition-all duration-500 hover:-translate-y-2 relative overflow-hidden">
+        <!-- <div data-animate class="bg-gradient-to-br from-gray-800 via-gray-900 to-blue-900 rounded-3xl p-8 md:p-10 text-white shadow-2xl hover:shadow-3xl transition-all duration-500 hover:-translate-y-2 relative overflow-hidden">
             {{-- Background Elements --}}
             <div class="absolute top-0 right-0 w-32 h-32 bg-white/10 rounded-full translate-x-1/2 -translate-y-1/2"></div>
             <div class="absolute bottom-0 left-0 w-48 h-48 bg-white/10 rounded-full -translate-x-1/3 translate-y-1/3"></div>
@@ -231,10 +283,10 @@
                     </div>
                 </div>
             </div>
-        </div>
+        </div> -->
 
         {{-- ================= LEADER TEAM SECTION ================= --}}
-        <div data-animate class="mb-20">
+        <!-- <div data-animate class="mb-20">
 
             {{-- Section Header --}}
             <div class="text-center mb-14">
@@ -321,7 +373,7 @@
 
                 @endforeach
             </div>
-        </div>
+        </div> -->
 
 
 

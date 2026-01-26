@@ -414,11 +414,11 @@
                                 <i class="fas fa-building-columns w-5 text-center"></i>
                                 <span>Faculties</span>
                             </a>
-                            <a href="{{ route('admin.team-members.index') }}"
+                            <!-- <a href="{{ route('admin.team-members.index') }}"
                                 class="dropdown-link flex items-center space-x-3 px-4 py-2 rounded-lg text-gray-400 hover:text-white hover:bg-gray-800 {{ request()->routeIs('admin.team-members*') ? 'active' : '' }}">
                                 <i class="fas fa-users w-5 text-center"></i>
                                 <span>Team Members</span>
-                            </a>
+                            </a> -->
                             <a href="{{ route('admin.core-values.index') }}"
                                 class="dropdown-link flex items-center space-x-3 px-4 py-2 rounded-lg text-gray-400 hover:text-white hover:bg-gray-800 {{ request()->routeIs('admin.core-values*') ? 'active' : '' }}">
                                 <i class="fas fa-gem w-5 text-center"></i>

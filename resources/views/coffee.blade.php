@@ -78,84 +78,112 @@
             </p>
         </div>
 
-        <!-- Menu Grid -->
-        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+  <!-- Menu Grid -->
+<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-12">
 
-            @forelse($menus as $menu)
-                <div
-                    class="bg-white rounded-2xl overflow-hidden shadow-lg hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-1">
+    @forelse($menus as $menu)
 
-                    <!-- Image -->
-                    <div class="relative h-64 overflow-hidden">
-                        <img
-                            src="{{ asset('storage/' . $menu->image) }}"
-                            alt="{{ $menu->title }}"
-                            class="w-full h-full object-cover">
+    <div
+        class="group relative overflow-hidden
+        bg-white/80 backdrop-blur-xl
+        rounded-3xl border border-white/40
+        shadow-[0_20px_45px_rgba(0,0,0,0.08)]
+        transition-all duration-500 ease-out
+        hover:-translate-y-4 hover:shadow-[0_30px_80px_rgba(0,0,0,0.15)]">
 
-                        @if($menu->badge)
-                            <div class="absolute top-4 right-4">
-                                <span
-                                    class="px-3 py-1 bg-amber-500 text-white text-sm font-semibold rounded-full shadow-lg">
-                                    {{ strtoupper($menu->badge) }}
-                                </span>
-                            </div>
-                        @endif
-                    </div>
+        <!-- Image -->
+        <div class="relative h-64 overflow-hidden">
 
-                    <!-- Content -->
-                    <div class="p-6">
-                        <div class="flex justify-between items-start mb-3">
-                            <h3 class="text-xl font-bold text-gray-900">
-                                {{ $menu->title }}
-                            </h3>
+            <img
+                src="{{ asset('storage/' . $menu->image) }}"
+                alt="{{ $menu->title }}"
+                class="w-full h-full object-cover
+                transition-transform duration-700
+                group-hover:scale-110">
 
-                            <div class="text-right">
-                                <span class="text-2xl font-bold text-amber-600">
-                                    ${{ number_format($menu->price, 2) }}
-                                </span>
+            <!-- Image Overlay -->
+            <div class="absolute inset-0
+                bg-gradient-to-t from-black/40 via-black/10 to-transparent
+                opacity-0 group-hover:opacity-100 transition duration-500">
+            </div>
 
-                                @if($menu->old_price)
-                                    <div class="text-sm text-gray-500 line-through">
-                                        ${{ number_format($menu->old_price, 2) }}
-                                    </div>
-                                @endif
-                            </div>
+            @if($menu->badge)
+                <div class="absolute top-4 left-4">
+                    <span
+                        class="px-4 py-1.5 text-xs font-bold tracking-widest uppercase
+                        bg-gradient-to-r from-amber-500 to-orange-500
+                        text-white rounded-full shadow-lg">
+                        {{ $menu->badge }}
+                    </span>
+                </div>
+            @endif
+        </div>
+
+        <!-- Content -->
+        <div class="relative p-7">
+
+            <!-- Title & Price -->
+            <div class="flex justify-between items-start mb-3">
+                <h3 class="text-xl font-semibold text-gray-900 leading-snug">
+                    {{ $menu->title }}
+                </h3>
+
+                <div class="text-right">
+                    <span class="text-2xl font-extrabold text-amber-600">
+                        ${{ number_format($menu->price, 2) }}
+                    </span>
+
+                    @if($menu->old_price)
+                        <div class="text-sm text-gray-400 line-through">
+                            ${{ number_format($menu->old_price, 2) }}
                         </div>
+                    @endif
+                </div>
+            </div>
 
-                        <p class="text-gray-600 mb-4">
-                            {{ $menu->description }}
-                        </p>
+            <!-- Description -->
+            <p class="text-gray-600 text-sm leading-relaxed mb-5">
+                {{ $menu->description }}
+            </p>
 
-                        <!-- Rating & Action -->
-                        <div class="flex items-center justify-between">
+            <!-- Rating & Action -->
+            <div class="flex items-center justify-between">
 
-                            <!-- Rating -->
-                            <div class="flex items-center space-x-1">
-                                @for($i = 1; $i <= 5; $i++)
-                                    <i class="fas fa-star {{ $i <= floor($menu->rating) ? 'text-amber-400' : 'text-gray-300' }}"></i>
-                                @endfor
+                <!-- Rating -->
+                <div class="flex items-center space-x-1">
+                    @for($i = 1; $i <= 5; $i++)
+                        <i class="fas fa-star text-sm
+                            {{ $i <= floor($menu->rating) ? 'text-amber-400' : 'text-gray-300' }}">
+                        </i>
+                    @endfor
 
-                                <span class="ml-2 text-sm text-gray-600">
-                                    ({{ $menu->reviews }})
-                                </span>
-                            </div>
-
-                            <!-- Button -->
-                            <button
-                                class="px-4 py-2 bg-amber-100 text-amber-700 font-semibold rounded-lg hover:bg-amber-200 transition-colors">
-                                Add to Cart
-                            </button>
-                        </div>
-                    </div>
+                    <span class="ml-2 text-xs text-gray-500">
+                        {{ $menu->rating }} · {{ $menu->reviews }} reviews
+                    </span>
                 </div>
 
-            @empty
-                <p class="col-span-3 text-center text-gray-500">
-                    No featured menu available.
-                </p>
-            @endforelse
+                <!-- Button -->
+                <button
+                    class="px-5 py-2.5 rounded-xl font-semibold text-sm
+                    bg-gradient-to-r from-amber-500 to-orange-500
+                    text-white shadow-md
+                    hover:shadow-lg hover:from-amber-600 hover:to-orange-600
+                    transition-all">
+                    Add to Cart
+                </button>
 
+            </div>
         </div>
+    </div>
+
+    @empty
+        <p class="col-span-3 text-center text-gray-500">
+            No featured menu available.
+        </p>
+    @endforelse
+
+</div>
+
 
         <!-- View Full Menu -->
         <div class="text-center mt-16">
