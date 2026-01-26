@@ -416,32 +416,37 @@
                         {{ $footer->description ?? __('Grow your skills with modern technology courses.') }}</p>
 
                     {{-- Social Links --}}
-                    <div class="flex space-x-2 mt-6">
-                        @foreach($footer->social_links ?? [] as $key => $link)
-                            @php
-                                $icon = match ($key) {
-                                    'facebook' => 'fab fa-facebook-f',
-                                    'twitter' => 'fab fa-twitter',
-                                    'instagram' => 'fab fa-instagram',
-                                    'youtube' => 'fab fa-youtube',
-                                    'linkedin' => 'fab fa-linkedin-in',
-                                    default => 'fab fa-globe'
-                                };
-                                $gradient = match ($key) {
-                                    'facebook' => 'from-blue-500 to-blue-600',
-                                    'twitter' => 'from-sky-400 to-sky-500',
-                                    'instagram' => 'from-pink-500 to-rose-500',
-                                    'youtube' => 'from-red-500 to-red-600',
-                                    'linkedin' => 'from-blue-600 to-blue-700',
-                                    default => 'from-gray-500 to-gray-600'
-                                };
-                            @endphp
-                            <a href="{{ $link }}"
-                                class="w-10 h-10 bg-gradient-to-br {{ $gradient }} rounded-lg flex items-center justify-center text-white hover:shadow-lg hover:scale-110 transition-all duration-200">
-                                <i class="{{ $icon }}"></i>
-                            </a>
-                        @endforeach
-                    </div>
+                <div class="flex space-x-2 mt-6">
+    @foreach($footer->social_links ?? [] as $key => $link)
+        @php
+            $icon = match ($key) {
+                'facebook' => 'fab fa-facebook-f',
+                'twitter' => 'fab fa-twitter',
+                'instagram' => 'fab fa-instagram',
+                'youtube' => 'fab fa-youtube',
+                'linkedin' => 'fab fa-linkedin-in',
+                default => 'fab fa-globe'
+            };
+
+            $gradient = match ($key) {
+                'facebook' => 'from-blue-500 to-blue-600',
+                'twitter' => 'from-sky-400 to-sky-500',
+                'instagram' => 'from-pink-500 to-rose-500',
+                'youtube' => 'from-red-500 to-red-600',
+                'linkedin' => 'from-blue-600 to-blue-700',
+                default => 'from-gray-500 to-gray-600'
+            };
+        @endphp
+
+        <a href="{{ $link }}"
+           target="_blank"
+           rel="noopener noreferrer"
+           class="w-10 h-10 bg-gradient-to-br {{ $gradient }} rounded-lg flex items-center justify-center text-white hover:shadow-lg hover:scale-110 transition-all duration-200">
+            <i class="{{ $icon }}"></i>
+        </a>
+    @endforeach
+</div>
+
                 </div>
 
                 {{-- Quick Links --}}
