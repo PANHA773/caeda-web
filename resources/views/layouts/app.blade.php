@@ -230,7 +230,7 @@
 
 
     <!-- ======================== NAVBAR ======================== -->
-    <nav class="fixed w-full z-50 py-3 bg-gradient-to-r from-indigo-600 via-purple-600 to-pink-500 shadow-xl">
+    <nav class="fixed w-full z-50 py-3 bg-gradient-to-r from-indigo-600 via-purple-600 to-blue-600 shadow-xl">
         <div class="max-w-7xl mx-auto px-4 flex justify-between items-center">
 
             <!-- Logo -->
