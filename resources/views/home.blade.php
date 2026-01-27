@@ -151,13 +151,26 @@
                     <div class="relative overflow-hidden rounded-3xl shadow-2xl w-full border-4 border-white/20 backdrop-blur-sm"
                         style="min-height: 500px">
 
-                        <div id="hero-carousel">
-                            @foreach($heroSlides as $index => $slide)
-                                <img src="{{ $slide->image_url }}" alt="{{ $slide->title }}"
-                                    class="absolute inset-0 w-full h-full object-cover transition-opacity duration-500 {{ $index === 0 ? 'opacity-100' : 'opacity-0' }}"
-                                    onerror="this.src='/assets/defaultcourse.jpg'">
-                            @endforeach
-                        </div>
+<div id="hero-carousel" class="relative w-full h-full min-h-[500px] overflow-hidden rounded-3xl">
+
+    <!-- Hero Carousel Slides -->
+    @foreach($heroSlides as $index => $slide)
+        <img
+            src="{{ $slide->image_url }}"
+            alt="{{ $slide->title }}"
+            class="absolute inset-0 w-full h-full object-cover
+                   transition-opacity duration-700 ease-in-out
+                   {{ $index === 0 ? 'opacity-100 z-10' : 'opacity-0 z-0' }}"
+            onerror="this.src='/assets/defaultcourse.jpg'"
+        >
+    @endforeach
+
+    <!-- Dark Overlay (UI only, optional but looks premium) -->
+    <!-- <div class="absolute inset-0 bg-black/30 z-20 pointer-events-none"></div> -->
+
+</div>
+
+
 
                         {{-- NAV BUTTONS --}}
                         <button id="prev-slide"
@@ -572,7 +585,12 @@
                         </button>
                     </div>
                 </div>
+
+                
             </section>
+
+
+            
 
 
 @endsection
