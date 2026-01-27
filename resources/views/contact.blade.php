@@ -306,12 +306,12 @@
             @csrf
 
             <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                <x-input-field name="first_name" label="First Name *" icon="fas fa-user" placeholder="John" required/>
-                <x-input-field name="last_name" label="Last Name *" icon="fas fa-user" placeholder="Doe" required/>
+                <x-input-field name="first_name" label="First Name *" icon="" placeholder="John" required/>
+                <x-input-field name="last_name" label="Last Name *" icon="" placeholder="Doe" required/>
             </div>
 
-            <x-input-field name="email" label="Email Address *" icon="fas fa-envelope" placeholder="john@example.com" type="email" required/>
-            <x-input-field name="phone" label="Phone Number" icon="fas fa-phone" placeholder="+855 12 345 678"/>
+            <x-input-field name="email" label="Email Address *" icon="" placeholder="john@example.com" type="email" required/>
+            <x-input-field name="phone" label="Phone Number" icon="" placeholder="+855 12 345 678"/>
 
             {{-- Subject --}}
             <div>
