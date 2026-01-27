@@ -211,7 +211,7 @@
                     ['label' => 'PSBU-Youth', 'href' => route('psbu-youth')],
                 ]
             ],
-            ['name' => 'membership', 'href' => route('our-team')],
+            ['name' => 'partners', 'href' => route('our-team')],
             ['name' => 'events', 'href' => route('events')],
             [
                 'name' => 'news',

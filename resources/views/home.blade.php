@@ -651,6 +651,23 @@
                             testimonialDots.appendChild(dot);
                         });
 
+                            document.addEventListener("DOMContentLoaded", () => {
+        const slides = document.querySelectorAll(".hero-slide");
+        let current = 0;
+
+        if (slides.length <= 1) return;
+
+        setInterval(() => {
+            slides[current].classList.remove("opacity-100");
+            slides[current].classList.add("opacity-0");
+
+            current = (current + 1) % slides.length;
+
+            slides[current].classList.remove("opacity-0");
+            slides[current].classList.add("opacity-100");
+        }, 5000); // change slide every 5 seconds
+    });
+
                         function updateTestimonials() {
                             testimonials.forEach((testimonial, i) => {
                                 if (i === currentTestimonial) {
@@ -752,5 +769,7 @@
                         }
                     }
                 });
+
+                
             </script>
         @endsection

@@ -369,16 +369,16 @@
                         </button>
                         <!-- welcome Section -->
                         <div class="dropdown-menu hidden pl-12 mt-1 space-y-1">
-                            <a href="{{ route('admin.welcome_sections.index') }}"
+                            <a href="{{ route('admin.hero_carousels.index') }}"
                                 class="dropdown-link flex items-center space-x-3 px-4 py-2 rounded-lg text-gray-400 hover:text-white hover:bg-gray-800 {{ request()->routeIs('admin.welcome_sections*') ? 'active' : '' }}">
                                 <i class="fas fa-hand-sparkles w-5 text-center"></i>
-                                <span>Welcome Section</span>
+                                <span>Hero Carousel</span>
                             </a>
-                            <!-- Hero Carousel -->
-                            <a href="{{ route('admin.hero_carousels.index') }}"
+                            <!-- welcome Section -->
+                            <a href="{{ route('admin.welcome_sections.index') }}"
                                 class="dropdown-link flex items-center space-x-3 px-4 py-2 rounded-lg text-gray-400 hover:text-white hover:bg-gray-800 {{ request()->routeIs('admin.hero_carousels*') ? 'active' : '' }}">
                                 <i class="fas fa-images w-5 text-center"></i>
-                                <span>Hero Carousel</span>
+                                <span>welcome Section</span>
                             </a>
                             <!-- Features -->
                             <a href="{{ route('admin.features.index') }}"
@@ -529,7 +529,7 @@
                             class="dropdown-btn w-full flex items-center justify-between px-4 py-3 rounded-xl text-gray-300 hover:text-white transition-all duration-200 focus:outline-none {{ request()->routeIs('admin.partners*') ? 'active' : '' }}">
                             <span class="flex items-center space-x-3">
                                 <i class="fas fa-handshake w-5 text-center text-lg"></i>
-                                <span class="font-medium">Membership Page</span>
+                                <span class="font-medium">Partner Page</span>
                             </span>
                             <i class="fas fa-chevron-down transition-transform duration-200 text-sm"></i>
                         </button>
@@ -784,7 +784,7 @@
                             class="dropdown-btn w-full flex items-center justify-between px-4 py-3 rounded-xl text-gray-300 hover:text-white transition-all duration-200 focus:outline-none {{ request()->routeIs('admin.menu-categories*') || request()->routeIs('admin.menu_items*') || request()->routeIs('admin.featured_menus*') || request()->routeIs('admin.why_choose_us*') || request()->routeIs('admin.order_steps*') || request()->routeIs('admin.locations*') ? 'active' : '' }}">
                             <span class="flex items-center space-x-3">
                                 <i class="fas fa-coffee w-5 text-center text-lg"></i>
-                                <span class="font-medium">ទ្រឿង</span>
+                                <span class="font-medium">Treung Coffee</span>
                             </span>
                             <i class="fas fa-chevron-down transition-transform duration-200 text-sm"></i>
                         </button>
