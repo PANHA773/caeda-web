@@ -108,7 +108,7 @@
                     <div class="flex flex-col items-center text-center gap-4">
 
                         {{-- Image / Initials --}}
-                        <div class="w-36 h-36 rounded-2xl overflow-hidden relative flex items-center justify-center shadow-lg transform transition-all duration-500 group-hover:scale-105 group-hover:rotate-3">
+                        <div class="w-40 h-40 rounded-2xl overflow-hidden relative flex items-center justify-center shadow-lg transform transition-all duration-500 group-hover:scale-105 group-hover:rotate-3">
                             @php
                             // Full URL to image if exists
                             $imagePath = $leader->image && file_exists(public_path('storage/' . $leader->image))
@@ -142,24 +142,45 @@
         {{-- ================= ENHANCED PROJECT OVERVIEW ================= --}}
         @if($projectOverviews->count())
         @foreach($projectOverviews as $overview)
-        <div data-animate
-            class="group bg-gradient-to-br from-blue-50/50 to-purple-50/50 backdrop-blur-sm rounded-3xl p-8 md:p-10 mb-16 border border-blue-200/50 shadow-lg hover:shadow-2xl transition-all duration-500 hover:-translate-y-2">
+      <div data-animate
+    class="group bg-gradient-to-br from-blue-50/50 to-purple-50/50 backdrop-blur-sm
+    rounded-3xl p-8 md:p-10 mb-16
+    border border-blue-200/50 shadow-lg
+    hover:shadow-2xl hover:-translate-y-2
+    transition-all duration-500">
 
-            {{-- Title --}}
-            <h2
-                class="text-3xl md:text-4xl font-bold text-gray-900 mb-6 bg-gradient-to-r from-blue-900 to-purple-900 bg-clip-text text-transparent text-center font-english">
-                {{ $overview->title }}
-            </h2>
+    {{-- Title --}}
+    <h2
+        class="text-3xl md:text-4xl font-extrabold
+        tracking-tight leading-snug
+        text-center mb-8
+        bg-gradient-to-r from-blue-900 to-purple-900
+        bg-clip-text text-transparent
+        font-english">
+        {{ $overview->title }}
+    </h2>
 
-            {{-- Content --}}
-            <div class="prose prose-lg max-w-none text-gray-700 leading-relaxed space-y-6 font-english">
-                @foreach(explode("\n\n", $overview->description) as $paragraph)
-                <p class="transform transition-all duration-500 hover:translate-x-2 hover:text-gray-900">
-                    {{ $paragraph }}
-                </p>
-                @endforeach
-            </div>
-        </div>
+    {{-- Content --}}
+    <div
+        class="max-w-none
+        text-gray-700
+        leading-relaxed
+        space-y-7
+        text-[17px] md:text-[18px]
+        font-english">
+
+        @foreach(explode("\n\n", $overview->description) as $paragraph)
+            <p
+                class="transition-all duration-300
+                hover:text-gray-900
+                hover:translate-x-1">
+                {{ $paragraph }}
+            </p>
+        @endforeach
+
+    </div>
+</div>
+
         @endforeach
         @endif
 

@@ -104,8 +104,7 @@
             </div>
             
             <!-- Animated gradient orbs -->
-            <div class="absolute top-0 right-0 w-96 h-96 bg-purple-500 rounded-full mix-blend-multiply filter blur-3xl opacity-20 animate-pulse"></div>
-            <div class="absolute bottom-0 left-0 w-96 h-96 bg-pink-500 rounded-full mix-blend-multiply filter blur-3xl opacity-20 animate-pulse" style="animation-delay: 1s;"></div>
+           
             
             <div class="max-w-7xl mx-auto relative z-10">
                 <nav class="flex mb-6 text-sm font-medium text-indigo-200" aria-label="Breadcrumb">
