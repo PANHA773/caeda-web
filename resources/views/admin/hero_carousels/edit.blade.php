@@ -39,6 +39,12 @@
                    placeholder="Slide title">
         </div>
 
+        {{-- DESCRIPTION --}}
+        <div class="mb-4">
+            <label class="block font-bold mb-1">Description (optional)</label>
+            <textarea name="description" rows="3" class="w-full border px-3 py-2 rounded" placeholder="Slide description">{{ old('description', $hero_carousel->description) }}</textarea>
+        </div>
+
         {{-- CURRENT IMAGE PREVIEW --}}
         <div class="mb-4">
             <label class="block font-bold mb-2">Current Image</label>

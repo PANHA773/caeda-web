@@ -211,7 +211,7 @@
                     bg-white/70 backdrop-blur-xl
                     border border-white/50
                     rounded-3xl p-10
-                    shadow-[0_20px_50px_rgba(0,0,0,0.08)]
+                    shadow-[]
                     transition-all duration-500 ease-out
                     hover:-translate-y-3 hover:shadow-[0_30px_80px_rgba(0,0,0,0.15)]">
 

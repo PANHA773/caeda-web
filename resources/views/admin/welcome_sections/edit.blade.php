@@ -91,9 +91,37 @@
 
         {{-- Upload New Image --}}
         <div>
-            <label class="block font-semibold mb-1">Change Image</label>
+            <label class="block font-semibold mb-1">Change Image (Poster)</label>
             <input type="file" name="image" accept="image/*" class="w-full border rounded px-3 py-2">
             <p class="text-xs text-gray-500 mt-1">Leave blank to keep current image. Supported formats: JPG, PNG, GIF (Max 2MB)</p>
+        </div>
+
+        {{-- Current Video Preview --}}
+        <div>
+            <label class="block font-semibold mb-2">Current Video</label>
+            @if($section->video)
+                @if(str_contains($section->video, 'youtube.com') || str_contains($section->video, 'youtu.be'))
+                    <div class="w-full max-w-md h-48 rounded-xl border-2 border-gray-300 mb-3">
+                        <iframe width="100%" height="100%" src="{{ $section->video }}" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+                    </div>
+                @else
+                    <video controls class="w-full max-w-md h-48 rounded-xl border-2 border-gray-300 mb-3">
+                        <source src="{{ asset('storage/' . $section->video) }}" type="video/mp4">
+                        Your browser does not support the video tag.
+                    </video>
+                @endif
+            @else
+                <div class="w-48 h-48 rounded-xl border-2 border-gray-300 mb-3 bg-gray-100 flex items-center justify-center text-gray-400">
+                    No Video
+                </div>
+            @endif
+        </div>
+
+        {{-- YouTube URL or Upload Video --}}
+        <div>
+            <label class="block font-semibold mb-1">YouTube Embed URL (Recommended)</label>
+            <input type="text" name="video" value="{{ old('video', $section->video) }}" class="w-full border rounded px-3 py-2" placeholder="https://www.youtube.com/embed/VIDEO_ID">
+            <p class="text-xs text-gray-500 mt-1">Paste YouTube embed URL (e.g., https://www.youtube.com/embed/dQw4w9WgXcQ) - No file size limits!</p>
         </div>
 
         {{-- Badges --}}

@@ -48,8 +48,9 @@
             border: 1px solid rgba(255, 255, 255, 0.3);
         }
 
-        .hero-gradient {
-            background: linear-gradient(135deg, #4F46E5 0%, #7C3AED 50%, #EC4899 100%);
+        .hero-section-white {
+            background: #ffffff;
+            border-bottom: 1px solid #f1f5f9;
         }
 
         .gradient-text {
@@ -99,31 +100,25 @@
 @section('content')
     <div class="bg-gradient-to-br from-gray-50 to-gray-100 min-h-screen pb-20">
         {{-- Top Hero Header --}}
-        <section class="hero-gradient text-white py-16 md:py-24 px-4 md:px-8 relative overflow-hidden">
-            <div class="absolute inset-0 opacity-10 bg-[url('https://www.transparenttextures.com/patterns/cubes.png')]">
-            </div>
-            
-            <!-- Animated gradient orbs -->
-           
-            
+        <section class="hero-section-white py-16 md:py-24 px-4 md:px-8 relative overflow-hidden">
             <div class="max-w-7xl mx-auto relative z-10">
-                <nav class="flex mb-6 text-sm font-medium text-indigo-200" aria-label="Breadcrumb">
+                <nav class="flex mb-6 text-sm font-bold text-slate-500" aria-label="Breadcrumb">
                     <ol class="inline-flex items-center space-x-1 md:space-x-2">
                         <li class="inline-flex items-center">
-                            <a href="{{ route('home') }}" class="hover:text-white transition-colors flex items-center">
+                            <a href="{{ route('home') }}" class="hover:text-blue-600 transition-colors flex items-center">
                                 <i class="fas fa-home mr-2"></i>Home
                             </a>
                         </li>
                         <li>
                             <div class="flex items-center">
-                                <i class="fas fa-chevron-right text-[10px] mx-2"></i>
-                                <a href="{{ route('programs') }}" class="hover:text-white transition-colors">Programs</a>
+                                <i class="fas fa-chevron-right text-[10px] mx-2 text-slate-300"></i>
+                                <a href="{{ route('programs') }}" class="hover:text-blue-600 transition-colors">Programs</a>
                             </div>
                         </li>
                         <li aria-current="page">
                             <div class="flex items-center">
-                                <i class="fas fa-chevron-right text-[10px] mx-2"></i>
-                                <span class="text-white font-semibold">{{ $program->title }}</span>
+                                <i class="fas fa-chevron-right text-[10px] mx-2 text-slate-300"></i>
+                                <span class="text-slate-900 font-black">{{ $program->title }}</span>
                             </div>
                         </li>
                     </ol>
@@ -132,63 +127,62 @@
                 <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
                     <div class="animate-fade-in-up">
                         <div
-                            class="inline-block px-4 py-2 rounded-full bg-white/20 backdrop-blur-sm border border-white/30 text-white text-xs font-bold uppercase tracking-wider mb-6">
+                            class="inline-block px-4 py-2 rounded-full bg-blue-50 text-blue-600 border border-blue-100 text-xs font-bold uppercase tracking-wider mb-6">
                             <i class="fas fa-graduation-cap mr-2"></i>{{ $program->category }}
                         </div>
-                        <h1 class="text-4xl md:text-6xl font-extrabold mb-6 leading-tight">
+                        <h1 class="text-4xl md:text-6xl font-black mb-6 leading-tight text-slate-900">
                             {{ $program->title }}
                         </h1>
-                        <p class="text-xl text-indigo-100 mb-8 leading-relaxed max-w-2xl">
+                        <p class="text-xl md:text-2xl text-slate-600 mb-8 leading-relaxed max-w-2xl font-medium">
                             {{ $program->short_description ?? 'Unlock your potential with this comprehensive academic program designed for excellence.' }}
                         </p>
 
                         <div class="flex flex-wrap gap-6 mb-10">
-                            <div class="flex items-center bg-white/10 backdrop-blur-sm rounded-xl px-4 py-3 border border-white/20">
-                                <div class="w-12 h-12 rounded-lg bg-gradient-to-br from-yellow-400 to-orange-500 flex items-center justify-center mr-4 shadow-lg">
-                                    <i class="far fa-clock text-xl text-white"></i>
+                            <div class="flex items-center bg-white rounded-xl px-4 py-3 border border-slate-200 shadow-sm">
+                                <div class="w-12 h-12 rounded-lg bg-blue-50 flex items-center justify-center mr-4">
+                                    <i class="far fa-clock text-xl text-blue-600"></i>
                                 </div>
                                 <div>
-                                    <div class="text-xs text-indigo-200 uppercase font-bold">Duration</div>
-                                    <div class="font-bold text-lg">{{ $program->duration ?? 'Standard' }}</div>
+                                    <div class="text-xs text-slate-400 uppercase font-bold">Duration</div>
+                                    <div class="font-bold text-lg text-slate-800">{{ $program->duration ?? 'Standard' }}</div>
                                 </div>
                             </div>
-                            <div class="flex items-center bg-white/10 backdrop-blur-sm rounded-xl px-4 py-3 border border-white/20">
-                                <div class="w-12 h-12 rounded-lg bg-gradient-to-br from-green-400 to-emerald-500 flex items-center justify-center mr-4 shadow-lg">
-                                    <i class="fas fa-signal text-xl text-white"></i>
+                            <div class="flex items-center bg-white rounded-xl px-4 py-3 border border-slate-200 shadow-sm">
+                                <div class="w-12 h-12 rounded-lg bg-green-50 flex items-center justify-center mr-4">
+                                    <i class="fas fa-signal text-xl text-green-600"></i>
                                 </div>
                                 <div>
-                                    <div class="text-xs text-indigo-200 uppercase font-bold">Level</div>
-                                    <div class="font-bold text-lg">{{ ucfirst($program->level ?? 'Beginner') }}</div>
+                                    <div class="text-xs text-slate-400 uppercase font-bold">Level</div>
+                                    <div class="font-bold text-lg text-slate-800">{{ ucfirst($program->level ?? 'Beginner') }}</div>
                                 </div>
                             </div>
-                            <div class="flex items-center bg-white/10 backdrop-blur-sm rounded-xl px-4 py-3 border border-white/20">
-                                <div class="w-12 h-12 rounded-lg bg-gradient-to-br from-blue-400 to-indigo-500 flex items-center justify-center mr-4 shadow-lg">
-                                    <i class="fas fa-users text-xl text-white"></i>
+                            <div class="flex items-center bg-white rounded-xl px-4 py-3 border border-slate-200 shadow-sm">
+                                <div class="w-12 h-12 rounded-lg bg-indigo-50 flex items-center justify-center mr-4">
+                                    <i class="fas fa-users text-xl text-indigo-600"></i>
                                 </div>
                                 <div>
-                                    <div class="text-xs text-indigo-200 uppercase font-bold">Students</div>
-                                    <div class="font-bold text-lg">{{ number_format($program->students ?? 0) }}+</div>
+                                    <div class="text-xs text-slate-400 uppercase font-bold">Students</div>
+                                    <div class="font-bold text-lg text-slate-800">{{ number_format($program->students ?? 0) }}+</div>
                                 </div>
                             </div>
                         </div>
 
                         <div class="flex flex-wrap gap-4">
                             <button
-                                class="px-8 py-4 bg-white text-indigo-700 font-bold rounded-xl hover:bg-gray-100 transition-all transform hover:-translate-y-1 shadow-2xl flex items-center">
+                                class="px-8 py-4 bg-blue-600 text-white font-bold rounded-xl hover:bg-blue-700 transition-all transform hover:-translate-y-1 shadow-xl flex items-center">
                                 <i class="fas fa-paper-plane mr-2"></i>Apply Now
                             </button>
                             <button
-                                class="px-8 py-4 bg-white/10 backdrop-blur-sm border-2 border-white/30 text-white font-bold rounded-xl hover:bg-white/20 transition-all flex items-center">
+                                class="px-8 py-4 bg-white border-2 border-slate-200 text-slate-700 font-bold rounded-xl hover:bg-slate-50 transition-all flex items-center">
                                 <i class="fas fa-download mr-2"></i>Download Syllabus
                             </button>
                         </div>
                     </div>
 
                     <div class="animate-fade-in-up" style="animation-delay: 0.2s">
-                        <div class="relative rounded-3xl overflow-hidden shadow-2xl border-4 border-white/20 group">
+                        <div class="relative rounded-3xl overflow-hidden shadow-2xl border-8 border-white group">
                             <img src="{{ $program->image_url }}" alt="{{ $program->title }}"
-                                class="w-full h-auto object-cover transform scale-100 group-hover:scale-110 transition-transform duration-700">
-                            <div class="absolute inset-0 bg-gradient-to-t from-indigo-900/60 to-transparent"></div>
+                                class="w-full h-auto object-cover transform scale-100 group-hover:scale-105 transition-transform duration-700">
                         </div>
                     </div>
                 </div>

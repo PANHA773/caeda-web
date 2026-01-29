@@ -13,6 +13,7 @@ class HeroCarousel extends Model
 
     protected $fillable = [
         'title',
+        'description',
         'image',
         'order',
         'is_active',

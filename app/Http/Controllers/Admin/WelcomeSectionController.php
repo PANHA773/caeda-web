@@ -36,7 +36,8 @@ class WelcomeSectionController extends Controller
             'description' => 'nullable|array',
             'signature_name' => 'nullable|string|max:255',
             'signature_title' => 'nullable|string|max:255',
-            'image' => 'nullable|image|max:2048', // Validate as image
+            'image' => 'nullable|image|max:2048',
+            'video' => 'nullable|string|max:500', // YouTube URL
             'badges' => 'nullable|array',
             'stats' => 'nullable|array',
             'is_active' => 'nullable|boolean',
@@ -74,7 +75,8 @@ class WelcomeSectionController extends Controller
             'description' => 'nullable|array',
             'signature_name' => 'nullable|string|max:255',
             'signature_title' => 'nullable|string|max:255',
-            'image' => 'nullable|image|max:2048', // Validate as image
+            'image' => 'nullable|image|max:2048',
+            'video' => 'nullable|string|max:500', // YouTube URL
             'badges' => 'nullable|array',
             'stats' => 'nullable|array',
             'is_active' => 'nullable|boolean',
@@ -103,6 +105,11 @@ class WelcomeSectionController extends Controller
         // Delete image if it exists and is a local file
         if ($welcomeSection->image && !preg_match('/^https?:\\/\\//i', $welcomeSection->image)) {
             Storage::disk('public')->delete($welcomeSection->image);
+        }
+
+        // Delete video if it exists and is a local file
+        if ($welcomeSection->video && !preg_match('/^https?:\\/\\//i', $welcomeSection->video)) {
+            Storage::disk('public')->delete($welcomeSection->video);
         }
 
         $welcomeSection->delete();

@@ -91,109 +91,98 @@
 
 @section('content')
 
-    {{-- ================= HERO SECTION ================= --}}
-    <section
-        class="relative py-20 px-4 md:px-8 overflow-hidden bg-gradient-to-br from-blue-900 via-blue-800 to-purple-900 min-h-screen flex items-center">
-
-        <div class="absolute inset-0 bg-black/10 -z-10"></div>
-        <div class="absolute top-1/4 left-1/4 w-96 h-96 bg-blue-600/20 rounded-full blur-3xl animate-pulse-slow"></div>
-        <div
-            class="absolute bottom-1/4 right-1/4 w-96 h-96 bg-purple-600/20 rounded-full blur-3xl animate-pulse-slow delay-1000">
+    {{-- ================= HERO SECTION (REDESIGNED) ================= --}}
+    <section class="relative min-h-[90vh] flex items-center justify-center pt-24 pb-32">
+        {{-- Background Carousel --}}
+        <div id="hero-carousel" class="absolute inset-0 z-0 overflow-hidden">
+            @foreach($heroSlides as $index => $slide)
+                <div class="absolute inset-0 transition-opacity duration-1000 ease-in-out {{ $index === 0 ? 'opacity-100' : 'opacity-0' }} hero-slide"
+                    style="background: linear-gradient(rgba(0,0,0,0.5), rgba(0,0,0,0.5)), url('{{ $slide->image_url }}') center/cover no-repeat;">
+                </div>
+            @endforeach
         </div>
 
-        <div class="max-w-7xl mx-auto w-full relative z-10">
-            <div class="flex flex-col lg:flex-row items-center justify-between gap-12">
+        {{-- Content Overlay --}}
+        <div class="relative z-10 max-w-7xl mx-auto px-4 text-center text-white">
+            @foreach($heroSlides as $index => $slide)
+                <div class="hero-content {{ $index === 0 ? 'block' : 'hidden' }} space-y-6" data-index="{{ $index }}">
+                    <h1
+                        class="text-5xl md:text-7xl lg:text-8xl font-black font-cinzel leading-tight tracking-wider uppercase animate-fade-in-up">
+                        {{ $slide->title }}
+                    </h1>
+                    <p
+                        class="text-xl md:text-2xl text-blue-50 max-w-3xl mx-auto font-medium opacity-90 animate-fade-in-up delay-200">
+                        {{ $slide->description ?? 'Lorem Ipsum is simply dummy text of the printing and typesetting industry.' }}
+                    </p>
+                    <div class="flex flex-col sm:flex-row items-center justify-center gap-6 pt-8 animate-fade-in-up delay-500">
+                        <a href="{{ route('programs') }}"
+                            class="bg-[#FF9800] hover:bg-[#F57C00] text-white px-10 py-4 rounded-lg font-bold uppercase transition-all flex items-center shadow-lg">
+                            Know More <i class="fas fa-chevron-right ml-3 text-sm"></i>
+                        </a>
+                        <a href="{{ route('about') }}"
+                            class="bg-white hover:bg-gray-100 text-gray-800 px-10 py-4 rounded-lg font-bold uppercase transition-all flex items-center shadow-lg">
+                            Take a Tour <i class="fas fa-play-circle ml-3"></i>
+                        </a>
+                    </div>
+                </div>
+            @endforeach
+        </div>
 
-                {{-- LEFT SIDE --}}
-                <div class="lg:w-1/2 text-white">
-                    <div class="mb-8" data-animate>
-                        <h2 class="text-xl md:text-2xl text-blue-200">Create Your Future with</h2>
+        {{-- Carousel Navigation --}}
+        <div class="absolute bottom-40 left-1/2 -translate-x-1/2 z-20 flex gap-4">
+            @foreach($heroSlides as $index => $slide)
+                <button
+                    class="w-12 h-1.5 rounded-full transition-all duration-300 carousel-dot-btn {{ $index === 0 ? 'bg-[#FF9800]' : 'bg-white/40' }}"
+                    data-index="{{ $index }}"></button>
+            @endforeach
+        </div>
 
-                        <h3
-                            class="text-5xl md:text-7xl lg:text-8xl font-bold leading-tight mb-6 bg-gradient-to-r from-white to-blue-100 bg-clip-text text-transparent animate-gradient-x font-cinzel">
-                            Caeda
-                        </h3>
-
-                        <div class="flex items-center gap-4 mb-8">
-                            <div class="w-16 h-1 bg-yellow-400 animate-pulse"></div>
-                            <span class="text-lg md:text-xl font-semibold text-red-500 animate-bounce">U.S</span>
+        {{-- BOTTOM FEATURE BOXES --}}
+        <div class="absolute bottom-0 left-0 right-0 z-30 translate-y-1/2">
+            <div class="max-w-7xl mx-auto px-4">
+                <div class="grid grid-cols-1 md:grid-cols-3 shadow-2xl rounded-3xl overflow-hidden">
+                    {{-- Box 1: Apply --}}
+                    <div
+                        class="bg-[#FF9800] p-8 md:p-10 flex items-center gap-6 group hover:bg-[#F57C00] transition-colors cursor-pointer">
+                        <div
+                            class="w-20 h-20 flex-shrink-0 bg-white/20 rounded-full flex items-center justify-center text-white text-4xl group-hover:scale-110 transition-transform">
+                            <i class="fas fa-mouse-pointer"></i>
+                        </div>
+                        <div class="text-white">
+                            <h3 class="text-2xl font-bold uppercase mb-1">Apply Online</h3>
+                            <p class="text-white/80 text-sm leading-snug">Start your journey with us by submitting your
+                                application online today.</p>
                         </div>
                     </div>
 
-                    {{-- FACULTIES --}}
-                    <div class="space-y-4 mb-8" data-animate>
-                        <h3 class="text-2xl md:text-3xl font-bold mb-6 text-white font-cinzel">University Faculties</h3>
-
-                        @foreach($faculties as $index => $faculty)
-                            <div class="flex items-center gap-3 text-lg md:text-xl group cursor-pointer hover:translate-x-2 transition-all"
-                                style="animation-delay: {{ $index * 200 }}ms">
-                                <div class="w-2 h-2 bg-yellow-400 rounded-full group-hover:scale-150 transition"></div>
-                                <span class="text-blue-100 group-hover:text-white">{{ $faculty }}</span>
-                            </div>
-                        @endforeach
+                    {{-- Box 2: Prospects --}}
+                    <div
+                        class="bg-[#2196F3] p-8 md:p-10 flex items-center gap-6 group hover:bg-[#1976D2] transition-colors cursor-pointer border-x border-white/10">
+                        <div
+                            class="w-20 h-20 flex-shrink-0 bg-white/20 rounded-full flex items-center justify-center text-white text-4xl group-hover:scale-110 transition-transform">
+                            <i class="fas fa-cloud-download-alt"></i>
+                        </div>
+                        <div class="text-white">
+                            <h3 class="text-2xl font-bold uppercase mb-1">Download Prospects</h3>
+                            <p class="text-white/80 text-sm leading-snug">Download our prospectus to learn more about our
+                                programs and opportunities.</p>
+                        </div>
                     </div>
 
-                    {{-- CTA BUTTONS --}}
-                    <div class="flex flex-col sm:flex-row gap-4 mt-12" data-animate>
-                        <button
-                            class="group bg-yellow-400 text-blue-900 hover:bg-yellow-300 font-bold py-4 px-8 rounded-xl shadow-lg hover:-translate-y-1 transition-all">
-                            Apply Now
-                        </button>
-
-                        <button
-                            class="group border-2 border-white text-white hover:bg-white/10 font-semibold py-4 px-8 rounded-xl backdrop-blur-sm transition-all">
-                            Learn More
-                        </button>
-                    </div>
-                </div>
-                {{-- RIGHT SIDE CAROUSEL --}}
-                <div class="lg:w-1/2 relative">
-                    <div class="relative overflow-hidden rounded-3xl shadow-2xl w-full border-4 border-white/20 backdrop-blur-sm"
-                        style="min-height: 500px">
-
-<div id="hero-carousel" class="relative w-full h-full min-h-[500px] overflow-hidden rounded-3xl">
-
-    <!-- Hero Carousel Slides -->
-    @foreach($heroSlides as $index => $slide)
-        <img
-            src="{{ $slide->image_url }}"
-            alt="{{ $slide->title }}"
-            class="absolute inset-0 w-full h-full object-cover
-                   transition-opacity duration-700 ease-in-out
-                   {{ $index === 0 ? 'opacity-100 z-10' : 'opacity-0 z-0' }}"
-            onerror="this.src='/assets/defaultcourse.jpg'"
-        >
-    @endforeach
-
-    <!-- Dark Overlay (UI only, optional but looks premium) -->
-    <!-- <div class="absolute inset-0 bg-black/30 z-20 pointer-events-none"></div> -->
-
-</div>
-
-
-
-                        {{-- NAV BUTTONS --}}
-                        <button id="prev-slide"
-                            class="absolute left-4 top-1/2 -translate-y-1/2 bg-white/80 p-2 rounded-full shadow-lg hover:bg-white hover:scale-110 transition">
-                            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" />
-                            </svg>
-                        </button>
-
-                        <button id="next-slide"
-                            class="absolute right-4 top-1/2 -translate-y-1/2 bg-white/80 p-2 rounded-full shadow-lg hover:bg-white hover:scale-110 transition">
-                            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
-                            </svg>
-                        </button>
-
-                        {{-- DOTS --}}
-                        <div id="hero-dots" class="absolute bottom-4 left-1/2 -translate-x-1/2 flex gap-2"></div>
+                    {{-- Box 3: Certification --}}
+                    <div
+                        class="bg-[#FFC107] p-8 md:p-10 flex items-center gap-6 group hover:bg-[#FFB300] transition-colors cursor-pointer">
+                        <div
+                            class="w-20 h-20 flex-shrink-0 bg-white/20 rounded-full flex items-center justify-center text-white text-4xl group-hover:scale-110 transition-transform">
+                            <i class="fas fa-certificate"></i>
+                        </div>
+                        <div class="text-white">
+                            <h3 class="text-2xl font-bold uppercase mb-1">Certification</h3>
+                            <p class="text-white/80 text-sm leading-snug">Earn internationally recognized certifications
+                                upon program completion.</p>
+                        </div>
                     </div>
                 </div>
-
-
-
             </div>
         </div>
     </section>
@@ -263,11 +252,38 @@
                         </div>
                     </div>
 
-                    {{-- RIGHT IMAGE --}}
+                    {{-- RIGHT VIDEO/IMAGE --}}
                     <div class="lg:w-1/2 relative">
-                        <div class="relative transform transition-all duration-500 hover:scale-105">
-                            <img src="{{ $welcome->image_url }}" alt="Caeda Campus"
-                                class="rounded-3xl shadow-2xl w-full h-96 object-cover border-4 border-white shadow-lg backdrop-blur-sm">
+                        <div class="relative transform transition-all duration-500 hover:scale-105 group">
+                            {{-- Video Player --}}
+                            <div class="relative rounded-3xl overflow-hidden shadow-2xl border-4 border-white backdrop-blur-sm">
+                                @if($welcome->video_url && (str_contains($welcome->video_url, 'youtube.com') || str_contains($welcome->video_url, 'youtu.be')))
+                                    {{-- YouTube Embed --}}
+                                    <iframe class="w-full h-96" src="{{ $welcome->video_url }}" frameborder="0"
+                                        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                                        allowfullscreen>
+                                    </iframe>
+                                @elseif($welcome->video_url)
+                                    {{-- Regular Video File --}}
+                                    <video id="welcome-video" class="w-full h-96 object-cover" poster="{{ $welcome->image_url }}"
+                                        preload="metadata">
+                                        <source src="{{ $welcome->video_url }}" type="video/mp4">
+                                        Your browser does not support the video tag.
+                                    </video>
+
+                                    {{-- Play Button Overlay for video files --}}
+                                    <div id="play-button-overlay"
+                                        class="absolute inset-0 flex items-center justify-center bg-black/30 cursor-pointer transition-opacity duration-300 group-hover:bg-black/40">
+                                        <button onclick="toggleVideo()"
+                                            class="w-20 h-20 bg-white/90 hover:bg-white rounded-full flex items-center justify-center shadow-2xl transform transition-all duration-300 hover:scale-110">
+                                            <i id="play-icon" class="fas fa-play text-blue-600 text-3xl ml-1"></i>
+                                        </button>
+                                    </div>
+                                @else
+                                    {{-- Just Image if no video --}}
+                                    <img src="{{ $welcome->image_url }}" alt="Caeda Campus" class="w-full h-96 object-cover">
+                                @endif
+                            </div>
 
                             {{-- FLOATING BADGES --}}
                             @if($welcome->badges)
@@ -318,9 +334,10 @@
             <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
                 @foreach($programs as $program)
                     {{-- CARD --}}
-                    <div class="bg-white rounded-2xl overflow-hidden shadow-lg hover:shadow-2xl
-                                                            transition-all duration-500 hover:-translate-y-2 group
-                                                            flex flex-col h-full">
+                    <div
+                        class="bg-white rounded-2xl overflow-hidden shadow-lg hover:shadow-2xl
+                                                                                                                    transition-all duration-500 hover:-translate-y-2 group
+                                                                                                                    flex flex-col h-full">
 
                         <div class="relative overflow-hidden">
                             <img src="{{ $program->image_url }}" alt="{{ $program->title }}"
@@ -378,12 +395,13 @@
 
                             {{-- BUTTON (always bottom) --}}
                             <div class="mt-auto">
-                                <a href="{{ route('programs') }}" class="w-full inline-block text-center
-                                                                      bg-gradient-to-r from-blue-600 to-purple-600
-                                                                      hover:from-blue-700 hover:to-purple-700
-                                                                      text-white font-semibold py-3 rounded-xl
-                                                                      transition-all duration-300
-                                                                      transform group-hover:-translate-y-1">
+                                <a href="{{ route('programs') }}"
+                                    class="w-full inline-block text-center
+                                                                                                                              bg-gradient-to-r from-blue-600 to-purple-600
+                                                                                                                              hover:from-blue-700 hover:to-purple-700
+                                                                                                                              text-white font-semibold py-3 rounded-xl
+                                                                                                                              transition-all duration-300
+                                                                                                                              transform group-hover:-translate-y-1">
                                     View Program
                                 </a>
                             </div>
@@ -586,11 +604,11 @@
                     </div>
                 </div>
 
-                
+
             </section>
 
 
-            
+
 
 
 @endsection
@@ -599,56 +617,80 @@
             <script>
                 document.addEventListener('DOMContentLoaded', function () {
                     /* -------------------- Hero Carousel -------------------- */
+                    /* -------------------- Redesigned Hero Carousel -------------------- */
                     let currentSlide = 0;
-                    const heroCarousel = document.getElementById('hero-carousel');
-                    const slides = heroCarousel.querySelectorAll('img');
-                    const dotsContainer = document.getElementById('hero-dots');
+                    const heroSlides = document.querySelectorAll('.hero-slide');
+                    const heroContents = document.querySelectorAll('.hero-content');
+                    const dotBtns = document.querySelectorAll('.carousel-dot-btn');
 
-                    // Create dots
-                    slides.forEach((_, i) => {
-                        const dot = document.createElement('button');
-                        dot.className = "w-3 h-3 rounded-full transition-all duration-300 " + (i === 0 ? "bg-white shadow-lg scale-125" : "bg-white/50 hover:bg-white/75");
-                        dot.setAttribute('aria-label', `Go to slide ${i + 1}`);
-                        dot.onclick = () => {
-                            currentSlide = i;
-                            updateHeroCarousel();
-                        };
-                        dotsContainer.appendChild(dot);
-                    });
+                    console.log('Hero slides found:', heroSlides.length);
+                    console.log('Hero contents found:', heroContents.length);
+                    console.log('Dot buttons found:', dotBtns.length);
 
-                    function updateHeroCarousel() {
-                        slides.forEach((img, i) => {
-                            img.classList.toggle('opacity-100', i === currentSlide);
-                            img.classList.toggle('opacity-0', i !== currentSlide);
+                    if (heroSlides.length > 0) {
+                        function updateHero(index) {
+                            console.log('Updating to slide:', index);
+
+                            // Update Backgrounds
+                            heroSlides.forEach((slide, i) => {
+                                if (i === index) {
+                                    slide.classList.remove('opacity-0');
+                                    slide.classList.add('opacity-100');
+                                } else {
+                                    slide.classList.remove('opacity-100');
+                                    slide.classList.add('opacity-0');
+                                }
+                            });
+
+                            // Update Content
+                            heroContents.forEach((content, i) => {
+                                if (i === index) {
+                                    content.classList.remove('hidden');
+                                    content.classList.add('block');
+                                } else {
+                                    content.classList.remove('block');
+                                    content.classList.add('hidden');
+                                }
+                            });
+
+                            // Update Dots - using style instead of Tailwind arbitrary values
+                            dotBtns.forEach((dot, i) => {
+                                if (i === index) {
+                                    dot.style.backgroundColor = '#FF9800';
+                                } else {
+                                    dot.style.backgroundColor = 'rgba(255, 255, 255, 0.4)';
+                                }
+                            });
+
+                            currentSlide = index;
+                        }
+
+                        // Dot click events
+                        dotBtns.forEach((btn, i) => {
+                            btn.onclick = () => {
+                                console.log('Dot clicked:', i);
+                                updateHero(i);
+                                resetInterval();
+                            };
                         });
 
-                        dotsContainer.querySelectorAll('button').forEach((dot, i) => {
-                            if (i === currentSlide) {
-                                dot.className = "w-3 h-3 rounded-full transition-all duration-300 bg-white shadow-lg scale-125";
-                            } else {
-                                dot.className = "w-3 h-3 rounded-full transition-all duration-300 bg-white/50 hover:bg-white/75";
-                            }
-                        });
+                        // Auto rotation
+                        let autoInterval = setInterval(() => {
+                            let next = (currentSlide + 1) % heroSlides.length;
+                            updateHero(next);
+                        }, 6000);
+
+                        function resetInterval() {
+                            clearInterval(autoInterval);
+                            autoInterval = setInterval(() => {
+                                let next = (currentSlide + 1) % heroSlides.length;
+                                updateHero(next);
+                            }, 6000);
+                        }
+
+                        // Initialize first slide
+                        updateHero(0);
                     }
-
-                    // Auto rotate
-                    const heroInterval = setInterval(() => {
-                        currentSlide = (currentSlide + 1) % slides.length;
-                        updateHeroCarousel();
-                    }, 5000);
-
-                    // Manual controls
-                    document.getElementById('prev-slide').onclick = () => {
-                        currentSlide = (currentSlide - 1 + slides.length) % slides.length;
-                        updateHeroCarousel();
-                        clearInterval(heroInterval);
-                    };
-
-                    document.getElementById('next-slide').onclick = () => {
-                        currentSlide = (currentSlide + 1) % slides.length;
-                        updateHeroCarousel();
-                        clearInterval(heroInterval);
-                    };
 
                     /* -------------------- Testimonial Carousel -------------------- */
                     let currentTestimonial = 0;
@@ -669,22 +711,22 @@
                             testimonialDots.appendChild(dot);
                         });
 
-                            document.addEventListener("DOMContentLoaded", () => {
-        const slides = document.querySelectorAll(".hero-slide");
-        let current = 0;
+                        document.addEventListener("DOMContentLoaded", () => {
+                            const slides = document.querySelectorAll(".hero-slide");
+                            let current = 0;
 
-        if (slides.length <= 1) return;
+                            if (slides.length <= 1) return;
 
-        setInterval(() => {
-            slides[current].classList.remove("opacity-100");
-            slides[current].classList.add("opacity-0");
+                            setInterval(() => {
+                                slides[current].classList.remove("opacity-100");
+                                slides[current].classList.add("opacity-0");
 
-            current = (current + 1) % slides.length;
+                                current = (current + 1) % slides.length;
 
-            slides[current].classList.remove("opacity-0");
-            slides[current].classList.add("opacity-100");
-        }, 5000); // change slide every 5 seconds
-    });
+                                slides[current].classList.remove("opacity-0");
+                                slides[current].classList.add("opacity-100");
+                            }, 5000); // change slide every 5 seconds
+                        });
 
                         function updateTestimonials() {
                             testimonials.forEach((testimonial, i) => {
@@ -786,8 +828,42 @@
                             }, 500);
                         }
                     }
+
+                    /* -------------------- Video Player Control -------------------- */
+                    window.toggleVideo = function () {
+                        const video = document.getElementById('welcome-video');
+                        const overlay = document.getElementById('play-button-overlay');
+                        const icon = document.getElementById('play-icon');
+
+                        if (video.paused) {
+                            video.play();
+                            overlay.style.opacity = '0';
+                            overlay.style.pointerEvents = 'none';
+                            icon.classList.remove('fa-play');
+                            icon.classList.add('fa-pause');
+                        } else {
+                            video.pause();
+                            overlay.style.opacity = '1';
+                            overlay.style.pointerEvents = 'auto';
+                            icon.classList.remove('fa-pause');
+                            icon.classList.add('fa-play');
+                        }
+                    };
+
+                    // Show overlay when video ends
+                    const welcomeVideo = document.getElementById('welcome-video');
+                    if (welcomeVideo) {
+                        welcomeVideo.addEventListener('ended', function () {
+                            const overlay = document.getElementById('play-button-overlay');
+                            const icon = document.getElementById('play-icon');
+                            overlay.style.opacity = '1';
+                            overlay.style.pointerEvents = 'auto';
+                            icon.classList.remove('fa-pause');
+                            icon.classList.add('fa-play');
+                        });
+                    }
                 });
 
-                
+
             </script>
         @endsection

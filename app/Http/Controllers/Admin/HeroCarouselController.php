@@ -24,6 +24,7 @@ class HeroCarouselController extends Controller
     {
         $data = $request->validate([
             'title' => 'nullable|string|max:255',
+            'description' => 'nullable|string',
             'image' => 'required|image|mimes:jpg,jpeg,png,webp|max:2048',
             'order' => 'nullable|integer',
             'is_active' => 'nullable|boolean',
@@ -53,6 +54,7 @@ class HeroCarouselController extends Controller
     {
         $data = $request->validate([
             'title' => 'nullable|string|max:255',
+            'description' => 'nullable|string',
             'image' => 'nullable|image|mimes:jpg,jpeg,png,webp|max:2048',
             'order' => 'nullable|integer',
             'is_active' => 'nullable|boolean',

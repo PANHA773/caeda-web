@@ -58,9 +58,19 @@
 
             {{-- Image --}}
             <div>
-                <label class="block text-gray-700 font-semibold mb-2">Upload Image</label>
+                <label class="block text-gray-700 font-semibold mb-2">Upload Image (Poster)</label>
                 <input type="file" name="image" accept="image/*" class="w-full border rounded px-3 py-2">
                 <p class="text-xs text-gray-500 mt-1">Supported formats: JPG, PNG, GIF (Max 2MB)</p>
+            </div>
+
+
+            {{-- YouTube Video URL --}}
+            <div>
+                <label class="block text-gray-700 font-semibold mb-2">YouTube Embed URL (Optional)</label>
+                <input type="text" name="video" value="{{ old('video') }}" class="w-full border rounded px-3 py-2"
+                    placeholder="https://www.youtube.com/embed/VIDEO_ID">
+                <p class="text-xs text-gray-500 mt-1">Paste YouTube embed URL (e.g.,
+                    https://www.youtube.com/embed/dQw4w9WgXcQ) - No file size limits!</p>
             </div>
 
             {{-- Badges --}}
