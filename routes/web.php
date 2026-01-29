@@ -186,13 +186,15 @@ Route::middleware(['auth', \App\Http\Middleware\AdminTokenMiddleware::class])->p
     Route::get('/', [DashboardController::class, 'index'])->name('dashboard');
 
     // Notifications
-    Route::get('notifications', [\App\Http\Controllers\Admin\NotificationController::class, 'index'])->name('notifications.index');
-    Route::post('notifications/{id}/read', [\App\Http\Controllers\Admin\NotificationController::class, 'markAsRead'])->name('notifications.read');
-    Route::post('notifications/read-all', [\App\Http\Controllers\Admin\NotificationController::class, 'markAllAsRead'])->name('notifications.read_all');
-    Route::delete('notifications/{id}', [\App\Http\Controllers\Admin\NotificationController::class, 'destroy'])->name('notifications.destroy');
+    Route::middleware('permission:notifications')->group(function () {
+        Route::get('notifications', [\App\Http\Controllers\Admin\NotificationController::class, 'index'])->name('notifications.index');
+        Route::post('notifications/{id}/read', [\App\Http\Controllers\Admin\NotificationController::class, 'markAsRead'])->name('notifications.read');
+        Route::post('notifications/read-all', [\App\Http\Controllers\Admin\NotificationController::class, 'markAllAsRead'])->name('notifications.read_all');
+        Route::delete('notifications/{id}', [\App\Http\Controllers\Admin\NotificationController::class, 'destroy'])->name('notifications.destroy');
+    });
 
     // Activity (Recent Activity listing)
-    Route::get('activities', [\App\Http\Controllers\Admin\ActivityController::class, 'index'])->name('activity.index');
+    Route::get('activities', [\App\Http\Controllers\Admin\ActivityController::class, 'index'])->name('activity.index')->middleware('permission:activities');
 
 
 
@@ -218,7 +220,7 @@ Route::middleware(['auth', \App\Http\Middleware\AdminTokenMiddleware::class])->p
     // Route::get('/accreditations', [AccreditationAdminController::class, 'index'])->name('accreditations.index');
 
     // Office Managers
-    Route::resource('office-managers', OfficeManagerController::class);
+    Route::resource('office-managers', OfficeManagerController::class)->middleware('permission:office_managers');
 
     // Programs Management
     Route::middleware('permission:programs')->group(function () {
@@ -312,7 +314,9 @@ Route::middleware(['auth', \App\Http\Middleware\AdminTokenMiddleware::class])->p
     });
 
     // Backup Management
-    Route::get('backup', [\App\Http\Controllers\Admin\BackupController::class, 'index'])->name('backup.index');
-    Route::post('backup/create', [\App\Http\Controllers\Admin\BackupController::class, 'create'])->name('backup.create');
+    Route::middleware('permission:backup')->group(function () {
+        Route::get('backup', [\App\Http\Controllers\Admin\BackupController::class, 'index'])->name('backup.index');
+        Route::post('backup/create', [\App\Http\Controllers\Admin\BackupController::class, 'create'])->name('backup.create');
+    });
 
 });

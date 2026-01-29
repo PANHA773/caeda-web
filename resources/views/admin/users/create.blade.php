@@ -99,32 +99,60 @@
 
                 {{-- Permissions --}}
                 <div class="mb-6">
-                    <label class="block text-sm font-medium text-gray-700 mb-2">Specific Permissions</label>
-                    <div class="grid grid-cols-2 md:grid-cols-3 gap-4 border border-gray-200 rounded-lg p-4 bg-gray-50">
+                    <div class="flex items-center justify-between mb-2">
+                        <label class="block text-sm font-medium text-gray-700">Specific Permissions</label>
+                        <button type="button" onclick="selectAllPermissions()" class="text-xs text-blue-600 hover:text-blue-800 font-semibold">
+                            Select All
+                        </button>
+                    </div>
+
+                    <div class="space-y-4">
                         @php
-                            $availablePermissions = [
-                                'home_page',
-                                'about_page',
-                                'programs',
-                                'staff',
-                                'news',
-                                'users',
-                                'membership_page',
-                                'events',
-                                'donation_page',
-                                'achieve_page',
-                                'contact_page',
-                                'workshop_page',
-                                'caffe_page',
-                                'team_page'
+                            $permissionGroups = [
+                                'Core Management' => [
+                                    'dashboard' => 'Dashboard Access',
+                                    'users' => 'User Management',
+                                    'staff' => 'Staff Directory',
+                                    'office_managers' => 'Office Managers',
+                                    'notifications' => 'System Notifications',
+                                    'activities' => 'Activity Logs'
+                                ],
+                                'Page Content' => [
+                                    'home_page' => 'Home Page',
+                                    'about_page' => 'About Page',
+                                    'team_page' => 'Our Team Page',
+                                    'programs' => 'Academic Programs',
+                                    'news' => 'News/Blog',
+                                    'membership_page' => 'Partners & Pricing',
+                                    'events' => 'Events & Speakers',
+                                    'donation_page' => 'Donation & Stories',
+                                    'achieve_page' => 'Achievements',
+                                    'contact_page' => 'Contact & FAQs',
+                                    'workshop_page' => 'Workshops',
+                                    'caffe_page' => 'Caffe Menu'
+                                ],
+                                'System' => [
+                                    'backup' => 'Database Backups'
+                                ]
                             ];
                         @endphp
-                        @foreach($availablePermissions as $perm)
-                            <label class="inline-flex items-center space-x-2">
-                                <input type="checkbox" name="permissions[]" value="{{ $perm }}" {{ in_array($perm, old('permissions', [])) ? 'checked' : '' }}
-                                    class="rounded border-gray-300 text-indigo-600 shadow-sm">
-                                <span class="text-sm text-gray-700 capitalize">{{ $perm }}</span>
-                            </label>
+
+                        @foreach($permissionGroups as $groupName => $permissions)
+                            <div class="border border-gray-100 rounded-xl overflow-hidden">
+                                <div class="bg-gray-50 px-4 py-2 border-b border-gray-100">
+                                    <h3 class="text-xs font-bold text-gray-500 uppercase tracking-wider">{{ $groupName }}</h3>
+                                </div>
+                                <div class="p-4 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 bg-white">
+                                    @foreach($permissions as $key => $label)
+                                        <label class="inline-flex items-center space-x-3 cursor-pointer group">
+                                            <input type="checkbox" name="permissions[]" value="{{ $key }}" 
+                                                {{ in_array($key, old('permissions', [])) ? 'checked' : '' }}
+                                                class="permission-checkbox rounded border-gray-300 text-indigo-600 shadow-sm focus:ring-indigo-500 transition-all cursor-pointer">
+                                            <span class="text-sm text-gray-600 group-hover:text-gray-900 transition-colors">{{ $label }}</span>
+                                        </label>
+                                    @endforeach
+                                </div>
+                            </div>
                         @endforeach
                     </div>
                 </div>
@@ -143,6 +171,12 @@
     </div>
     @section('scripts')
         <script>
+            function selectAllPermissions() {
+                const checkboxes = document.querySelectorAll('.permission-checkbox');
+                const allChecked = Array.from(checkboxes).every(cb => cb.checked);
+                checkboxes.forEach(cb => cb.checked = !allChecked);
+            }
+
             document.getElementById('avatar-input').onchange = function (evt) {
                 const [file] = this.files;
                 if (file) {

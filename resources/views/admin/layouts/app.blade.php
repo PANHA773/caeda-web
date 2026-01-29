@@ -327,11 +327,13 @@
         <nav class="flex-1 p-4 overflow-y-auto">
             <div class="space-y-1">
                 <!-- Dashboard -->
-                <a href="{{ route('admin.dashboard') }}"
-                    class="nav-link flex items-center space-x-3 px-4 py-3 rounded-xl text-gray-300 hover:text-white transition-all duration-200 {{ request()->routeIs('admin.dashboard') ? 'active' : '' }}">
-                    <i class="fas fa-chart-line w-5 text-center text-lg"></i>
-                    <span class="font-medium">Dashboard</span>
-                </a>
+                @if(Auth::user()->hasPermission('dashboard'))
+                    <a href="{{ route('admin.dashboard') }}"
+                        class="nav-link flex items-center space-x-3 px-4 py-3 rounded-xl text-gray-300 hover:text-white transition-all duration-200 {{ request()->routeIs('admin.dashboard') ? 'active' : '' }}">
+                        <i class="fas fa-chart-line w-5 text-center text-lg"></i>
+                        <span class="font-medium">Dashboard</span>
+                    </a>
+                @endif
 
                 <div class="mt-6 mb-2 px-4">
                     <p class="text-xs font-semibold text-gray-400 uppercase tracking-wider">Content Management</p>
@@ -352,6 +354,15 @@
                         class="nav-link flex items-center space-x-3 px-4 py-3 rounded-xl text-gray-300 hover:text-white transition-all duration-200 {{ request()->routeIs('admin.users*') ? 'active' : '' }}">
                         <i class="fas fa-users w-5 text-center text-lg"></i>
                         <span class="font-medium">Users</span>
+                    </a>
+                @endif
+
+                <!-- Activities -->
+                @if(Auth::user()->hasPermission('activities'))
+                    <a href="{{ route('admin.activity.index') }}"
+                        class="nav-link flex items-center space-x-3 px-4 py-3 rounded-xl text-gray-300 hover:text-white transition-all duration-200 {{ request()->routeIs('admin.activity*') ? 'active' : '' }}">
+                        <i class="fas fa-history w-5 text-center text-lg"></i>
+                        <span class="font-medium">Activity Logs</span>
                     </a>
                 @endif
 
@@ -851,25 +862,29 @@
                     <p class="text-xs font-semibold text-gray-400 uppercase tracking-wider">System Settings</p>
                 </div>
 
-                <a href="{{ route('admin.backup.index') }}"
-                    class="nav-link flex items-center space-x-3 px-4 py-3 rounded-xl text-gray-300 hover:text-white transition-all duration-200 {{ request()->routeIs('admin.backup*') ? 'active' : '' }}">
-                    <i class="fas fa-database w-5 text-center text-lg"></i>
-                    <span class="font-medium">Backup Data</span>
-                </a>
+                @if(Auth::user()->hasPermission('backup'))
+                    <a href="{{ route('admin.backup.index') }}"
+                        class="nav-link flex items-center space-x-3 px-4 py-3 rounded-xl text-gray-300 hover:text-white transition-all duration-200 {{ request()->routeIs('admin.backup*') ? 'active' : '' }}">
+                        <i class="fas fa-database w-5 text-center text-lg"></i>
+                        <span class="font-medium">Backup Data</span>
+                    </a>
+                @endif
 
-                <a href="{{ route('admin.notifications.index') }}"
-                    class="nav-link flex items-center justify-between px-4 py-3 rounded-xl text-gray-300 hover:text-white transition-all duration-200 {{ request()->routeIs('admin.notifications*') ? 'active' : '' }}">
-                    <div class="flex items-center space-x-3">
-                        <i class="fas fa-bell w-5 text-center text-lg"></i>
-                        <span class="font-medium">Notifications</span>
-                    </div>
-                    @php $unreadCount = auth()->user()->unreadNotifications->count(); @endphp
-                    @if($unreadCount > 0)
-                        <span class="bg-red-500 text-white text-[10px] font-bold px-2 py-0.5 rounded-full animate-pulse">
-                            {{ $unreadCount > 99 ? '99+' : $unreadCount }}
-                        </span>
-                    @endif
-                </a>
+                @if(Auth::user()->hasPermission('notifications'))
+                    <a href="{{ route('admin.notifications.index') }}"
+                        class="nav-link flex items-center justify-between px-4 py-3 rounded-xl text-gray-300 hover:text-white transition-all duration-200 {{ request()->routeIs('admin.notifications*') ? 'active' : '' }}">
+                        <div class="flex items-center space-x-3">
+                            <i class="fas fa-bell w-5 text-center text-lg"></i>
+                            <span class="font-medium">Notifications</span>
+                        </div>
+                        @php $unreadCount = auth()->user()->unreadNotifications->count(); @endphp
+                        @if($unreadCount > 0)
+                            <span class="bg-red-500 text-white text-[10px] font-bold px-2 py-0.5 rounded-full animate-pulse">
+                                {{ $unreadCount > 99 ? '99+' : $unreadCount }}
+                            </span>
+                        @endif
+                    </a>
+                @endif
 
                 <!-- <a href="#"
                     class="nav-link flex items-center space-x-3 px-4 py-3 rounded-xl text-gray-300 hover:text-white transition-all duration-200">
