@@ -174,6 +174,7 @@
             box-shadow: 0 10px 25px -5px rgba(79, 70, 229, 0.4);
         }
     </style>
+    @yield('styles')
 </head>
 
 <body class="font-sans bg-gray-50">
@@ -245,11 +246,10 @@
             </a>
 
             <!-- Desktop Menu -->
-        <div class="hidden lg:flex items-center gap-2">
+            <div class="hidden lg:flex items-center gap-2">
 
-    <!-- Dark mode toggle -->
-    <button id="darkModeToggle" title="Toggle dark mode"
-        class="
+                <!-- Dark mode toggle -->
+                <button id="darkModeToggle" title="Toggle dark mode" class="
             bg-white/10 backdrop-blur-md
             text-white
             px-3 py-2
@@ -261,94 +261,88 @@
             transition-all duration-300
             shadow-sm
         ">
-        <i class="fa fa-moon"></i>
-    </button>
-
-    @foreach($menuItems as $item)
-        @if(isset($item['dropdown']))
-            <div class="relative group">
-                <!-- Parent -->
-                <button
-                    class="
-                        text-white font-medium
-                        px-4 py-2
-                        rounded-xl
-                        flex items-center gap-1
-                        border border-transparent
-                        hover:bg-white/15 hover:border-white/20
-                        transition-all duration-300
-                    ">
-                    {{ __($item['name']) }}
-                    <i class="fa fa-chevron-down text-xs
-                        transition-transform duration-300
-                        group-hover:rotate-180"></i>
+                    <i class="fa fa-moon"></i>
                 </button>
 
-                <!-- Dropdown -->
-                <div class="
-                    absolute left-0 mt-3 w-56
-                    bg-white/95 backdrop-blur-xl
-                    rounded-2xl
-                    shadow-xl
-                    py-2
-                    border border-gray-100
+                @foreach($menuItems as $item)
+                    @if(isset($item['dropdown']))
+                        <div class="relative group">
+                            <!-- Parent -->
+                            <button class="
+                                text-white font-medium
+                                px-4 py-2
+                                rounded-xl
+                                flex items-center gap-1
+                                border border-transparent
+                                hover:bg-white/15 hover:border-white/20
+                                transition-all duration-300
+                            ">
+                                {{ __($item['name']) }}
+                                <i class="fa fa-chevron-down text-xs
+                                transition-transform duration-300
+                                group-hover:rotate-180"></i>
+                            </button>
 
-                    opacity-0 invisible
-                    translate-y-3
-                    group-hover:opacity-100 group-hover:visible
-                    group-hover:translate-y-0
-                    transition-all duration-300 ease-out
-                ">
-                    @foreach($item['dropdown'] as $sub)
-                        <a href="{{ $sub['href'] }}"
-                           class="
-                               group flex items-center
-                               px-4 py-2.5
-                               text-gray-700 font-medium
-                               rounded-lg
-                               hover:bg-indigo-50
-                               hover:text-indigo-700
-                               transition-all duration-200
+                            <!-- Dropdown -->
+                            <div class="
+                            absolute left-0 mt-3 w-56
+                            bg-white/95 backdrop-blur-xl
+                            rounded-2xl
+                            shadow-xl
+                            py-2
+                            border border-gray-100
+
+                            opacity-0 invisible
+                            translate-y-3
+                            group-hover:opacity-100 group-hover:visible
+                            group-hover:translate-y-0
+                            transition-all duration-300 ease-out
+                        ">
+                                @foreach($item['dropdown'] as $sub)
+                                    <a href="{{ $sub['href'] }}" class="
+                                           group flex items-center
+                                           px-4 py-2.5
+                                           text-gray-700 font-medium
+                                           rounded-lg
+                                           hover:bg-indigo-50
+                                           hover:text-indigo-700
+                                           transition-all duration-200
+                                       ">
+                                        <i class="fas fa-chevron-right text-xs mr-2
+                                            text-indigo-500
+                                            opacity-0 -ml-3
+                                            group-hover:opacity-100 group-hover:ml-0
+                                            transition-all duration-200"></i>
+                                        {{ $sub['label'] }}
+                                    </a>
+                                @endforeach
+                            </div>
+                        </div>
+                    @else
+                            <a href="{{ $item['href'] }}" class="
+                               text-white font-medium
+                               px-4 py-2
+                               rounded-xl
+                               border border-transparent
+                               hover:bg-white/15 hover:border-white/20
+                               transition-all duration-300
+                               {{ $activeItem === $item['name'] ? 'bg-white/25 border-white/30 shadow-md' : '' }}
                            ">
-                            <i
-                                class="fas fa-chevron-right text-xs mr-2
-                                text-indigo-500
-                                opacity-0 -ml-3
-                                group-hover:opacity-100 group-hover:ml-0
-                                transition-all duration-200"></i>
-                            {{ $sub['label'] }}
-                        </a>
-                    @endforeach
-                </div>
+                                {{ __($item['name']) }}
+                            </a>
+                    @endif
+                @endforeach
             </div>
-        @else
-            <a href="{{ $item['href'] }}"
-               class="
-                   text-white font-medium
-                   px-4 py-2
-                   rounded-xl
-                   border border-transparent
-                   hover:bg-white/15 hover:border-white/20
-                   transition-all duration-300
-                   {{ $activeItem === $item['name'] ? 'bg-white/25 border-white/30 shadow-md' : '' }}
-               ">
-                {{ __($item['name']) }}
-            </a>
-        @endif
-    @endforeach
-</div>
 
 
             <!-- Right Controls -->
             <div class="hidden lg:flex items-center gap-3">
 
                 <!-- Language -->
-     <form method="POST" action="{{ route('language.switch') }}" class="relative">
-    @csrf
+                <form method="POST" action="{{ route('language.switch') }}" class="relative">
+                    @csrf
 
-    <select name="lang"
-        onchange="this.form.submit()"
-        class="
+                    <select name="lang" onchange="this.form.submit()" class="
             bg-white/10 backdrop-blur-md
             text-white
             px-4 py-2
@@ -363,15 +357,13 @@
             focus:ring-2 focus:ring-white/40
             shadow-sm
         ">
-        @foreach($languages as $lang)
-            <option value="{{ $lang['code'] }}"
-                class="text-gray-800"
-                {{ $currentLang === $lang['code'] ? 'selected' : '' }}>
-                {{ $lang['flag'] }} {{ $lang['label'] }}
-            </option>
-        @endforeach
-    </select>
-</form>
+                        @foreach($languages as $lang)
+                            <option value="{{ $lang['code'] }}" class="text-gray-800" {{ $currentLang === $lang['code'] ? 'selected' : '' }}>
+                                {{ $lang['flag'] }} {{ $lang['label'] }}
+                            </option>
+                        @endforeach
+                    </select>
+                </form>
 
 
                 <!-- Auth -->
@@ -404,8 +396,9 @@
             @foreach($menuItems as $item)
                 @if(isset($item['dropdown']))
                     <details class="mb-3 group">
-                        <summary class="px-3 py-2 flex justify-between items-center font-semibold cursor-pointer
-                                       hover:text-indigo-600 rounded-lg hover:bg-indigo-50 transition-all duration-200">
+                        <summary
+                            class="px-3 py-2 flex justify-between items-center font-semibold cursor-pointer
+                                               hover:text-indigo-600 rounded-lg hover:bg-indigo-50 transition-all duration-200">
                             {{ __($item['name']) }}
                             <i class="fa fa-chevron-down text-xs transition-transform group-open:rotate-180"></i>
                         </summary>
@@ -479,39 +472,38 @@
                     <p class="text-gray-400 mt-3 italic font-medium">{{ $footer->tagline ?? __('Education Of Best') }}
                     </p>
                     <p class="text-gray-500 mt-4 leading-relaxed">
-                        {{ $footer->description ?? __('Grow your skills with modern technology courses.') }}</p>
+                        {{ $footer->description ?? __('Grow your skills with modern technology courses.') }}
+                    </p>
 
                     {{-- Social Links --}}
-                <div class="flex space-x-2 mt-6">
-    @foreach($footer->social_links ?? [] as $key => $link)
-        @php
-            $icon = match ($key) {
-                'facebook' => 'fab fa-facebook-f',
-                'twitter' => 'fab fa-twitter',
-                'instagram' => 'fab fa-instagram',
-                'youtube' => 'fab fa-youtube',
-                'linkedin' => 'fab fa-linkedin-in',
-                default => 'fab fa-globe'
-            };
+                    <div class="flex space-x-2 mt-6">
+                        @foreach($footer->social_links ?? [] as $key => $link)
+                            @php
+                                $icon = match ($key) {
+                                    'facebook' => 'fab fa-facebook-f',
+                                    'twitter' => 'fab fa-twitter',
+                                    'instagram' => 'fab fa-instagram',
+                                    'youtube' => 'fab fa-youtube',
+                                    'linkedin' => 'fab fa-linkedin-in',
+                                    default => 'fab fa-globe'
+                                };
 
-            $gradient = match ($key) {
-                'facebook' => 'from-blue-500 to-blue-600',
-                'twitter' => 'from-sky-400 to-sky-500',
-                'instagram' => 'from-pink-500 to-rose-500',
-                'youtube' => 'from-red-500 to-red-600',
-                'linkedin' => 'from-blue-600 to-blue-700',
-                default => 'from-gray-500 to-gray-600'
-            };
-        @endphp
+                                $gradient = match ($key) {
+                                    'facebook' => 'from-blue-500 to-blue-600',
+                                    'twitter' => 'from-sky-400 to-sky-500',
+                                    'instagram' => 'from-pink-500 to-rose-500',
+                                    'youtube' => 'from-red-500 to-red-600',
+                                    'linkedin' => 'from-blue-600 to-blue-700',
+                                    default => 'from-gray-500 to-gray-600'
+                                };
+                            @endphp
 
-        <a href="{{ $link }}"
-           target="_blank"
-           rel="noopener noreferrer"
-           class="w-10 h-10 bg-gradient-to-br {{ $gradient }} rounded-lg flex items-center justify-center text-white hover:shadow-lg hover:scale-110 transition-all duration-200">
-            <i class="{{ $icon }}"></i>
-        </a>
-    @endforeach
-</div>
+                            <a href="{{ $link }}" target="_blank" rel="noopener noreferrer"
+                                class="w-10 h-10 bg-gradient-to-br {{ $gradient }} rounded-lg flex items-center justify-center text-white hover:shadow-lg hover:scale-110 transition-all duration-200">
+                                <i class="{{ $icon }}"></i>
+                            </a>
+                        @endforeach
+                    </div>
 
                 </div>
 
@@ -619,6 +611,7 @@
         })();
     </script>
 
+    @yield('scripts')
 </body>
 
 </html>

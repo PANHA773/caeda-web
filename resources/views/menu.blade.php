@@ -108,9 +108,24 @@
                                         @endfor
                                         <span class="ml-2 text-sm text-gray-500">{{ $item->rating ?? '0.0' }} ({{ $item->reviews ?? 0 }})</span>
                                     </div>
-                                    <button class="px-4 py-2 bg-amber-100 text-amber-700 font-medium rounded-lg hover:bg-amber-200 transition-colors text-sm">
-                                        Add to Order
-                                    </button>
+                                    <div class="flex gap-2">
+                                        <button 
+                                            onclick="openDetailModal(this)" 
+                                            data-title="{{ $item->title }}"
+                                            data-description="{{ $item->description }}"
+                                            data-price="{{ number_format($item->price, 2) }}"
+                                            data-old-price="{{ $item->old_price ? number_format($item->old_price, 2) : '' }}"
+                                            data-image="{{ $item->image && file_exists(public_path('storage/' . $item->image)) ? asset('storage/'.$item->image) : '' }}"
+                                            data-rating="{{ $item->rating ?? 0 }}"
+                                            data-reviews="{{ $item->reviews ?? 0 }}"
+                                            class="px-3 py-2 bg-gray-100 text-gray-700 font-medium rounded-lg hover:bg-gray-200 transition-colors text-sm" 
+                                            title="View Details">
+                                            <i class="fas fa-eye"></i>
+                                        </button>
+                                        <button class="px-4 py-2 bg-amber-100 text-amber-700 font-medium rounded-lg hover:bg-amber-200 transition-colors text-sm">
+                                            Add to Order
+                                        </button>
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -148,6 +163,54 @@
         </div>
     </div>
 </section>
+
+<!-- Detail Modal -->
+<div id="detailModal" class="fixed inset-0 z-50 hidden" aria-labelledby="modal-title" role="dialog" aria-modal="true">
+    <div class="flex items-center justify-center min-h-screen px-4 pt-4 pb-20 text-center sm:block sm:p-0">
+        <div class="fixed inset-0 bg-gray-900 bg-opacity-75 transition-opacity" aria-hidden="true" onclick="closeDetailModal()"></div>
+
+        <span class="hidden sm:inline-block sm:align-middle sm:h-screen" aria-hidden="true">&#8203;</span>
+
+        <div class="inline-block align-bottom bg-white rounded-2xl text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-lg sm:w-full animate-slideIn">
+            <div class="relative">
+                <button onclick="closeDetailModal()" class="absolute top-4 right-4 bg-white/80 rounded-full p-2 text-gray-500 hover:text-gray-700 z-10">
+                    <i class="fas fa-times"></i>
+                </button>
+                <div class="h-64 overflow-hidden bg-gray-100">
+                    <img id="modalImage" src="" alt="" class="w-full h-full object-cover">
+                    <div id="modalNoImage" class="w-full h-full flex items-center justify-center text-gray-400 hidden">
+                        <i class="fas fa-coffee text-4xl"></i>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="px-6 py-6">
+                <h3 class="text-2xl font-bold text-gray-900 mb-2" id="modalTitle"></h3>
+                
+                <div class="flex items-center justify-between mb-4">
+                    <div class="flex items-center gap-3">
+                         <div class="text-2xl font-bold text-amber-600" id="modalPrice"></div>
+                         <div class="text-base text-gray-400 line-through" id="modalOldPrice"></div>
+                    </div>
+                </div>
+
+                <div class="flex items-center mb-4" id="modalRating">
+                     <!-- Stars injected here -->
+                </div>
+
+                <div class="prose prose-sm text-gray-600 mb-6">
+                    <p id="modalDescription"></p>
+                </div>
+
+                <div class="flex gap-3">
+                    <button type="button" class="flex-1 inline-flex justify-center items-center gap-2 rounded-xl border border-transparent shadow-lg px-4 py-3 bg-gradient-to-r from-amber-600 to-orange-600 text-base font-medium text-white hover:from-amber-700 hover:to-orange-700 focus:outline-none transition-all hover:scale-[1.02]" onclick="addToOrderFromModal()">
+                        <i class="fas fa-shopping-cart"></i> Add to Order
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
 
 @endsection
 
@@ -284,5 +347,85 @@
         `;
         document.head.appendChild(style);
     });
+
+    // Make these functions available globally
+    window.openDetailModal = function(button) {
+        const modal = document.getElementById('detailModal');
+        const dataset = button.dataset;
+        
+        // Populate data
+        document.getElementById('modalTitle').textContent = dataset.title;
+        document.getElementById('modalDescription').textContent = dataset.description;
+        document.getElementById('modalPrice').textContent = '$' + dataset.price;
+        
+        const oldPriceEl = document.getElementById('modalOldPrice');
+        if (dataset.oldPrice) {
+            oldPriceEl.textContent = '$' + dataset.oldPrice;
+            oldPriceEl.classList.remove('hidden');
+        } else {
+            oldPriceEl.classList.add('hidden');
+        }
+
+        const img = document.getElementById('modalImage');
+        const noImg = document.getElementById('modalNoImage');
+        if (dataset.image) {
+            img.src = dataset.image;
+            img.classList.remove('hidden');
+            noImg.classList.add('hidden');
+        } else {
+            img.classList.add('hidden');
+            noImg.classList.remove('hidden');
+        }
+
+        // Generate stars
+        const rating = parseFloat(dataset.rating);
+        const reviews = dataset.reviews;
+        let starsHtml = '';
+        for (let i = 1; i <= 5; i++) {
+            if (i <= Math.floor(rating)) {
+                starsHtml += '<i class="fas fa-star text-amber-400 text-sm"></i>';
+            } else {
+                starsHtml += '<i class="far fa-star text-amber-400 text-sm"></i>';
+            }
+        }
+        starsHtml += `<span class="ml-2 text-sm text-gray-500">${rating} (${reviews} reviews)</span>`;
+        document.getElementById('modalRating').innerHTML = starsHtml;
+
+        // Show modal
+        modal.classList.remove('hidden');
+        document.body.style.overflow = 'hidden';
+    }
+
+    window.closeDetailModal = function() {
+        const modal = document.getElementById('detailModal');
+        modal.classList.add('hidden');
+        document.body.style.overflow = '';
+    }
+
+    window.addToOrderFromModal = function() {
+        const title = document.getElementById('modalTitle').textContent;
+        const price = document.getElementById('modalPrice').textContent;
+        
+        // Create a temporary simplified toast function usage or trigger the existing one if possible
+        // Since showToast is scoped inside DOMContentLoaded, we typically can't access it unless we move it out or trigger an event.
+        // For simplicity, let's just duplicate the toast logic or make showToast global.
+        
+        // Better yet, let's find the "Add to Order" button for this item and click it?? 
+        // No, that's hard to find back. 
+        // Let's just create a toast here directly for now.
+        
+        const toast = document.createElement('div');
+        toast.className = 'fixed top-4 right-4 z-50 bg-gradient-to-r from-green-500 to-emerald-600 text-white px-6 py-3 rounded-xl shadow-xl flex items-center gap-3 animate-slideIn';
+        toast.innerHTML = `
+            <i class="fas fa-shopping-cart text-xl"></i>
+            <span class="font-medium">${title} added to cart! ${price}</span>
+        `;
+        document.body.appendChild(toast);
+        setTimeout(() => {
+            toast.remove();
+        }, 3000);
+
+        closeDetailModal();
+    }
 </script>
 @endsection
