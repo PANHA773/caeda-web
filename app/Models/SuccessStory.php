@@ -29,8 +29,8 @@ class SuccessStory extends Model
       get: fn() => $this->image ? (
         Str::startsWith($this->image, ['http://', 'https://'])
         ? $this->image
-        : Storage::disk('public')->url($this->image)
-      ) : asset('images/placeholder-alumni.png')
+        : '/storage/' . $this->image
+      ) : '/images/placeholder-alumni.png'
     );
   }
 }

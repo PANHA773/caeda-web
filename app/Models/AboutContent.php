@@ -27,4 +27,16 @@ class AboutContent extends Model
         'today_content' => 'array',
         'is_active' => 'boolean',
     ];
+
+    /**
+     * Get the full URL for the rector image.
+     */
+    protected function imageUrl(): \Illuminate\Database\Eloquent\Casts\Attribute
+    {
+        return \Illuminate\Database\Eloquent\Casts\Attribute::make(
+            get: fn() => $this->rector_image ? (
+                \Illuminate\Support\Str::startsWith($this->rector_image, ['http://', 'https://']) ? $this->rector_image : '/storage/' . $this->rector_image
+            ) : '/images/placeholder-rector.png'
+        );
+    }
 }

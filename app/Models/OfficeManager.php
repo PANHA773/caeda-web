@@ -36,17 +36,12 @@ class OfficeManager extends Model
 
         // Public assets (legacy support)
         if (Str::startsWith($this->image, ['assets/', '/assets/'])) {
-            return asset(ltrim($this->image, '/'));
+            return '/' . ltrim($this->image, '/');
         }
 
-        // Storage image (SAFE CHECK)
-        if (Storage::disk('public')->exists($this->image)) {
-            return asset('storage/' . ltrim($this->image, '/'));
-        }
-
-        // File missing
-        return null;
+        // Storage image
+        return '/storage/' . ltrim($this->image, '/');
     }
 
-    
+
 }

@@ -64,7 +64,31 @@ class Workshop extends Model
         }
 
         // Otherwise, assume it's a local file path in the 'public' disk
-        return \Illuminate\Support\Facades\Storage::disk('public')->url($url);
+        return '/storage/' . $url;
+    }
+
+    /**
+     * Get the full URL for the workshop image.
+     */
+    protected function imageUrl(): \Illuminate\Database\Eloquent\Casts\Attribute
+    {
+        return \Illuminate\Database\Eloquent\Casts\Attribute::make(
+            get: fn() => $this->image ? (
+                Str::startsWith($this->image, ['http://', 'https://']) ? $this->image : '/storage/' . $this->image
+            ) : '/images/placeholder-workshop.png'
+        );
+    }
+
+    /**
+     * Get the full URL for the instructor image.
+     */
+    protected function instructorImageUrl(): \Illuminate\Database\Eloquent\Casts\Attribute
+    {
+        return \Illuminate\Database\Eloquent\Casts\Attribute::make(
+            get: fn() => $this->instructor_image ? (
+                Str::startsWith($this->instructor_image, ['http://', 'https://']) ? $this->instructor_image : '/storage/' . $this->instructor_image
+            ) : '/images/placeholder-instructor.png'
+        );
     }
 
 }

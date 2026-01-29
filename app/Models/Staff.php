@@ -62,9 +62,9 @@ class Staff extends Model
 
         // Handle legacy public asset paths used in seeders (e.g. '/assets/...')
         if (Str::startsWith($this->image, ['/assets', 'assets/'])) {
-            return asset(ltrim($this->image, '/'));
+            return '/' . ltrim($this->image, '/');
         }
 
-        return asset('storage/' . ltrim($this->image, '/'));
+        return '/storage/' . ltrim($this->image, '/');
     }
 }

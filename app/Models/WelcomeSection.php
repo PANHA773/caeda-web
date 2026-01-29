@@ -50,8 +50,8 @@ class WelcomeSection extends Model
             get: fn() => $this->image ? (
                 Str::startsWith($this->image, ['http://', 'https://'])
                 ? $this->image
-                : Storage::disk('public')->url($this->image)
-            ) : asset('images/placeholder-welcome.png')
+                : '/storage/' . $this->image
+            ) : '/images/placeholder-welcome.png'
         );
     }
 
@@ -77,7 +77,7 @@ class WelcomeSection extends Model
                 }
 
                 // Otherwise, it's a file path
-                return Storage::disk('public')->url($this->video);
+                return '/storage/' . $this->video;
             }
         );
     }

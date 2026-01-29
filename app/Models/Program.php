@@ -53,7 +53,7 @@ class Program extends Model
     protected function finalPrice(): Attribute
     {
         return Attribute::make(
-            get: fn () => $this->discount ?? $this->tuition
+            get: fn() => $this->discount ?? $this->tuition
         );
     }
 
@@ -61,9 +61,9 @@ class Program extends Model
     protected function imageUrl(): Attribute
     {
         return Attribute::make(
-            get: fn () => $this->image ? (
-                Str::startsWith($this->image, ['http://', 'https://']) ? $this->image : asset('storage/' . $this->image)
-            ) : asset('images/placeholder-program.png')
+            get: fn() => $this->image ? (
+                Str::startsWith($this->image, ['http://', 'https://']) ? $this->image : '/storage/' . $this->image
+            ) : '/images/placeholder-program.png'
         );
     }
 
@@ -71,7 +71,7 @@ class Program extends Model
     protected function hasDiscount(): Attribute
     {
         return Attribute::make(
-            get: fn () => !is_null($this->discount) && $this->discount < $this->tuition
+            get: fn() => !is_null($this->discount) && $this->discount < $this->tuition
         );
     }
 
@@ -107,7 +107,7 @@ class Program extends Model
     public function scopeUpcoming($query)
     {
         return $query->where('start_date', '>=', now())
-                    ->orWhereNull('start_date');
+            ->orWhereNull('start_date');
     }
 
     public function scopeByCategory($query, $category)
@@ -149,15 +149,15 @@ class Program extends Model
         if (!$this->is_active) {
             return 'inactive';
         }
-        
+
         if ($this->hasStarted()) {
             return 'ongoing';
         }
-        
+
         if (!$this->isRegistrationOpen()) {
             return 'registration_closed';
         }
-        
+
         return 'upcoming';
     }
 }

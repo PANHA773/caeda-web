@@ -160,8 +160,7 @@
                         {{-- Media --}}
                         <a href="{{ route('news.show', $post->slug) }}" class="block relative aspect-[16/10] overflow-hidden">
                             @if($post->image)
-                                <img src="{{ Str::startsWith($post->image, ['http://', 'https://']) ? $post->image : asset($post->image) }}"
-                                    alt="{{ $post->title }}"
+                                <img src="{{ $post->image_url }}" alt="{{ $post->title }}"
                                     class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110">
                             @else
                                 <div class="w-full h-full bg-indigo-50 flex items-center justify-center">

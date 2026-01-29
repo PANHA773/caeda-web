@@ -57,7 +57,7 @@ class Partner extends Model
     public function getLogoUrlAttribute()
     {
         if (!$this->logo) {
-            return asset('assets/default-logo.png');
+            return '/assets/default-logo.png';
         }
 
         // If it's a full URL (external), return it
@@ -66,6 +66,6 @@ class Partner extends Model
         }
 
         // Otherwise return stored file URL
-        return asset('storage/' . $this->logo);
+        return '/storage/' . $this->logo;
     }
 }

@@ -50,4 +50,16 @@ class News extends Model
     {
         return $this->hasMany(Comment::class)->latest();
     }
+
+    /**
+     * Get the full URL for the news image.
+     */
+    protected function imageUrl(): \Illuminate\Database\Eloquent\Casts\Attribute
+    {
+        return \Illuminate\Database\Eloquent\Casts\Attribute::make(
+            get: fn() => $this->image ? (
+                \Illuminate\Support\Str::startsWith($this->image, ['http://', 'https://']) ? $this->image : '/storage/' . $this->image
+            ) : '/images/placeholder-news.png'
+        );
+    }
 }

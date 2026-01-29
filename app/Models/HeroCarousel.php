@@ -26,8 +26,8 @@ class HeroCarousel extends Model
     {
         return Attribute::make(
             get: fn() => $this->image
-            ? Storage::disk('public')->url($this->image)
-            : asset('images/placeholder-hero.png')
+            ? '/storage/' . $this->image
+            : '/images/placeholder-hero.png'
         );
     }
 }

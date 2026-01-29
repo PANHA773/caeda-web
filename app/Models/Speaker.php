@@ -32,8 +32,8 @@ class Speaker extends Model
     {
         return Attribute::make(
             get: fn() => $this->image ? (
-                Str::startsWith($this->image, ['http://', 'https://']) ? $this->image : asset('storage/' . $this->image)
-            ) : asset('images/placeholder-speaker.png')
+                Str::startsWith($this->image, ['http://', 'https://']) ? $this->image : '/storage/' . $this->image
+            ) : '/images/placeholder-speaker.png'
         );
     }
 }

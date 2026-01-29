@@ -47,8 +47,8 @@ class Event extends Model
     {
         return Attribute::make(
             get: fn() => $this->image ? (
-                Str::startsWith($this->image, ['http://', 'https://']) ? $this->image : asset('storage/' . $this->image)
-            ) : asset('images/placeholder-event.png')
+                Str::startsWith($this->image, ['http://', 'https://']) ? $this->image : '/storage/' . $this->image
+            ) : '/images/placeholder-event.png'
         );
     }
 }

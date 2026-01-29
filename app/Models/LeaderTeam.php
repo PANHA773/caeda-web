@@ -23,6 +23,18 @@ class LeaderTeam extends Model
      */
     protected $casts = [
         'is_active' => 'boolean',
-        'order'     => 'integer',
+        'order' => 'integer',
     ];
+
+    /**
+     * Get the full URL for the leader image.
+     */
+    protected function imageUrl(): \Illuminate\Database\Eloquent\Casts\Attribute
+    {
+        return \Illuminate\Database\Eloquent\Casts\Attribute::make(
+            get: fn() => $this->image ? (
+                \Illuminate\Support\Str::startsWith($this->image, ['http://', 'https://']) ? $this->image : '/storage/' . $this->image
+            ) : null
+        );
+    }
 }

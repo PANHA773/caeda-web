@@ -78,8 +78,8 @@
                     @foreach($category->items as $item)
                         <div class="bg-white rounded-xl border border-gray-200 overflow-hidden hover:shadow-lg transition-shadow duration-300">
                             <div class="h-48 overflow-hidden">
-                                @if($item->image && file_exists(public_path('storage/' . $item->image)))
-                                    <img src="{{ asset('storage/'.$item->image) }}" alt="{{ $item->title }}" class="w-full h-full object-cover transition-transform duration-500 hover:scale-110">
+                                @if($item->image_url)
+                                    <img src="{{ $item->image_url }}" alt="{{ $item->title }}" class="w-full h-full object-cover transition-transform duration-500 hover:scale-110">
                                 @else
                                     <div class="w-full h-full bg-gray-100 flex items-center justify-center text-gray-400">No Image</div>
                                 @endif
@@ -115,7 +115,7 @@
                                             data-description="{{ $item->description }}"
                                             data-price="{{ number_format($item->price, 2) }}"
                                             data-old-price="{{ $item->old_price ? number_format($item->old_price, 2) : '' }}"
-                                            data-image="{{ $item->image && file_exists(public_path('storage/' . $item->image)) ? asset('storage/'.$item->image) : '' }}"
+                                            data-image="{{ $item->image_url }}"
                                             data-rating="{{ $item->rating ?? 0 }}"
                                             data-reviews="{{ $item->reviews ?? 0 }}"
                                             class="px-3 py-2 bg-gray-100 text-gray-700 font-medium rounded-lg hover:bg-gray-200 transition-colors text-sm" 
