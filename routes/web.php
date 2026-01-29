@@ -69,6 +69,7 @@ use App\Http\Controllers\Admin\WhyChooseUsController;
 use App\Http\Controllers\Admin\OrderStepController;
 use App\Http\Controllers\Admin\LocationController;
 use App\Http\Controllers\Admin\FeaturedMenuController;
+use App\Http\Controllers\Admin\LeadershipController;
 use App\Http\Controllers\Admin\DashboardController;
 use App\Http\Controllers\Admin\NewsAdminController;
 use App\Http\Controllers\Admin\UserAdminController;
@@ -206,6 +207,8 @@ Route::middleware(['auth', \App\Http\Middleware\AdminTokenMiddleware::class])->p
     // About Page Management
     Route::middleware('permission:about_page')->group(function () {
         Route::get('/about', [AboutAdminController::class, 'index'])->name('about.index');
+        Route::put('/about', [AboutAdminController::class, 'update'])->name('about.update');
+        Route::resource('leadership', LeadershipController::class);
         Route::resource('faculties', FacultyAdminController::class);
         Route::resource('team-members', TeamMemberAdminController::class);
         Route::resource('core-values', CoreValueAdminController::class);

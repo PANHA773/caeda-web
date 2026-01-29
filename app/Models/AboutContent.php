@@ -16,12 +16,15 @@ class AboutContent extends Model
         'today_content',
         'mission',
         'vision',
+        'rector_name',
+        'rector_message',
+        'rector_image',
         'is_active',
     ];
 
     protected $casts = [
         'foundation_content' => 'array',
-        'today_content'      => 'array',
-        'is_active'          => 'boolean',
+        'today_content' => 'array',
+        'is_active' => 'boolean',
     ];
 }

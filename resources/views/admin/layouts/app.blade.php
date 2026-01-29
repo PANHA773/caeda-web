@@ -409,6 +409,16 @@
                         </button>
 
                         <div class="dropdown-menu hidden pl-12 mt-1 space-y-1">
+                            <a href="{{ route('admin.about.index') }}"
+                                class="dropdown-link flex items-center space-x-3 px-4 py-2 rounded-lg text-gray-400 hover:text-white hover:bg-gray-800 {{ request()->routeIs('admin.about.index') ? 'active' : '' }}">
+                                <i class="fas fa-file-alt w-5 text-center"></i>
+                                <span>Main Content</span>
+                            </a>
+                            <a href="{{ route('admin.leadership.index') }}"
+                                class="dropdown-link flex items-center space-x-3 px-4 py-2 rounded-lg text-gray-400 hover:text-white hover:bg-gray-800 {{ request()->routeIs('admin.leadership*') ? 'active' : '' }}">
+                                <i class="fas fa-user-tie w-5 text-center"></i>
+                                <span>Leadership</span>
+                            </a>
                             <a href="{{ route('admin.faculties.index') }}"
                                 class="dropdown-link flex items-center space-x-3 px-4 py-2 rounded-lg text-gray-400 hover:text-white hover:bg-gray-800 {{ request()->routeIs('admin.faculties*') ? 'active' : '' }}">
                                 <i class="fas fa-building-columns w-5 text-center"></i>

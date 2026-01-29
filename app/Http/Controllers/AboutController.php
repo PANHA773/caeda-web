@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\AboutContent;
+use App\Models\Leadership;
 use App\Models\Faculty;
 use App\Models\LeaderTeam;
 use App\Models\CoreValue;
@@ -37,13 +38,13 @@ class AboutController extends Controller
             ->orderBy('order')
             ->get();
 
-    
 
 
 
-        
 
-            $footer = Footer::first();
+
+
+        $footer = Footer::first();
 
         // Core Values
         $coreValues = CoreValue::query()
@@ -51,24 +52,26 @@ class AboutController extends Controller
             ->orderBy('order')
             ->get();
 
-            $accreditations = Accreditation::where('is_active', true)->get();
+        $accreditations = Accreditation::where('is_active', true)->get();
 
-            $leaderTeams = LeaderTeam::query()
-                ->where('is_active', true)
-                ->orderBy('order')
-                ->get();
+        $leaderTeams = LeaderTeam::query()
+            ->where('is_active', true)
+            ->orderBy('order')
+            ->get();
 
 
         $visionMissions = VisionMission::where('is_active', true)->orderBy('type')->get();
+        $leadershipMessages = Leadership::where('is_active', true)->orderBy('order')->get();
 
         return view('about', compact(
             'aboutContent',
             'faculties',
             'leaderTeams',
+            'leadershipMessages',
             'coreValues',
             'accreditations',
             'visionMissions',
-            
+
             'footer'
         ));
     }
