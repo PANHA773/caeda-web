@@ -1372,6 +1372,7 @@
     </script>
 
     @yield('scripts')
+    @yield('extra-js')
 </body>
 
 </html>

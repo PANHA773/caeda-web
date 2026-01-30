@@ -26,6 +26,8 @@ class Workshop extends Model
         'order',
     ];
 
+    protected $appends = ['video_url'];
+
     /**
      * Accessor for backward-compatible `video_url` attribute used in views.
      */

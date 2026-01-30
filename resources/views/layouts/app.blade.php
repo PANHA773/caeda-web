@@ -269,67 +269,67 @@
                         <div class="relative group">
                             <!-- Parent -->
                             <button class="
-                                text-white font-medium
-                                px-4 py-2
-                                rounded-xl
-                                flex items-center gap-1
-                                border border-transparent
-                                hover:bg-white/15 hover:border-white/20
-                                transition-all duration-300
-                            ">
+                                        text-white font-medium
+                                        px-4 py-2
+                                        rounded-xl
+                                        flex items-center gap-1
+                                        border border-transparent
+                                        hover:bg-white/15 hover:border-white/20
+                                        transition-all duration-300
+                                    ">
                                 {{ __($item['name']) }}
                                 <i class="fa fa-chevron-down text-xs
-                                transition-transform duration-300
-                                group-hover:rotate-180"></i>
+                                        transition-transform duration-300
+                                        group-hover:rotate-180"></i>
                             </button>
 
                             <!-- Dropdown -->
                             <div class="
-                            absolute left-0 mt-3 w-56
-                            bg-white/95 backdrop-blur-xl
-                            rounded-2xl
-                            shadow-xl
-                            py-2
-                            border border-gray-100
+                                    absolute left-0 mt-3 w-56
+                                    bg-white/95 backdrop-blur-xl
+                                    rounded-2xl
+                                    shadow-xl
+                                    py-2
+                                    border border-gray-100
 
-                            opacity-0 invisible
-                            translate-y-3
-                            group-hover:opacity-100 group-hover:visible
-                            group-hover:translate-y-0
-                            transition-all duration-300 ease-out
-                        ">
+                                    opacity-0 invisible
+                                    translate-y-3
+                                    group-hover:opacity-100 group-hover:visible
+                                    group-hover:translate-y-0
+                                    transition-all duration-300 ease-out
+                                ">
                                 @foreach($item['dropdown'] as $sub)
                                     <a href="{{ $sub['href'] }}" class="
-                                           group flex items-center
-                                           px-4 py-2.5
-                                           text-gray-700 font-medium
-                                           rounded-lg
-                                           hover:bg-indigo-50
-                                           hover:text-indigo-700
-                                           transition-all duration-200
-                                       ">
+                                                       group flex items-center
+                                                       px-4 py-2.5
+                                                       text-gray-700 font-medium
+                                                       rounded-lg
+                                                       hover:bg-indigo-50
+                                                       hover:text-indigo-700
+                                                       transition-all duration-200
+                                                   ">
                                         <i class="fas fa-chevron-right text-xs mr-2
-                                            text-indigo-500
-                                            opacity-0 -ml-3
-                                            group-hover:opacity-100 group-hover:ml-0
-                                            transition-all duration-200"></i>
+                                                        text-indigo-500
+                                                        opacity-0 -ml-3
+                                                        group-hover:opacity-100 group-hover:ml-0
+                                                        transition-all duration-200"></i>
                                         {{ $sub['label'] }}
                                     </a>
                                 @endforeach
                             </div>
                         </div>
                     @else
-                            <a href="{{ $item['href'] }}" class="
-                               text-white font-medium
-                               px-4 py-2
-                               rounded-xl
-                               border border-transparent
-                               hover:bg-white/15 hover:border-white/20
-                               transition-all duration-300
-                               {{ $activeItem === $item['name'] ? 'bg-white/25 border-white/30 shadow-md' : '' }}
-                           ">
-                                {{ __($item['name']) }}
-                            </a>
+                        <a href="{{ $item['href'] }}" class="
+                                       text-white font-medium
+                                       px-4 py-2
+                                       rounded-xl
+                                       border border-transparent
+                                       hover:bg-white/15 hover:border-white/20
+                                       transition-all duration-300
+                                       {{ $activeItem === $item['name'] ? 'bg-white/25 border-white/30 shadow-md' : '' }}
+                                   ">
+                            {{ __($item['name']) }}
+                        </a>
                     @endif
                 @endforeach
             </div>
@@ -398,7 +398,7 @@
                     <details class="mb-3 group">
                         <summary
                             class="px-3 py-2 flex justify-between items-center font-semibold cursor-pointer
-                                               hover:text-indigo-600 rounded-lg hover:bg-indigo-50 transition-all duration-200">
+                                                       hover:text-indigo-600 rounded-lg hover:bg-indigo-50 transition-all duration-200">
                             {{ __($item['name']) }}
                             <i class="fa fa-chevron-down text-xs transition-transform group-open:rotate-180"></i>
                         </summary>
@@ -612,6 +612,7 @@
     </script>
 
     @yield('scripts')
+    @yield('extra-js')
 </body>
 
 </html>

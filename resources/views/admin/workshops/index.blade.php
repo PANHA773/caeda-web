@@ -19,7 +19,7 @@
         {{-- Category Filters --}}
         <div class="flex flex-wrap gap-3 mb-8">
             @php
-                $categories = $workshops->pluck('category')->unique();
+                $categories = collect($workshops)->pluck('category')->unique();
             @endphp
 
             <button class="category-filter category-btn-active" data-category="all">
@@ -78,8 +78,9 @@
                                 </div>
 
                                 {{-- Play Button --}}
-                                <button onclick="playWorkshop({{ $workshop->id }})" class="absolute inset-0 flex items-center justify-center
-                                                   bg-black/40 text-white text-3xl hover:bg-black/60">
+                                <button id="play-btn-{{ $workshop->id }}" onclick="playWorkshop({{ $workshop->id }})"
+                                    class="absolute inset-0 flex items-center justify-center
+                                                                                       bg-black/40 text-white text-3xl hover:bg-black/60">
                                     ▶
                                 </button>
                             @endif
@@ -95,8 +96,9 @@
                                     {{ ucfirst($workshop->level) }}
                                 </span>
 
-                                <span class="text-xs px-2 py-1 rounded
-                                        {{ $workshop->status ? 'bg-green-100 text-green-700' : 'bg-red-100 text-red-700' }}">
+                                <span
+                                    class="text-xs px-2 py-1 rounded
+                                                                {{ $workshop->status ? 'bg-green-100 text-green-700' : 'bg-red-100 text-red-700' }}">
                                     {{ $workshop->status ? 'Active' : 'Inactive' }}
                                 </span>
                             </div>
@@ -140,28 +142,50 @@
         function playWorkshop(id) {
             const videoDiv = document.getElementById('video-' + id);
             const thumbImg = document.getElementById('thumb-' + id);
+            const playBtn = document.getElementById('play-btn-' + id);
             const iframe = videoDiv.querySelector('iframe');
+            const video = videoDiv.querySelector('video');
 
-            // Hide thumbnail and show video
-            thumbImg.classList.add('hidden');
+            if (!videoDiv) return;
+
+            // Hide thumbnail and play button, show video container
+            if (thumbImg) thumbImg.classList.add('hidden');
+            if (playBtn) playBtn.classList.add('hidden');
             videoDiv.classList.remove('hidden');
 
-            // Load video if not loaded
-            if (!iframe.src) {
+            // Load iframe if needed
+            if (iframe && !iframe.src) {
                 iframe.src = iframe.dataset.src;
             }
 
-            // Pause other videos
+            // Play local video if present
+            if (video) {
+                video.play();
+            }
+
+            // Reset/Stop other videos
             document.querySelectorAll('[id^="video-"]').forEach(v => {
-                if (v.id !== 'video-' + id) {
+                const otherId = v.id.replace('video-', '');
+                if (otherId !== id.toString()) {
                     v.classList.add('hidden');
+
+                    // Stop iframe
                     const f = v.querySelector('iframe');
                     if (f) f.src = '';
-                }
-            });
-            document.querySelectorAll('[id^="thumb-"]').forEach(t => {
-                if (t.id !== 'thumb-' + id) {
-                    t.classList.remove('hidden');
+
+                    // Stop local video
+                    const vid = v.querySelector('video');
+                    if (vid) {
+                        vid.pause();
+                        vid.currentTime = 0;
+                    }
+
+                    // Show other thumbnails and play buttons
+                    const otherThumb = document.getElementById('thumb-' + otherId);
+                    if (otherThumb) otherThumb.classList.remove('hidden');
+
+                    const otherPlayBtn = document.getElementById('play-btn-' + otherId);
+                    if (otherPlayBtn) otherPlayBtn.classList.remove('hidden');
                 }
             });
         }

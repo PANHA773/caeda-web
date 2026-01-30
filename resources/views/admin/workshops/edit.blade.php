@@ -44,6 +44,13 @@
                     class="w-full mt-1 border rounded-lg px-4 py-2" required>
             </div>
 
+            {{-- Instructor --}}
+            <div>
+                <label class="block text-sm font-medium text-gray-700">Instructor</label>
+                <input type="text" name="instructor" value="{{ old('instructor', $workshop->instructor) }}"
+                    class="w-full mt-1 border rounded-lg px-4 py-2" required>
+            </div>
+
             {{-- Instructor Image --}}
             <div>
                 <label class="block text-sm font-medium text-gray-700">Instructor Image</label>

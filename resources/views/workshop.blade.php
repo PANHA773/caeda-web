@@ -384,9 +384,16 @@
                         <div class="relative h-48 bg-gray-900 overflow-hidden">
 
                             {{-- Video --}}
-                            <div id="video-{{ $workshop->id }}" class="hidden absolute inset-0">
-                                <iframe data-src="{{ $workshop->video_url }}?autoplay=1" class="w-full h-full" frameborder="0"
-                                    allow="autoplay; encrypted-media" allowfullscreen></iframe>
+                            <div id="video-{{ $workshop->id }}" class="hidden absolute inset-0 bg-black z-20">
+                                @if(preg_match('/^https?:\/\//i', $workshop->video))
+                                    <iframe data-src="{{ $workshop->video_url }}?autoplay=1" class="w-full h-full" frameborder="0"
+                                        allow="autoplay; encrypted-media" allowfullscreen></iframe>
+                                @else
+                                    <video class="w-full h-full object-cover" controls preload="none">
+                                        <source src="{{ $workshop->video_url }}" type="video/mp4">
+                                        Your browser does not support the video tag.
+                                    </video>
+                                @endif
                             </div>
 
                             {{-- Thumbnail --}}
@@ -394,7 +401,7 @@
                                 class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" />
 
                             {{-- Play Button --}}
-                            <button onclick="playWorkshop({{ $workshop->id }})"
+                            <button id="play-btn-{{ $workshop->id }}" onclick="playWorkshop({{ $workshop->id }})"
                                 class="absolute inset-0 flex items-center justify-center z-10">
                                 <div class="w-16 h-16 bg-white/90 rounded-full flex items-center justify-center shadow-2xl">
                                     <svg class="w-8 h-8 text-blue-600 ml-1" fill="currentColor" viewBox="0 0 24 24">
@@ -519,7 +526,7 @@
                         </div>
                     @endforeach
 
-                    @if($upcomingWorkshops->isEmpty())
+                    @if(count($upcomingWorkshops) == 0)
                         <p class="text-center text-gray-500 col-span-full">No upcoming workshops.</p>
                     @endif
                 </div>
@@ -543,21 +550,21 @@
             <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
                 @forelse($benefits as $index => $benefit)
                     <div class="bg-white/90 backdrop-blur-sm rounded-2xl p-6 text-center
-                                   border border-white/50 hover:shadow-xl transition-all duration-500
-                                   transform hover:-translate-y-2 group animate-fade-in-up"
+                                                           border border-white/50 hover:shadow-xl transition-all duration-500
+                                                           transform hover:-translate-y-2 group animate-fade-in-up"
                         style="animation-delay: {{ $index * 150 }}ms">
                         {{-- Icon --}}
                         <div class="w-16 h-16 bg-gradient-to-br from-blue-500 to-purple-600
-                                       rounded-2xl flex items-center justify-center
-                                       text-white text-2xl mx-auto mb-4
-                                       transform group-hover:scale-110 group-hover:rotate-12
-                                       transition-transform duration-300 shadow-lg">
+                                                               rounded-2xl flex items-center justify-center
+                                                               text-white text-2xl mx-auto mb-4
+                                                               transform group-hover:scale-110 group-hover:rotate-12
+                                                               transition-transform duration-300 shadow-lg">
                             {{ $benefit->icon }}
                         </div>
 
                         {{-- Title --}}
                         <h3 class="text-lg font-bold text-gray-900 mb-3
-                                       group-hover:text-blue-600 transition-colors duration-300">
+                                                               group-hover:text-blue-600 transition-colors duration-300">
                             {{ $benefit->title }}
                         </h3>
 
@@ -621,7 +628,7 @@
                         <div class="mb-4">
                             @for($i = 1; $i <= 5; $i++)
                                         <span class="text-xl transition-all duration-300
-                                                    {{ $i <= $testimonial->rating
+                                                                                                                {{ $i <= $testimonial->rating
                                 ? 'text-yellow-400 group-hover:scale-125'
                                 : 'text-gray-300' }}">
                                             ★
@@ -767,6 +774,11 @@
 @section('extra-js')
 
     <script>
+        window.APP_DATA = {
+            workshops: @json($workshops),
+            upcomingWorkshops: @json($upcomingWorkshops)
+        };
+
         document.addEventListener('DOMContentLoaded', () => {
 
             const categoryFilters = document.querySelectorAll('.category-filter');
@@ -845,24 +857,54 @@
 
         /* ================= VIDEO PLAY ================= */
         function playWorkshop(id) {
+            const videoDiv = document.getElementById('video-' + id);
+            const thumbImg = document.getElementById('thumb-' + id);
+            const playBtn = document.getElementById('play-btn-' + id);
+            const iframe = videoDiv?.querySelector('iframe');
+            const video = videoDiv?.querySelector('video');
 
-            document.querySelectorAll('[id^="video-"]').forEach(video => {
-                video.classList.add('hidden');
-                video.querySelector('iframe')?.setAttribute('src', '');
+            if (!videoDiv) return;
+
+            // Stop other videos
+            document.querySelectorAll('[id^="video-"]').forEach(v => {
+                const otherId = v.id.replace('video-', '');
+                if (otherId !== id.toString()) {
+                    v.classList.add('hidden');
+
+                    // Stop iframe
+                    const f = v.querySelector('iframe');
+                    if (f) f.src = '';
+
+                    // Stop local video
+                    const vid = v.querySelector('video');
+                    if (vid) {
+                        vid.pause();
+                        vid.currentTime = 0;
+                    }
+
+                    // Show other thumbnails and play buttons
+                    const otherThumb = document.getElementById('thumb-' + otherId);
+                    if (otherThumb) otherThumb.classList.remove('hidden');
+
+                    const otherPlayBtn = document.getElementById('play-btn-' + otherId);
+                    if (otherPlayBtn) otherPlayBtn.classList.remove('hidden');
+                }
             });
 
-            document.querySelectorAll('[id^="thumb-"]').forEach(img => img.classList.remove('hidden'));
+            // Hide thumbnail and play button, show video container
+            if (thumbImg) thumbImg.classList.add('hidden');
+            if (playBtn) playBtn.classList.add('hidden');
+            videoDiv.classList.remove('hidden');
 
-            const video = document.getElementById(`video-${id}`);
-            const thumb = document.getElementById(`thumb-${id}`);
-            const iframe = video?.querySelector('iframe');
+            // Load iframe if needed
+            if (iframe && !iframe.src) {
+                iframe.src = iframe.dataset.src;
+            }
 
-            if (!video || !thumb || !iframe) return;
-
-            thumb.classList.add('hidden');
-            video.classList.remove('hidden');
-
-            if (!iframe.src) iframe.src = iframe.dataset.src;
+            // Play local video if present
+            if (video) {
+                video.play();
+            }
         }
 
         /* ================= SCROLL ================= */
@@ -877,9 +919,12 @@
         /* ================= MODALS ================= */
         function playWorkshopVideo(id) {
             const workshop = window.APP_DATA.workshops.find(w => w.id === id);
-            if (!workshop || !workshop.video) return;
+            if (!workshop) return;
 
-            document.getElementById('workshop-video-frame').src = workshop.video;
+            const videoUrl = workshop.video_url || workshop.video;
+            if (!videoUrl) return;
+
+            document.getElementById('workshop-video-frame').src = videoUrl;
             document.getElementById('video-title').textContent = workshop.title;
             document.getElementById('video-instructor').textContent = `Instructor: ${workshop.instructor}`;
             document.getElementById('video-modal').classList.remove('hidden');
